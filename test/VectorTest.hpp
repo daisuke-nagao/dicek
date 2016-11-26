@@ -4,12 +4,6 @@
 
 class VectorTest : public CxxTest::TestSuite {
 public:
-    void testInstance( void )
-    {
-        using namespace dicek::math;
-        vector<3, double> v;
-    }
-
     struct traits {
 
     };
@@ -43,23 +37,23 @@ public:
         v.at( 2 ) = 11;
 
         TSM_ASSERT_EQUALS( "at(0) is not 5", v.at( 0 ), 5 );
-        TSM_ASSERT_EQUALS( "at(0) is not 7", v.at( 1 ), 7 );
-        TSM_ASSERT_EQUALS( "at(0) is not 11", v.at( 2 ), 11 );
+        TSM_ASSERT_EQUALS( "at(1) is not 7", v.at( 1 ), 7 );
+        TSM_ASSERT_EQUALS( "at(2) is not 11", v.at( 2 ), 11 );
     }
 
     void test_at_const( void )
     {
         using namespace dicek::math;
         vector<3, double> v;
-        v.at( 0 ) = 5;
-        v.at( 1 ) = 7;
-        v.at( 2 ) = 11;
+        v.at( 0 ) = 13;
+        v.at( 1 ) = 17;
+        v.at( 2 ) = 19;
 
         const auto& ref = v;
 
-        TSM_ASSERT_EQUALS( "at(0) is not 5", ref.at( 0 ), 5 );
-        TSM_ASSERT_EQUALS( "at(0) is not 7", ref.at( 1 ), 7 );
-        TSM_ASSERT_EQUALS( "at(0) is not 11", ref.at( 2 ), 11 );
+        TSM_ASSERT_EQUALS( "at(0) is not 5", ref.at( 0 ), 13 );
+        TSM_ASSERT_EQUALS( "at(1) is not 7", ref.at( 1 ), 17 );
+        TSM_ASSERT_EQUALS( "at(2) is not 11", ref.at( 2 ), 19 );
     }
 
     void test_at_throw( void )
