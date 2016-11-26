@@ -4,15 +4,15 @@
 
 class VectorTest : public CxxTest::TestSuite {
 public:
-    struct traits {
+    //struct traits {
 
-    };
+    //};
 
-    void testInstanceTraits( void )
-    {
-        using namespace dicek::math;
-        vector<3, double, traits> v;
-    }
+    //void testInstanceTraits( void )
+    //{
+    //    using namespace dicek::math;
+    //    vector<3, double, traits> v;
+    //}
 
     void testDIM( void )
     {
@@ -51,9 +51,9 @@ public:
 
         const auto& ref = v;
 
-        TSM_ASSERT_EQUALS( "at(0) is not 5", ref.at( 0 ), 13 );
-        TSM_ASSERT_EQUALS( "at(1) is not 7", ref.at( 1 ), 17 );
-        TSM_ASSERT_EQUALS( "at(2) is not 11", ref.at( 2 ), 19 );
+        TSM_ASSERT_EQUALS( "at(0) is not 13", ref.at( 0 ), 13 );
+        TSM_ASSERT_EQUALS( "at(1) is not 17", ref.at( 1 ), 17 );
+        TSM_ASSERT_EQUALS( "at(2) is not 19", ref.at( 2 ), 19 );
     }
 
     void test_at_throw( void )
@@ -61,6 +61,34 @@ public:
         using namespace dicek::math;
         vector<3, double> v;
         TSM_ASSERT_THROWS( "Exception not thrown", v.at( 3 ), std::out_of_range );
-        TSM_ASSERT_THROWS( "Exception not thrown", const_cast<const decltype(v)&>( v ).at( 3 ), std::out_of_range );
+        TSM_ASSERT_THROWS( "Exception not thrown", const_cast<const decltype( v )&>( v ).at( 3 ), std::out_of_range );
+    }
+
+    void test_operator_square_bracket( void )
+    {
+        using namespace dicek::math;
+        vector<3, double> v;
+        v[ 0 ] = 5;
+        v[ 1 ] = 7;
+        v[ 2 ] = 11;
+
+        TSM_ASSERT_EQUALS( "operator[](0) is not 5", v[ 0 ], 5 );
+        TSM_ASSERT_EQUALS( "operator[](1) is not 7", v[ 1 ], 7 );
+        TSM_ASSERT_EQUALS( "operator[](2) is not 11", v[ 2 ], 11 );
+    }
+
+    void test_operator_square_bracket_const( void )
+    {
+        using namespace dicek::math;
+        vector<3, double> v;
+        v[ 0 ] = 13;
+        v[ 1 ] = 17;
+        v[ 2 ] = 19;
+
+        const auto& ref = v;
+
+        TSM_ASSERT_EQUALS( "operator[](0) is not 13", ref[ 0 ], 13 );
+        TSM_ASSERT_EQUALS( "operator[](1) is not 17", ref[ 1 ], 17 );
+        TSM_ASSERT_EQUALS( "operator[](2) is not 19", ref[ 2 ], 19 );
     }
 };

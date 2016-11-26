@@ -23,6 +23,16 @@ namespace dicek
                 return m_elm.at( index );
             }
 
+            real_type& operator[]( unsigned long index )
+            {
+                return m_elm[ index ];
+            }
+
+            const real_type& operator[]( unsigned long index ) const
+            {
+                return m_elm[ index ];
+            }
+
         private:
             std::array<real_type, DIM> m_elm;
         };
