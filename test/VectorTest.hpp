@@ -4,16 +4,6 @@
 
 class VectorTest : public CxxTest::TestSuite {
 public:
-    //struct traits {
-
-    //};
-
-    //void testInstanceTraits( void )
-    //{
-    //    using namespace dicek::math;
-    //    vector<3, double, traits> v;
-    //}
-
     void testDIM( void )
     {
         using namespace dicek::math;

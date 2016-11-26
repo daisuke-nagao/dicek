@@ -7,7 +7,7 @@ namespace dicek
 {
     namespace math
     {
-        template<unsigned long _DIM, typename _real, typename _real_traits = void>
+        template<unsigned long _DIM, typename _real>
         class vector {
         public:
             static const unsigned long DIM = _DIM;
