@@ -1,5 +1,5 @@
 #include <cxxtest/TestSuite.h>
-#include "Vector.hpp"
+#include "dicek/Vector.hpp"
 
 class VectorTest : public CxxTest::TestSuite {
 public:
