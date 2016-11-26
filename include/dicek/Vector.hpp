@@ -9,6 +9,7 @@ namespace dicek
         class vector {
         public:
             static const unsigned long DIM = _DIM;
+            typedef _real real_type;
         };
     }
 }
