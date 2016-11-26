@@ -33,4 +33,32 @@ public:
         static_assert( std::is_same< vector<3, double>::real_type, double>::value, "vector<3, double>::real_type is not double" );
         TSM_ASSERT( "vector<3, double>::real_type is not double", typeid( vector<3, double>::real_type ) == typeid( double ) );
     }
+
+    void test_at( void )
+    {
+        using namespace dicek::math;
+        vector<3, double> v;
+        v.at( 0 ) = 5;
+        v.at( 1 ) = 7;
+        v.at( 2 ) = 11;
+
+        TSM_ASSERT_EQUALS( "at(0) is not 5", v.at( 0 ), 5 );
+        TSM_ASSERT_EQUALS( "at(0) is not 7", v.at( 1 ), 7 );
+        TSM_ASSERT_EQUALS( "at(0) is not 11", v.at( 2 ), 11 );
+    }
+
+    void test_at_const( void )
+    {
+        using namespace dicek::math;
+        vector<3, double> v;
+        v.at( 0 ) = 5;
+        v.at( 1 ) = 7;
+        v.at( 2 ) = 11;
+
+        const auto& ref = v;
+
+        TSM_ASSERT_EQUALS( "at(0) is not 5", ref.at( 0 ), 5 );
+        TSM_ASSERT_EQUALS( "at(0) is not 7", ref.at( 1 ), 7 );
+        TSM_ASSERT_EQUALS( "at(0) is not 11", ref.at( 2 ), 11 );
+    }
 };
