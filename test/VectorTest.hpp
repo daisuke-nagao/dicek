@@ -61,4 +61,12 @@ public:
         TSM_ASSERT_EQUALS( "at(0) is not 7", ref.at( 1 ), 7 );
         TSM_ASSERT_EQUALS( "at(0) is not 11", ref.at( 2 ), 11 );
     }
+
+    void test_at_throw( void )
+    {
+        using namespace dicek::math;
+        vector<3, double> v;
+        TSM_ASSERT_THROWS( "Exception not thrown", v.at( 3 ), std::out_of_range );
+        TSM_ASSERT_THROWS( "Exception not thrown", const_cast<const decltype(v)&>( v ).at( 3 ), std::out_of_range );
+    }
 };
