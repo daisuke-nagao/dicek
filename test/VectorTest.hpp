@@ -8,4 +8,13 @@ public:
         using namespace dicek::math;
         Vector<3, double> v;
     }
+
+    struct traits {
+
+    };
+    void testInstanceTraits( void )
+    {
+        using namespace dicek::math;
+        Vector<3, double, traits > v;
+    }
 };
