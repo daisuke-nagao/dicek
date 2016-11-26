@@ -5,8 +5,10 @@ namespace dicek
 {
     namespace math
     {
-        template<unsigned long DIM, typename Real, typename real_traits = void>
-        class Vector {
+        template<unsigned long _DIM, typename _real, typename _real_traits = void>
+        class vector {
+        public:
+            static const unsigned long DIM = _DIM;
         };
     }
 }
