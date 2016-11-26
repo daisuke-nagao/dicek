@@ -1,10 +1,11 @@
 #include <cxxtest/TestSuite.h>
+#include "Vector.hpp"
 
-class VectorTest : public CxxTest::TestSuite
-{
+class VectorTest : public CxxTest::TestSuite {
 public:
-  void testDummy( void )
-  {
-	TS_FAIL("dummy");
-  }
+    void testInstance( void )
+    {
+        using namespace dicek::math;
+        Vector<3, double> v;
+    }
 };
