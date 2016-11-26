@@ -24,13 +24,13 @@ public:
     {
         using namespace dicek::math;
         static_assert( vector<3, double>::DIM == 3, "vector<3,double>::DIM is not 3" );
-        TS_ASSERT_EQUALS( 3, ( vector<3, double>::DIM ) );
+        TSM_ASSERT_EQUALS( "vector<3,double>::DIM is not 3", 3, ( vector<3, double>::DIM ) );
     }
 
     void test_real_type( void )
     {
         using namespace dicek::math;
         static_assert( std::is_same< vector<3, double>::real_type, double>::value, "vector<3, double>::real_type is not double" );
-        TS_ASSERT( typeid( vector<3, double>::real_type ) == typeid( double ) );
+        TSM_ASSERT( "vector<3, double>::real_type is not double", typeid( vector<3, double>::real_type ) == typeid( double ) );
     }
 };
