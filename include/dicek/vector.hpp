@@ -7,33 +7,33 @@ namespace dicek
 {
     namespace math
     {
-        template<unsigned long _DIM, typename _real>
+        template<unsigned long _DIM, typename _scalar_type>
         class vector {
         public:
             static const unsigned long DIM = _DIM;
-            typedef _real real_type;
+            typedef _scalar_type scalar_type;
 
             vector()
                 : m_elm()
             {
             }
 
-            real_type& at( unsigned long index )
+            scalar_type& at( unsigned long index )
             {
                 return m_elm.at( index );
             }
 
-            const real_type& at( unsigned long index ) const
+            const scalar_type& at( unsigned long index ) const
             {
                 return m_elm.at( index );
             }
 
-            real_type& operator[]( unsigned long index )
+            scalar_type& operator[]( unsigned long index )
             {
                 return m_elm[ index ];
             }
 
-            const real_type& operator[]( unsigned long index ) const
+            const scalar_type& operator[]( unsigned long index ) const
             {
                 return m_elm[ index ];
             }
@@ -50,7 +50,7 @@ namespace dicek
             }
 
         private:
-            std::array<real_type, DIM> m_elm;
+            std::array<scalar_type, DIM> m_elm;
         };
     }
 }

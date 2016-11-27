@@ -12,10 +12,10 @@ public:
         TSM_ASSERT_EQUALS( "vector<3,double>::DIM is not 3", 3, ( vector3d::DIM ) );
     }
 
-    void test_real_type( void )
+    void test_scalar_type( void )
     {
-        static_assert( std::is_same< vector3d::real_type, double>::value, "vector3d::real_type is not double" );
-        TSM_ASSERT( "vector3d::real_type is not double", typeid( vector3d::real_type ) == typeid( double ) );
+        static_assert( std::is_same< vector3d::scalar_type, double>::value, "vector3d::scalar_type is not double" );
+        TSM_ASSERT( "vector3d::scalar_type is not double", typeid( vector3d::scalar_type ) == typeid( double ) );
     }
 
     void test_default_constructor( void )
