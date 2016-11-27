@@ -4,24 +4,23 @@
 
 class VectorTest : public CxxTest::TestSuite {
 public:
+    using vector3d = dicek::math::vector<3,double>;
+
     void testDIM( void )
     {
-        using namespace dicek::math;
-        static_assert( vector<3, double>::DIM == 3, "vector<3,double>::DIM is not 3" );
-        TSM_ASSERT_EQUALS( "vector<3,double>::DIM is not 3", 3, ( vector<3, double>::DIM ) );
+        static_assert( vector3d::DIM == 3, "vector<3,double>::DIM is not 3" );
+        TSM_ASSERT_EQUALS( "vector<3,double>::DIM is not 3", 3, ( vector3d::DIM ) );
     }
 
     void test_real_type( void )
     {
-        using namespace dicek::math;
-        static_assert( std::is_same< vector<3, double>::real_type, double>::value, "vector<3, double>::real_type is not double" );
-        TSM_ASSERT( "vector<3, double>::real_type is not double", typeid( vector<3, double>::real_type ) == typeid( double ) );
+        static_assert( std::is_same< vector3d::real_type, double>::value, "vector3d::real_type is not double" );
+        TSM_ASSERT( "vector3d::real_type is not double", typeid( vector3d::real_type ) == typeid( double ) );
     }
 
     void test_at( void )
     {
-        using namespace dicek::math;
-        vector<3, double> v;
+        vector3d v;
         v.at( 0 ) = 5;
         v.at( 1 ) = 7;
         v.at( 2 ) = 11;
@@ -33,8 +32,7 @@ public:
 
     void test_at_const( void )
     {
-        using namespace dicek::math;
-        vector<3, double> v;
+        vector3d v;
         v.at( 0 ) = 13;
         v.at( 1 ) = 17;
         v.at( 2 ) = 19;
@@ -48,16 +46,14 @@ public:
 
     void test_at_throw( void )
     {
-        using namespace dicek::math;
-        vector<3, double> v;
+        vector3d v;
         TSM_ASSERT_THROWS( "Exception not thrown", v.at( 3 ), std::out_of_range );
         TSM_ASSERT_THROWS( "Exception not thrown", const_cast<const decltype( v )&>( v ).at( 3 ), std::out_of_range );
     }
 
     void test_operator_square_bracket( void )
     {
-        using namespace dicek::math;
-        vector<3, double> v;
+        vector3d v;
         v[ 0 ] = 5;
         v[ 1 ] = 7;
         v[ 2 ] = 11;
@@ -69,8 +65,7 @@ public:
 
     void test_operator_square_bracket_const( void )
     {
-        using namespace dicek::math;
-        vector<3, double> v;
+        vector3d v;
         v[ 0 ] = 13;
         v[ 1 ] = 17;
         v[ 2 ] = 19;
