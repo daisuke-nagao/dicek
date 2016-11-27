@@ -161,7 +161,7 @@ public:
         const auto& _v = v;
         const auto& _w = w;
 
-        vector3d::scalar_type x = vector3d::inner_product( _v, _w );
+        vector3d::scalar_type x = inner_product( _v, _w );
 
         TS_ASSERT_EQUALS( x, 1 * 10 + 2 * 20 + 3 * 30 );
     }
