@@ -4,7 +4,7 @@
 
 class VectorTest : public CxxTest::TestSuite {
 public:
-    using vector3d = dicek::math::vector<3,double>;
+    using vector3d = dicek::math::vector<3, double>;
 
     void testDIM( void )
     {
@@ -106,8 +106,8 @@ public:
         TSM_ASSERT_EQUALS( "operator+ is not 22", x[ 1 ], 22 );
         TSM_ASSERT_EQUALS( "operator+ is not 33", x[ 2 ], 33 );
 
-        TSM_ASSERT_EQUALS( "operator+ is not 11", y[ 0 ], 11 );
-        TSM_ASSERT_EQUALS( "operator+ is not 22", y[ 1 ], 22 );
-        TSM_ASSERT_EQUALS( "operator+ is not 33", y[ 2 ], 33 );
+        TSM_ASSERT_EQUALS( "operator+ is not 11", y[ 0 ], x[ 0 ] );
+        TSM_ASSERT_EQUALS( "operator+ is not 22", y[ 1 ], x[ 1 ] );
+        TSM_ASSERT_EQUALS( "operator+ is not 33", y[ 2 ], x[ 2 ] );
     }
 };
