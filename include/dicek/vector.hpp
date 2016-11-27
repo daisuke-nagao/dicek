@@ -82,7 +82,6 @@ namespace dicek
 
             return ret;
         }
-
     }
 }
 
