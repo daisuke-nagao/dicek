@@ -1,3 +1,6 @@
+#ifndef UUID_50C55706_B490_11E6_BFE5_0800274CD854
+#define UUID_50C55706_B490_11E6_BFE5_0800274CD854
+
 #include <cxxtest/TestSuite.h>
 #include <typeinfo>
 #include "dicek/vector.hpp"
@@ -124,3 +127,5 @@ public:
         TSM_ASSERT_EQUALS( "operator+ is not 33", w[ 2 ], 9 );
     }
 };
+
+#endif /* UUID_50C55706_B490_11E6_BFE5_0800274CD854 */
