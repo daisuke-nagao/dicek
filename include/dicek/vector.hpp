@@ -49,19 +49,8 @@ namespace dicek
                 return ret;
             }
 
-            vector scale( scalar_type val ) const
-            {
-                vector ret;
-
-                for( unsigned long index = 0; index < DIM; ++index ) {
-                    ret[ index ] = val * ( *this )[ index ];
-                }
-
-                return ret;
-            }
-
             template< typename F >
-            vector map( F f )
+            vector map( F f ) const
             {
                 vector ret;
 
@@ -70,6 +59,11 @@ namespace dicek
                 }
 
                 return ret;
+            }
+
+            vector scale( scalar_type val ) const
+            {
+                return map( [ val ]( scalar_type x ) { return val * x; } );
             }
 
         private:
