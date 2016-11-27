@@ -122,9 +122,9 @@ public:
         v[ 2 ] = 3;
 
         vector3d w = v.scale( 3 );
-        TSM_ASSERT_EQUALS( "operator+ is not 11", w[ 0 ], 3 );
-        TSM_ASSERT_EQUALS( "operator+ is not 22", w[ 1 ], 6 );
-        TSM_ASSERT_EQUALS( "operator+ is not 33", w[ 2 ], 9 );
+        TS_ASSERT_EQUALS( w[ 0 ], 3 );
+        TS_ASSERT_EQUALS( w[ 1 ], 6 );
+        TS_ASSERT_EQUALS( w[ 2 ], 9 );
     }
 
     void test_map( void )
@@ -135,9 +135,14 @@ public:
         v[ 2 ] = 3;
 
         vector3d w = v.map( []( double val ) { return val*val; } );
-        TSM_ASSERT_EQUALS( "operator+ is not 11", w[ 0 ], 1 );
-        TSM_ASSERT_EQUALS( "operator+ is not 22", w[ 1 ], 4 );
-        TSM_ASSERT_EQUALS( "operator+ is not 33", w[ 2 ], 9 );
+        TS_ASSERT_EQUALS( w[ 0 ], 1 );
+        TS_ASSERT_EQUALS( w[ 1 ], 4 );
+        TS_ASSERT_EQUALS( w[ 2 ], 9 );
+
+        vector3d x = v.map( []( double val ) { return sin( val ); } );
+        TS_ASSERT_EQUALS( x[ 0 ], sin( 1.0 ) );
+        TS_ASSERT_EQUALS( x[ 1 ], sin( 2.0 ) );
+        TS_ASSERT_EQUALS( x[ 2 ], sin( 3.0 ) );
     }
 };
 
