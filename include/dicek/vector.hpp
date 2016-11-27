@@ -15,7 +15,8 @@ namespace dicek
 
             vector()
                 : m_elm()
-            { }
+            {
+            }
 
             real_type& at( unsigned long index )
             {
@@ -39,10 +40,10 @@ namespace dicek
 
             vector operator+( const vector& rhs ) const
             {
-                vector ret = *this;
+                vector ret;
 
                 for( unsigned long index = 0; index < DIM; ++index ) {
-                    ret[ index ] += rhs[ index ];
+                    ret[ index ] = *this[ index ] + rhs[ index ];
                 }
 
                 return ret;
