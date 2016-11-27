@@ -126,6 +126,19 @@ public:
         TSM_ASSERT_EQUALS( "operator+ is not 22", w[ 1 ], 6 );
         TSM_ASSERT_EQUALS( "operator+ is not 33", w[ 2 ], 9 );
     }
+
+    void test_map( void )
+    {
+        vector3d v;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        vector3d w = v.map( []( double val ) { return val*val; } );
+        TSM_ASSERT_EQUALS( "operator+ is not 11", w[ 0 ], 1 );
+        TSM_ASSERT_EQUALS( "operator+ is not 22", w[ 1 ], 4 );
+        TSM_ASSERT_EQUALS( "operator+ is not 33", w[ 2 ], 9 );
+    }
 };
 
 #endif /* UUID_50C55706_B490_11E6_BFE5_0800274CD854 */

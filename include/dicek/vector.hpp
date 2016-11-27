@@ -60,6 +60,18 @@ namespace dicek
                 return ret;
             }
 
+            template< typename F >
+            vector map( F f )
+            {
+                vector ret;
+
+                for( unsigned long index = 0; index < DIM; ++index ) {
+                    ret[ index ] = f( ( *this )[ index ] );
+                }
+
+                return ret;
+            }
+
         private:
             std::array<scalar_type, DIM> m_elm;
         };
