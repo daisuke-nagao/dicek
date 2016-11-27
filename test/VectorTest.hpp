@@ -76,4 +76,30 @@ public:
         TSM_ASSERT_EQUALS( "operator[](1) is not 17", ref[ 1 ], 17 );
         TSM_ASSERT_EQUALS( "operator[](2) is not 19", ref[ 2 ], 19 );
     }
+
+    void test_operator_add( void )
+    {
+        vector3d v, w;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        w[ 0 ] = 10;
+        w[ 1 ] = 20;
+        w[ 2 ] = 30;
+
+        const auto& _v = v;
+        const auto& _w = w;
+
+        vector3d x = _v + _w;
+        vector3d y = _w + _v;
+
+        TSM_ASSERT_EQUALS( "operator+ is not 11", x[ 0 ], 11 );
+        TSM_ASSERT_EQUALS( "operator+ is not 22", x[ 1 ], 22 );
+        TSM_ASSERT_EQUALS( "operator+ is not 33", x[ 2 ], 33 );
+
+        TSM_ASSERT_EQUALS( "operator+ is not 11", y[ 0 ], 11 );
+        TSM_ASSERT_EQUALS( "operator+ is not 22", y[ 1 ], 22 );
+        TSM_ASSERT_EQUALS( "operator+ is not 33", y[ 2 ], 33 );
+    }
 };

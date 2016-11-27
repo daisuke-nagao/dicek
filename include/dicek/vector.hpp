@@ -13,6 +13,10 @@ namespace dicek
             static const unsigned long DIM = _DIM;
             typedef _real real_type;
 
+            vector()
+                : m_elm()
+            { }
+
             real_type& at( unsigned long index )
             {
                 return m_elm.at( index );
@@ -31,6 +35,17 @@ namespace dicek
             const real_type& operator[]( unsigned long index ) const
             {
                 return m_elm[ index ];
+            }
+
+            vector operator+( const vector& rhs ) const
+            {
+                vector ret = *this;
+
+                for( unsigned long index = 0; index < DIM; ++index ) {
+                    ret[ index ] += rhs[ index ];
+                }
+
+                return ret;
             }
 
         private:
