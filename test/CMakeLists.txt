@@ -5,3 +5,10 @@ include(CxxTest)
 include_directories(${CXXTEST_INCLUDES} ${PROJECT_SOURCE_DIR}/include)
 
 cxx_test(VectorTest ${CMAKE_CURRENT_LIST_DIR}/VectorTest.hpp)
+
+if(${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
+  # Using gnu
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
+elseif(${CMAKE_CXX_COMPILER_ID} MATCHES MSVC)
+  # Using visual studio
+endif()
