@@ -66,6 +66,17 @@ namespace dicek
                 return map( [ val ]( scalar_type x ) { return val * x; } );
             }
 
+            static scalar_type inner_product( const vector& lhs, const vector& rhs )
+            {
+                scalar_type ret = scalar_type();
+
+                for( unsigned long index = 0; index < DIM; ++index ) {
+                    ret += lhs[ index ] * rhs[ index ];
+                }
+
+                return ret;
+            }
+
         private:
             std::array<scalar_type, DIM> m_elm;
         };

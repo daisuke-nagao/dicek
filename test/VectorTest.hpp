@@ -134,15 +134,36 @@ public:
         v[ 1 ] = 2;
         v[ 2 ] = 3;
 
-        vector3d w = v.map( []( double val ) { return val*val; } );
+        const auto& _v = v;
+
+        vector3d w = _v.map( []( double val ) { return val*val; } );
         TS_ASSERT_EQUALS( w[ 0 ], 1 );
         TS_ASSERT_EQUALS( w[ 1 ], 4 );
         TS_ASSERT_EQUALS( w[ 2 ], 9 );
 
-        vector3d x = v.map( []( double val ) { return sin( val ); } );
+        vector3d x = _v.map( []( double val ) { return sin( val ); } );
         TS_ASSERT_EQUALS( x[ 0 ], sin( 1.0 ) );
         TS_ASSERT_EQUALS( x[ 1 ], sin( 2.0 ) );
         TS_ASSERT_EQUALS( x[ 2 ], sin( 3.0 ) );
+    }
+
+    void test_inner_product( void )
+    {
+        vector3d v, w;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        w[ 0 ] = 10;
+        w[ 1 ] = 20;
+        w[ 2 ] = 30;
+
+        const auto& _v = v;
+        const auto& _w = w;
+
+        vector3d::scalar_type x = vector3d::inner_product( _v, _w );
+
+        TS_ASSERT_EQUALS( x, 1 * 10 + 2 * 20 + 3 * 30 );
     }
 };
 
