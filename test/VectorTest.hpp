@@ -110,4 +110,17 @@ public:
         TSM_ASSERT_EQUALS( "operator+ is not 22", y[ 1 ], x[ 1 ] );
         TSM_ASSERT_EQUALS( "operator+ is not 33", y[ 2 ], x[ 2 ] );
     }
+
+    void test_scale( void )
+    {
+        vector3d v;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        vector3d w = v.scale( 3 );
+        TSM_ASSERT_EQUALS( "operator+ is not 11", w[ 0 ], 3 );
+        TSM_ASSERT_EQUALS( "operator+ is not 22", w[ 1 ], 6 );
+        TSM_ASSERT_EQUALS( "operator+ is not 33", w[ 2 ], 9 );
+    }
 };

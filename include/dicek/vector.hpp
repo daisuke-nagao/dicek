@@ -43,7 +43,18 @@ namespace dicek
                 vector ret;
 
                 for( unsigned long index = 0; index < DIM; ++index ) {
-                    ret[ index ] = (*this)[ index ] + rhs[ index ];
+                    ret[ index ] = ( *this )[ index ] + rhs[ index ];
+                }
+
+                return ret;
+            }
+
+            vector scale( scalar_type val ) const
+            {
+                vector ret;
+
+                for( unsigned long index = 0; index < DIM; ++index ) {
+                    ret[ index ] = val * ( *this )[ index ];
                 }
 
                 return ret;
