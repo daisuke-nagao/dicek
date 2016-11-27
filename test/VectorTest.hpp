@@ -18,6 +18,14 @@ public:
         TSM_ASSERT( "vector3d::real_type is not double", typeid( vector3d::real_type ) == typeid( double ) );
     }
 
+    void test_default_constructor( void )
+    {
+        vector3d v;
+        TSM_ASSERT_EQUALS( "Not zero", v[ 0 ], 0 );
+        TSM_ASSERT_EQUALS( "Not zero", v[ 1 ], 0 );
+        TSM_ASSERT_EQUALS( "Not zero", v[ 2 ], 0 );
+    }
+
     void test_at( void )
     {
         vector3d v;
