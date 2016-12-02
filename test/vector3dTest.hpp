@@ -5,7 +5,7 @@
 #include <typeinfo>
 #include "dicek/vector.hpp"
 
-class VectorTest : public CxxTest::TestSuite {
+class vector3dTest : public CxxTest::TestSuite {
 public:
     using vector3d = dicek::math::vector<3, double>;
 
