@@ -70,24 +70,24 @@ public:
         v[ 1 ] = complexf( 7, 2 );
         v[ 2 ] = complexf( 11, 3 );
 
-        TSM_ASSERT_EQUALS( "operator[](0) is not 5", v[ 0 ], complexf( 5, 1 ) );
-        TSM_ASSERT_EQUALS( "operator[](1) is not 7", v[ 1 ], complexf( 7, 2 ) );
-        TSM_ASSERT_EQUALS( "operator[](2) is not 11", v[ 2 ], complexf( 11, 3 ) );
+        TSM_ASSERT_EQUALS( "operator[](0) is not 5 + i", v[ 0 ], complexf( 5, 1 ) );
+        TSM_ASSERT_EQUALS( "operator[](1) is not 7 + 2i", v[ 1 ], complexf( 7, 2 ) );
+        TSM_ASSERT_EQUALS( "operator[](2) is not 11 + 3i", v[ 2 ], complexf( 11, 3 ) );
     }
 
-    //void test_operator_square_bracket_const( void )
-    //{
-    //    vector2c v;
-    //    v[ 0 ] = 13;
-    //    v[ 1 ] = 17;
-    //    v[ 2 ] = 19;
+    void test_operator_square_bracket_const( void )
+    {
+        vector2c v;
+        v[ 0 ] = complexf( 5, 1 );
+        v[ 1 ] = complexf( 7, 2 );
+        v[ 2 ] = complexf( 11, 3 );
 
-    //    const auto& ref = v;
+        const auto& ref = v;
 
-    //    TSM_ASSERT_EQUALS( "operator[](0) is not 13", ref[ 0 ], 13 );
-    //    TSM_ASSERT_EQUALS( "operator[](1) is not 17", ref[ 1 ], 17 );
-    //    TSM_ASSERT_EQUALS( "operator[](2) is not 19", ref[ 2 ], 19 );
-    //}
+        TSM_ASSERT_EQUALS( "operator[](0) is not 5 + i", ref[ 0 ], complexf( 5, 1 ) );
+        TSM_ASSERT_EQUALS( "operator[](1) is not 7 + 2i", ref[ 1 ], complexf( 7, 2 ) );
+        TSM_ASSERT_EQUALS( "operator[](2) is not 11 + 3i", ref[ 2 ], complexf( 11, 3 ) );
+    }
 
     //void test_operator_add( void )
     //{
