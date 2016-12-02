@@ -56,12 +56,12 @@ public:
         TSM_ASSERT_EQUALS( "at(2) is not (11, 3)", v.at( 2 ), complexf( 11, 3 ) );
     }
 
-    //void test_at_throw( void )
-    //{
-    //    vector2c v;
-    //    TSM_ASSERT_THROWS( "Exception not thrown", v.at( 3 ), std::out_of_range );
-    //    TSM_ASSERT_THROWS( "Exception not thrown", const_cast<const decltype( v )&>( v ).at( 3 ), std::out_of_range );
-    //}
+    void test_at_throw( void )
+    {
+        vector2c v;
+        TSM_ASSERT_THROWS( "Exception not thrown", v.at( 3 ), std::out_of_range );
+        TSM_ASSERT_THROWS( "Exception not thrown", const_cast<const decltype( v )&>( v ).at( 3 ), std::out_of_range );
+    }
 
     //void test_operator_square_bracket( void )
     //{
