@@ -89,31 +89,31 @@ public:
         TSM_ASSERT_EQUALS( "operator[](2) is not 11 + 3i", ref[ 2 ], complexf( 11, 3 ) );
     }
 
-    //void test_operator_add( void )
-    //{
-    //    vector2c v, w;
-    //    v[ 0 ] = 1;
-    //    v[ 1 ] = 2;
-    //    v[ 2 ] = 3;
+    void test_operator_add( void )
+    {
+        vector2c v, w;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
 
-    //    w[ 0 ] = 10;
-    //    w[ 1 ] = 20;
-    //    w[ 2 ] = 30;
+        w[ 0 ] = complexf( 0, 10 );
+        w[ 1 ] = complexf( 0, 20 );
+        w[ 2 ] = complexf( 0, 30 );
 
-    //    const auto& _v = v;
-    //    const auto& _w = w;
+        const auto& _v = v;
+        const auto& _w = w;
 
-    //    vector2c x = _v + _w;
-    //    vector2c y = _w + _v;
+        vector2c x = _v + _w;
+        vector2c y = _w + _v;
 
-    //    TSM_ASSERT_EQUALS( "operator+ is not 11", x[ 0 ], 11 );
-    //    TSM_ASSERT_EQUALS( "operator+ is not 22", x[ 1 ], 22 );
-    //    TSM_ASSERT_EQUALS( "operator+ is not 33", x[ 2 ], 33 );
+        TSM_ASSERT_EQUALS( "operator+ is not 11", x[ 0 ], complexf( 1, 10 ) );
+        TSM_ASSERT_EQUALS( "operator+ is not 22", x[ 1 ], complexf( 2, 20 ) );
+        TSM_ASSERT_EQUALS( "operator+ is not 33", x[ 2 ], complexf( 3, 30 ) );
 
-    //    TSM_ASSERT_EQUALS( "operator+ is not 11", y[ 0 ], x[ 0 ] );
-    //    TSM_ASSERT_EQUALS( "operator+ is not 22", y[ 1 ], x[ 1 ] );
-    //    TSM_ASSERT_EQUALS( "operator+ is not 33", y[ 2 ], x[ 2 ] );
-    //}
+        TSM_ASSERT_EQUALS( "operator+ is not 11", y[ 0 ], x[ 0 ] );
+        TSM_ASSERT_EQUALS( "operator+ is not 22", y[ 1 ], x[ 1 ] );
+        TSM_ASSERT_EQUALS( "operator+ is not 33", y[ 2 ], x[ 2 ] );
+    }
 
     //void test_scale( void )
     //{
