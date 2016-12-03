@@ -115,18 +115,18 @@ public:
         TSM_ASSERT_EQUALS( "operator+ is not 33", y[ 2 ], x[ 2 ] );
     }
 
-    //void test_scale( void )
-    //{
-    //    vector2c v;
-    //    v[ 0 ] = 1;
-    //    v[ 1 ] = 2;
-    //    v[ 2 ] = 3;
+    void test_scale( void )
+    {
+        vector2c v;
+        v[ 0 ] = complexf( 1, 10 );
+        v[ 1 ] = complexf( 2, 20 );
+        v[ 2 ] = complexf( 3, 30 );
 
-    //    vector2c w = v.scale( 3 );
-    //    TS_ASSERT_EQUALS( w[ 0 ], 3 );
-    //    TS_ASSERT_EQUALS( w[ 1 ], 6 );
-    //    TS_ASSERT_EQUALS( w[ 2 ], 9 );
-    //}
+        vector2c w = v.scale( 3 );
+        TS_ASSERT_EQUALS( w[ 0 ], complexf( 3, 30 ) );
+        TS_ASSERT_EQUALS( w[ 1 ], complexf( 6, 60 ) );
+        TS_ASSERT_EQUALS( w[ 2 ], complexf( 9, 90 ) );
+    }
 
     //void test_map( void )
     //{
