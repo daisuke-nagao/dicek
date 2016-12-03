@@ -10,6 +10,21 @@ namespace dicek
         template<typename T>
         struct scalar_type {
             typedef typename std::remove_reference<typename std::remove_cv<T>::type>::type type;
+
+            static type conj( const type& val )
+            {
+                return val;
+            }
+        };
+
+        template<typename U>
+        struct scalar_type<std::complex<U>> {
+            typedef typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type type;
+
+            static type conj( const type& val )
+            {
+                return std::conj( val );
+            }
         };
     }
 }
