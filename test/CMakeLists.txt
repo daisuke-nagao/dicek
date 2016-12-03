@@ -4,8 +4,11 @@ find_package(CxxTest)
 
 include_directories(${CXXTEST_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
-cxxtest_add_test(vector3dTest vector3dTest.cpp ${CMAKE_CURRENT_LIST_DIR}/vector3dTest.hpp)
-cxxtest_add_test(vector2cTest vector2cTest.cpp ${CMAKE_CURRENT_LIST_DIR}/vector2cTest.hpp)
+file(GLOB TEST_SOURCES "*Test.hpp" "*Test.h" "*test.h")
+foreach( FILEPATH ${TEST_SOURCES} )
+  get_filename_component( FILENAME_WE ${FILEPATH} NAME_WE )
+  cxxtest_add_test(${FILENAME_WE} "${FILENAME_WE}.cpp" ${FILEPATH})
+endforeach()
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
   # Using gnu
