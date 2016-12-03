@@ -1,8 +1,11 @@
+#ifndef UUID_50C55706_B490_11E6_BFE5_0800274CD854
+#define UUID_50C55706_B490_11E6_BFE5_0800274CD854
+
 #include <cxxtest/TestSuite.h>
 #include <typeinfo>
 #include "dicek/vector.hpp"
 
-class VectorTest : public CxxTest::TestSuite {
+class vector3dTest : public CxxTest::TestSuite {
 public:
     using vector3d = dicek::math::vector<3, double>;
 
@@ -119,8 +122,49 @@ public:
         v[ 2 ] = 3;
 
         vector3d w = v.scale( 3 );
-        TSM_ASSERT_EQUALS( "operator+ is not 11", w[ 0 ], 3 );
-        TSM_ASSERT_EQUALS( "operator+ is not 22", w[ 1 ], 6 );
-        TSM_ASSERT_EQUALS( "operator+ is not 33", w[ 2 ], 9 );
+        TS_ASSERT_EQUALS( w[ 0 ], 3 );
+        TS_ASSERT_EQUALS( w[ 1 ], 6 );
+        TS_ASSERT_EQUALS( w[ 2 ], 9 );
+    }
+
+    void test_map( void )
+    {
+        vector3d v;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        const auto& _v = v;
+
+        vector3d w = _v.map( []( double val ) { return val*val; } );
+        TS_ASSERT_EQUALS( w[ 0 ], 1 );
+        TS_ASSERT_EQUALS( w[ 1 ], 4 );
+        TS_ASSERT_EQUALS( w[ 2 ], 9 );
+
+        vector3d x = _v.map( []( double val ) { return sin( val ); } );
+        TS_ASSERT_EQUALS( x[ 0 ], sin( 1.0 ) );
+        TS_ASSERT_EQUALS( x[ 1 ], sin( 2.0 ) );
+        TS_ASSERT_EQUALS( x[ 2 ], sin( 3.0 ) );
+    }
+
+    void test_inner_product( void )
+    {
+        vector3d v, w;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        w[ 0 ] = 10;
+        w[ 1 ] = 20;
+        w[ 2 ] = 30;
+
+        const auto& _v = v;
+        const auto& _w = w;
+
+        vector3d::scalar_type x = inner_product( _v, _w );
+
+        TS_ASSERT_EQUALS( x, 1 * 10 + 2 * 20 + 3 * 30 );
     }
 };
+
+#endif /* UUID_50C55706_B490_11E6_BFE5_0800274CD854 */

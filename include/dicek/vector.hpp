@@ -49,20 +49,39 @@ namespace dicek
                 return ret;
             }
 
-            vector scale( scalar_type val ) const
+            template< typename F >
+            vector map( F f ) const
             {
                 vector ret;
 
                 for( unsigned long index = 0; index < DIM; ++index ) {
-                    ret[ index ] = val * ( *this )[ index ];
+                    ret[ index ] = f( ( *this )[ index ] );
                 }
 
                 return ret;
             }
 
+            vector scale( scalar_type val ) const
+            {
+                return map( [ val ]( scalar_type x ) { return val * x; } );
+            }
+
         private:
             std::array<scalar_type, DIM> m_elm;
         };
+
+        template< typename V >
+        typename V::scalar_type inner_product( const V& lhs, const V& rhs )
+        {
+            typedef typename V::scalar_type scalar_type;
+            scalar_type ret = scalar_type();
+
+            for( unsigned long index = 0; index < V::DIM; ++index ) {
+                ret += lhs[ index ] * rhs[ index ];
+            }
+
+            return ret;
+        }
     }
 }
 

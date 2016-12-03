@@ -1,10 +1,11 @@
 cmake_minimum_required(VERSION 2.8)
 
-include(CxxTest)
+find_package(CxxTest)
 
-include_directories(${CXXTEST_INCLUDES} ${PROJECT_SOURCE_DIR}/include)
+include_directories(${CXXTEST_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/include)
 
-cxx_test(VectorTest ${CMAKE_CURRENT_LIST_DIR}/VectorTest.hpp)
+cxxtest_add_test(vector3dTest vector3dTest.cpp ${CMAKE_CURRENT_LIST_DIR}/vector3dTest.hpp)
+cxxtest_add_test(vector2cTest vector2cTest.cpp ${CMAKE_CURRENT_LIST_DIR}/vector2cTest.hpp)
 
 if(${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
   # Using gnu
