@@ -1,3 +1,6 @@
+#ifndef UUID_3A12F814_B92D_11E6_AB3C_0800274CD854
+#define UUID_3A12F814_B92D_11E6_AB3C_0800274CD854
+
 #include <cxxtest/TestSuite.h>
 #include <typeinfo>
 #include <complex>
@@ -167,3 +170,5 @@ public:
         TS_SKIP( ( /*TS_ASSERT_EQUALS*/( x, complexf( 1, 4 ) * std::conj( complexf( 2, 3 ) ) + complexf( 2, 5 ) * std::conj( complexf( 5, 7 ) ) + complexf( 3, 6 ) *std::conj( complexf( 11, 13 ) ) ) ) );
     }
 };
+
+#endif /* UUID_3A12F814_B92D_11E6_AB3C_0800274CD854 */
