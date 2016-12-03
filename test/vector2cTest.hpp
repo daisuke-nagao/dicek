@@ -148,22 +148,22 @@ public:
         TS_ASSERT_EQUALS( x[ 2 ], complexf( 5, 30 ) );
     }
 
-    //void test_inner_product( void )
-    //{
-    //    vector2c v, w;
-    //    v[ 0 ] = 1;
-    //    v[ 1 ] = 2;
-    //    v[ 2 ] = 3;
+    void test_inner_product( void )
+    {
+        vector2c v, w;
+        v[ 0 ] = complexf( 1, 4 );
+        v[ 1 ] = complexf( 2, 5 );
+        v[ 2 ] = complexf( 3, 6 );
 
-    //    w[ 0 ] = 10;
-    //    w[ 1 ] = 20;
-    //    w[ 2 ] = 30;
+        w[ 0 ] = complexf( 2, 3 );
+        w[ 1 ] = complexf( 5, 7 );
+        w[ 2 ] = complexf( 11, 13 );
 
-    //    const auto& _v = v;
-    //    const auto& _w = w;
+        const auto& _v = v;
+        const auto& _w = w;
 
-    //    vector2c::scalar_type x = inner_product( _v, _w );
+        vector2c::scalar_type x = inner_product( _v, _w );
 
-    //    TS_ASSERT_EQUALS( x, 1 * 10 + 2 * 20 + 3 * 30 );
-    //}
+        TS_SKIP( ( /*TS_ASSERT_EQUALS*/( x, complexf( 1, 4 ) * std::conj( complexf( 2, 3 ) ) + complexf( 2, 5 ) * std::conj( complexf( 5, 7 ) ) + complexf( 3, 6 ) *std::conj( complexf( 11, 13 ) ) ) ) );
+    }
 };
