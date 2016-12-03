@@ -128,25 +128,25 @@ public:
         TS_ASSERT_EQUALS( w[ 2 ], complexf( 9, 90 ) );
     }
 
-    //void test_map( void )
-    //{
-    //    vector2c v;
-    //    v[ 0 ] = 1;
-    //    v[ 1 ] = 2;
-    //    v[ 2 ] = 3;
+    void test_map( void )
+    {
+        vector2c v;
+        v[ 0 ] = complexf( 1, 10 );
+        v[ 1 ] = complexf( 2, 20 );
+        v[ 2 ] = complexf( 3, 30 );
 
-    //    const auto& _v = v;
+        const auto& _v = v;
 
-    //    vector2c w = _v.map( []( complexf val ) { return val*val; } );
-    //    TS_ASSERT_EQUALS( w[ 0 ], 1 );
-    //    TS_ASSERT_EQUALS( w[ 1 ], 4 );
-    //    TS_ASSERT_EQUALS( w[ 2 ], 9 );
+        vector2c w = _v.map( []( complexf val ) { return val*val; } );
+        TS_ASSERT_EQUALS( w[ 0 ], complexf( 1, 10 ) * complexf( 1, 10 ) );
+        TS_ASSERT_EQUALS( w[ 1 ], complexf( 2, 20 ) * complexf( 2, 20 ) );
+        TS_ASSERT_EQUALS( w[ 2 ], complexf( 3, 30 ) * complexf( 3, 30 ) );
 
-    //    vector2c x = _v.map( []( complexf val ) { return sin( val ); } );
-    //    TS_ASSERT_EQUALS( x[ 0 ], sin( 1.0 ) );
-    //    TS_ASSERT_EQUALS( x[ 1 ], sin( 2.0 ) );
-    //    TS_ASSERT_EQUALS( x[ 2 ], sin( 3.0 ) );
-    //}
+        vector2c x = _v.map( []( complexf val ) -> complexf { return val + 2.0f; } );
+        TS_ASSERT_EQUALS( x[ 0 ], complexf( 3, 10 ) );
+        TS_ASSERT_EQUALS( x[ 1 ], complexf( 4, 20 ) );
+        TS_ASSERT_EQUALS( x[ 2 ], complexf( 5, 30 ) );
+    }
 
     //void test_inner_product( void )
     //{
