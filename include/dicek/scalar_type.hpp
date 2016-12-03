@@ -9,7 +9,7 @@ namespace dicek
     {
         template<typename T>
         struct scalar_type {
-            typedef typename std::remove_const<T>::type type;
+            typedef typename std::remove_cv<T>::type type;
         };
     }
 }
