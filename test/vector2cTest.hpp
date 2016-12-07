@@ -167,7 +167,7 @@ public:
 
         vector2c::scalar_type x = inner_product( _v, _w );
 
-        TS_SKIP( ( /*TS_ASSERT_EQUALS*/( x, complexf( 1, 4 ) * std::conj( complexf( 2, 3 ) ) + complexf( 2, 5 ) * std::conj( complexf( 5, 7 ) ) + complexf( 3, 6 ) *std::conj( complexf( 11, 13 ) ) ) ) );
+        TS_ASSERT_EQUALS( x, complexf( 1, 4 ) * std::conj( complexf( 2, 3 ) ) + complexf( 2, 5 ) * std::conj( complexf( 5, 7 ) ) + complexf( 3, 6 ) *std::conj( complexf( 11, 13 ) ) );
     }
 };
 
