@@ -2,16 +2,18 @@
 #define UUID_E2494444_AF31_11E6_9A65_0800274CD854
 
 #include <array>
+#include "scalar_traits.hpp"
 
 namespace dicek
 {
     namespace math
     {
-        template<unsigned long _DIM, typename _scalar_type>
+        template<unsigned long _DIM, typename _scalar_type, typename _scalar_traits = scalar_traits<_scalar_type>>
         class vector {
         public:
             static const unsigned long DIM = _DIM;
-            typedef _scalar_type scalar_type;
+            typedef _scalar_traits scalar_traits;
+            typedef typename scalar_traits::type scalar_type;
 
             vector()
                 : m_elm()
@@ -77,7 +79,7 @@ namespace dicek
             scalar_type ret = scalar_type();
 
             for( unsigned long index = 0; index < V::DIM; ++index ) {
-                ret += lhs[ index ] * rhs[ index ];
+                ret += lhs[ index ] * V::scalar_traits::conj( rhs[ index ] );
             }
 
             return ret;
