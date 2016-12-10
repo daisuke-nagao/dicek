@@ -41,7 +41,7 @@ namespace dicek
                 return val;
             }
 
-            static type abs( const type& val )
+            static auto abs( const type& val ) -> decltype( std::abs( val ) )
             {
                 using std::abs;
                 return abs( val );
@@ -57,7 +57,7 @@ namespace dicek
                 return std::conj( val );
             }
 
-            static type abs( const type& val )
+            static auto abs( const type& val ) -> decltype( std::abs( val ) )
             {
                 using std::abs;
                 return abs( val );

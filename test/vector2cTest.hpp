@@ -205,7 +205,7 @@ public:
         expect = sqrt( pow( abs( v[ 0 ] ), 2 ) + pow( abs( v[ 1 ] ), 2 ) + pow( abs( v[ 2 ] ), 2 ) );
         TS_ASSERT_DELTA( expect, n, expect * FLT_EPSILON );
 
-        n = norm( v, 3.0 );
+        n = norm( v, 3.0l );
         expect = pow( pow( abs( v[ 0 ] ), 3 ) + pow( abs( v[ 1 ] ), 3 ) + pow( abs( v[ 2 ] ), 3 ), 1.0 / 3 );
         TS_ASSERT_DELTA( expect, n, expect * FLT_EPSILON );
     }

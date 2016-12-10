@@ -111,13 +111,37 @@ namespace dicek
         template< typename V >
         double norm( const V& v, double p )
         {
-            double ret = 0;
-
-            for( unsigned long index = 0; index < V::DIM; ++index ) {
-                ret += std::pow( std::abs( v[ index ] ), p );
+            using std::pow;
+            if( p <= 0 ) {
+                throw std::invalid_argument( "p must be greater than 0" );
             }
 
-            return std::pow( ret, 1 / p );
+            typedef typename V::scalar_traits scalar_traits;
+
+            long double ret = 0;
+            for( unsigned long index = 0; index < V::DIM; ++index ) {
+                ret += pow( scalar_traits::abs( v[ index ] ), p );
+            }
+
+            return pow( ret, 1.0 / p );
+        }
+
+        template< typename V >
+        double norm( const V& v, long double p )
+        {
+            using std::pow;
+            if( p <= 0 ) {
+                throw std::invalid_argument( "p must be greater than 0" );
+            }
+
+            typedef typename V::scalar_traits scalar_traits;
+
+            long double ret = 0;
+            for( unsigned long index = 0; index < V::DIM; ++index ) {
+                ret += pow( scalar_traits::abs( v[ index ] ), p );
+            }
+
+            return pow( ret, 1.0 / p );
         }
     }
 }
