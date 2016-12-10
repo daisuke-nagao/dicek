@@ -192,6 +192,23 @@ public:
 
         TS_ASSERT_EQUALS( x, complexf( 1, 4 ) * std::conj( complexf( 2, 3 ) ) + complexf( 2, 5 ) * std::conj( complexf( 5, 7 ) ) + complexf( 3, 6 ) *std::conj( complexf( 11, 13 ) ) );
     }
+
+    void test_norm( void )
+    {
+        vector2c v;
+        v[ 0 ] = complexf( 1, -1 );
+        v[ 1 ] = complexf( 1, -1 );
+        v[ 2 ] = complexf( 1, -1 );
+        double expect;
+
+        double n = norm( v, 2.0 );
+        expect = sqrt( pow( abs( v[ 0 ] ), 2 ) + pow( abs( v[ 1 ] ), 2 ) + pow( abs( v[ 2 ] ), 2 ) );
+        TS_ASSERT_DELTA( expect, n, expect * FLT_EPSILON );
+
+        n = norm( v, 3.0 );
+        expect = pow( pow( abs( v[ 0 ] ), 3 ) + pow( abs( v[ 1 ] ), 3 ) + pow( abs( v[ 2 ] ), 3 ), 1.0 / 3 );
+        TS_ASSERT_DELTA( expect, n, expect * FLT_EPSILON );
+    }
 };
 
 #endif /* UUID_3A12F814_B92D_11E6_AB3C_0800274CD854 */

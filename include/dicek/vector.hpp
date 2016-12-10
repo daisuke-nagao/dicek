@@ -107,6 +107,18 @@ namespace dicek
 
             return ret;
         }
+
+        template< typename V >
+        double norm( const V& v, double p )
+        {
+            double ret = 0;
+
+            for( unsigned long index = 0; index < V::DIM; ++index ) {
+                ret += std::pow( std::abs( v[ index ] ), p );
+            }
+
+            return std::pow( ret, 1 / p );
+        }
     }
 }
 

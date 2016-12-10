@@ -188,6 +188,20 @@ public:
 
         TS_ASSERT_EQUALS( x, 1 * 10 + 2 * 20 + 3 * 30 );
     }
+
+    void test_norm( void )
+    {
+        vector3d v;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        double n = norm( v, 2.0 );
+        TS_ASSERT_DELTA( sqrt( 1 + 4 + 9 ), n, FLT_EPSILON );
+
+        n = norm( v, 3.0 );
+        TS_ASSERT_DELTA( pow( (double)( 1 + 8 + 27 ), 1 / 3.0 ), n, FLT_EPSILON );
+    }
 };
 
 #endif /* UUID_50C55706_B490_11E6_BFE5_0800274CD854 */
