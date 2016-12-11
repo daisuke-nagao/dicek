@@ -107,6 +107,24 @@ namespace dicek
 
             return ret;
         }
+
+        template< typename V, typename scalar >
+        scalar norm( const V& v, scalar p )
+        {
+            using std::pow;
+            if( p < scalar( 1 ) ) {
+                throw std::range_error( "p must be greater than or equal to 1" );
+            }
+
+            typedef typename V::scalar_traits scalar_traits;
+
+            scalar ret = 0;
+            for( unsigned long index = 0; index < V::DIM; ++index ) {
+                ret += pow( scalar_traits::abs( v[ index ] ), p );
+            }
+
+            return pow( ret, scalar( 1 ) / p );
+        }
     }
 }
 

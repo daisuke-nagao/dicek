@@ -25,6 +25,8 @@ SOFTWARE.
 #define UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854
 
 #include <type_traits>
+#include <cmath>
+#include <complex>
 
 namespace dicek
 {
@@ -38,6 +40,12 @@ namespace dicek
             {
                 return val;
             }
+
+            static auto abs( const type& val ) -> decltype( std::abs( val ) )
+            {
+                using std::abs;
+                return abs( val );
+            }
         };
 
         template<typename U>
@@ -47,6 +55,12 @@ namespace dicek
             static type conj( const type& val )
             {
                 return std::conj( val );
+            }
+
+            static auto abs( const type& val ) -> decltype( std::abs( val ) )
+            {
+                using std::abs;
+                return abs( val );
             }
         };
     }

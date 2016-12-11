@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <cxxtest/TestSuite.h>
 #include <typeinfo>
+#include <cfloat>
 #include "dicek/vector.hpp"
 
 class vector3dTest : public CxxTest::TestSuite {
@@ -187,6 +188,20 @@ public:
         vector3d::scalar_type x = inner_product( _v, _w );
 
         TS_ASSERT_EQUALS( x, 1 * 10 + 2 * 20 + 3 * 30 );
+    }
+
+    void test_norm( void )
+    {
+        vector3d v;
+        v[ 0 ] = 1;
+        v[ 1 ] = 2;
+        v[ 2 ] = 3;
+
+        double n = norm( v, 2.0 );
+        TS_ASSERT_DELTA( sqrt( 1 + 4 + 9 ), n, FLT_EPSILON );
+
+        n = norm( v, 3.0 );
+        TS_ASSERT_DELTA( pow( (double)( 1 + 8 + 27 ), 1 / 3.0 ), n, FLT_EPSILON );
     }
 };
 
