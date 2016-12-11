@@ -112,8 +112,8 @@ namespace dicek
         double norm( const V& v, double p )
         {
             using std::pow;
-            if( p <= 0 ) {
-                throw std::invalid_argument( "p must be greater than 0" );
+            if( p < 1 ) {
+                throw std::range_error( "p must be greater than or equal to 1" );
             }
 
             typedef typename V::scalar_traits scalar_traits;
@@ -130,8 +130,8 @@ namespace dicek
         double norm( const V& v, long double p )
         {
             using std::pow;
-            if( p <= 0 ) {
-                throw std::invalid_argument( "p must be greater than 0" );
+            if( p < 1 ) {
+                throw std::range_error( "p must be greater than or equal to 1" );
             }
 
             typedef typename V::scalar_traits scalar_traits;
