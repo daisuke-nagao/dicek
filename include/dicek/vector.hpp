@@ -31,12 +31,35 @@ namespace dicek
 {
     namespace math
     {
+        template<typename derived, typename _scalar_type, typename _scalar_traits = scalar_traits<_scalar_type>>
+        class vector_base
+        {
+        public:
+          typedef _scalar_traits scalar_traits;
+          typedef typename scalar_traits::type scalar_type;
+
+          derived operator+( const derived& rhs ) const
+          {
+              const derived* this_ = static_cast<const derived*>( this );
+              return this_->add_impl( rhs );
+          }
+
+          derived scale( scalar_type val ) const
+          {
+              const derived* this_ = static_cast<const derived*>( this );
+              return this_->scale_impl( val );
+          }
+
+        private:
+        };
+
         template<unsigned long _DIM, typename _scalar_type, typename _scalar_traits = scalar_traits<_scalar_type>>
-        class vector {
+        class vector : public vector_base<vector<_DIM,_scalar_type,_scalar_traits>, _scalar_type, _scalar_traits> {
         public:
             static const unsigned long DIM = _DIM;
-            typedef _scalar_traits scalar_traits;
-            typedef typename scalar_traits::type scalar_type;
+            typedef vector_base<vector<_DIM,_scalar_type,_scalar_traits>, _scalar_type, _scalar_traits> vector_base_;
+            typedef typename vector_base_::scalar_traits scalar_traits;
+            typedef typename vector_base_::scalar_type scalar_type;
 
             vector()
                 : m_elm()
@@ -63,17 +86,6 @@ namespace dicek
                 return m_elm[ index ];
             }
 
-            vector operator+( const vector& rhs ) const
-            {
-                vector ret;
-
-                for( unsigned long index = 0; index < DIM; ++index ) {
-                    ret[ index ] = ( *this )[ index ] + rhs[ index ];
-                }
-
-                return ret;
-            }
-
             template< typename F >
             vector map( F f ) const
             {
@@ -86,13 +98,26 @@ namespace dicek
                 return ret;
             }
 
-            vector scale( scalar_type val ) const
+        private:
+            std::array<scalar_type, DIM> m_elm;
+
+            vector add_impl( const vector& rhs ) const
+            {
+                vector ret;
+
+                for( unsigned long index = 0; index < DIM; ++index ) {
+                    ret[ index ] = ( *this )[ index ] + rhs[ index ];
+                }
+
+                return ret;
+            }
+
+            vector scale_impl( scalar_type val ) const
             {
                 return map( [ val ]( scalar_type x ) { return val * x; } );
             }
 
-        private:
-            std::array<scalar_type, DIM> m_elm;
+            friend vector_base_;
         };
 
         template< typename V >
