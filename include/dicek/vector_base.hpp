@@ -38,10 +38,15 @@ namespace dicek
           typedef _scalar_traits scalar_traits;
           typedef typename scalar_traits::type scalar_type;
 
-          derived operator+( const derived& rhs ) const
+          derived add( const derived& rhs ) const
           {
               const derived* this_ = static_cast<const derived*>( this );
               return this_->add_impl( rhs );
+          }
+
+          derived operator+( const derived& rhs ) const
+          {
+              return add( rhs );
           }
 
           derived scale( scalar_type val ) const
