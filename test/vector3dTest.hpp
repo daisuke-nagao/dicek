@@ -27,7 +27,7 @@ SOFTWARE.
 #include <cxxtest/TestSuite.h>
 #include <typeinfo>
 #include <cfloat>
-#include "dicek/vector.hpp"
+#include "dicek/linalg/vector.hpp"
 
 class vector3dTest : public CxxTest::TestSuite {
 public:

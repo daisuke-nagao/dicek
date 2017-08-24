@@ -25,34 +25,13 @@ SOFTWARE.
 #define UUID_E2494444_AF31_11E6_9A65_0800274CD854
 
 #include <array>
-#include "scalar_traits.hpp"
+#include "../scalar_traits.hpp"
+#include "../vector_base.hpp"
 
 namespace dicek
 {
     namespace math
     {
-        template<typename derived, typename _scalar_type, typename _scalar_traits = scalar_traits<_scalar_type>>
-        class vector_base
-        {
-        public:
-          typedef _scalar_traits scalar_traits;
-          typedef typename scalar_traits::type scalar_type;
-
-          derived operator+( const derived& rhs ) const
-          {
-              const derived* this_ = static_cast<const derived*>( this );
-              return this_->add_impl( rhs );
-          }
-
-          derived scale( scalar_type val ) const
-          {
-              const derived* this_ = static_cast<const derived*>( this );
-              return this_->scale_impl( val );
-          }
-
-        private:
-        };
-
         template<unsigned long _DIM, typename _scalar_type, typename _scalar_traits = scalar_traits<_scalar_type>>
         class vector : public vector_base<vector<_DIM,_scalar_type,_scalar_traits>, _scalar_type, _scalar_traits> {
         public:
