@@ -33,7 +33,7 @@ SOFTWARE.
 class vector2cTest : public CxxTest::TestSuite {
 public:
     using complexf = std::complex<float>;
-    using vector2c = dicek::math::vector<3, complexf>;
+    using vector2c = dicek::math::linalg::vector<3, complexf>;
 
     void testDIM( void )
     {

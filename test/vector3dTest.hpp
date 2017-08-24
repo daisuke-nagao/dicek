@@ -31,7 +31,7 @@ SOFTWARE.
 
 class vector3dTest : public CxxTest::TestSuite {
 public:
-    using vector3d = dicek::math::vector<3, double>;
+    using vector3d = dicek::math::linalg::vector<3, double>;
 
     void testDIM( void )
     {
