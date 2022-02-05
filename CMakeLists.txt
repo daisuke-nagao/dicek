@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.16)
 
-project(dicek CXX)
+project(dicek VERSION 0.1.0 LANGUAGES CXX)
 
-if(NOT without-test)
+if(BUILD_TESTING)
 enable_testing()
+add_subdirectory(googletest)
 add_subdirectory(test)
 endif()
