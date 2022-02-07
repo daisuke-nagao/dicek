@@ -44,3 +44,8 @@ TEST(scalar_traitsTest, volatile_type) {
   static_assert(std::is_same<float, typename dicek::math::scalar_traits<volatile float>::type>::value, "two types are not the same");
   EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<volatile float>::type>::value));
 }
+
+TEST(scalar_traitsTest, reference_type) {
+  static_assert(std::is_same<float, typename dicek::math::scalar_traits<float&>::type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<float&>::type>::value));
+}
