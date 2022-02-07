@@ -32,18 +32,6 @@ SOFTWARE.
 
 class scalar_traitsTest : public CxxTest::TestSuite {
  public:
-  void test_plain_type(void) {
-    static_assert(std::is_same<float, dicek::math::scalar_traits<float>::type>::value, "two types are not the same");
-    TS_ASSERT((std::is_same<float, dicek::math::scalar_traits<float>::type>::value));
-
-    static_assert(std::is_same<double, dicek::math::scalar_traits<double>::type>::value, "two types are not the same");
-    TS_ASSERT((std::is_same<double, dicek::math::scalar_traits<double>::type>::value));
-  }
-
-  void test_const_type(void) {
-    static_assert(std::is_same<float, dicek::math::scalar_traits<const float>::type>::value, "two types are not the same");
-    TS_ASSERT((std::is_same<float, dicek::math::scalar_traits<const float>::type>::value));
-  }
 
   void test_volatile_type(void) {
     static_assert(std::is_same<float, dicek::math::scalar_traits<volatile float>::type>::value, "two types are not the same");
