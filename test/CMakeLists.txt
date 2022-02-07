@@ -2,6 +2,15 @@ cmake_minimum_required(VERSION 3.16)
 
 add_subdirectory(googletest)
 
+add_executable(scalar_traitsTest scalar_traitsTest.cpp)
+set_target_properties(scalar_traitsTest PROPERTIES
+  CXX_STANDARD 17
+  CXX_STANDARD_REQUIRED ON
+)
+target_link_libraries(scalar_traitsTest gtest_main)
+include(GoogleTest)
+gtest_discover_tests(scalar_traitsTest)
+
 #find_package(CxxTest)
 #
 #include_directories(${CXXTEST_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/include)
