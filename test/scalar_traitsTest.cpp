@@ -54,3 +54,8 @@ TEST(scalar_traitsTest, conj) {
   EXPECT_EQ(dicek::math::scalar_traits<float>::conj(1.5), 1.5f);
   EXPECT_EQ(dicek::math::scalar_traits<std::complex<double>>::conj(std::complex<double>(1.5, -2)), std::complex<double>(1.5, 2));
 }
+
+TEST(scalar_traitsTest, abs) {
+  EXPECT_EQ(dicek::math::scalar_traits<float>::abs(-1.5f), 1.5f);
+  EXPECT_EQ(dicek::math::scalar_traits<std::complex<double>>::abs(std::complex<double>(-1.5f, 2.0f)), sqrt(1.5 * 1.5 + 4));
+}
