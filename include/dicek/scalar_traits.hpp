@@ -32,7 +32,7 @@ namespace dicek {
 namespace math {
 template<typename T>
 struct scalar_traits {
-  typedef typename std::remove_reference<typename std::remove_cv<T>::type>::type type;
+  using type = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
 
   static type conj(const type& val) {
     return val;
@@ -46,7 +46,7 @@ struct scalar_traits {
 
 template<typename U>
 struct scalar_traits<std::complex<U>> {
-  typedef typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type type;
+  using type = typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type;
 
   static type conj(const type& val) {
     return std::conj(val);
