@@ -22,3 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 #include <gtest/gtest.h>
+
+#include <type_traits>
+
+#include "dicek/scalar_traits.hpp"
+
+TEST(scalar_traitsTest, plain_type) {
+  static_assert(std::is_same<float, dicek::math::scalar_traits<float>::type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, dicek::math::scalar_traits<float>::type>::value));
+
+  static_assert(std::is_same<double, dicek::math::scalar_traits<double>::type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<double, dicek::math::scalar_traits<double>::type>::value));
+}
+

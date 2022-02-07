@@ -7,7 +7,7 @@ set_target_properties(scalar_traitsTest PROPERTIES
   CXX_STANDARD 17
   CXX_STANDARD_REQUIRED ON
 )
-target_link_libraries(scalar_traitsTest gtest_main)
+target_link_libraries(scalar_traitsTest dicek gtest_main)
 include(GoogleTest)
 gtest_discover_tests(scalar_traitsTest)
 
