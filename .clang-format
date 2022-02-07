@@ -1,0 +1,16 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+AlignConsecutiveAssignments: true
+AllowShortFunctionsOnASingleLine: Empty
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+BreakBeforeBinaryOperators: NonAssignment
+BreakConstructorInitializers: BeforeComma
+ColumnLimit: 240
+ConstructorInitializerAllOnOneLineOrOnePerLine: true
+DerivePointerAlignment: false
+ReflowComments: false
+SortIncludes: true
+SortUsingDeclarations: true
+SpaceAfterTemplateKeyword : false
