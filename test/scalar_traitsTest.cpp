@@ -49,3 +49,8 @@ TEST(scalar_traitsTest, reference_type) {
   static_assert(std::is_same<float, typename dicek::math::scalar_traits<float&>::type>::value, "two types are not the same");
   EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<float&>::type>::value));
 }
+
+TEST(scalar_traitsTest, conj) {
+  EXPECT_EQ(dicek::math::scalar_traits<float>::conj(1.5), 1.5f);
+  EXPECT_EQ(dicek::math::scalar_traits<std::complex<double>>::conj(std::complex<double>(1.5, -2)), std::complex<double>(1.5, 2));
+}
