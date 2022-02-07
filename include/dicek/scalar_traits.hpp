@@ -28,17 +28,16 @@ SOFTWARE.
 #include <complex>
 #include <type_traits>
 
-namespace dicek {
-namespace math {
+namespace dicek::math {
 template<typename T>
 struct scalar_traits {
   using type = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
 
-  static type conj(const type& val) {
+  static constexpr type conj(type val) {
     return val;
   }
 
-  static auto abs(const type& val) -> decltype(std::abs(val)) {
+  static constexpr auto abs(type val) -> decltype(std::abs(val)) {
     using std::abs;
     return abs(val);
   }
@@ -48,16 +47,15 @@ template<typename U>
 struct scalar_traits<std::complex<U>> {
   using type = typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type;
 
-  static type conj(const type& val) {
+  static constexpr type conj(type val) {
     return std::conj(val);
   }
 
-  static auto abs(const type& val) -> decltype(std::abs(val)) {
+  static constexpr auto abs(type val) -> decltype(std::abs(val)) {
     using std::abs;
     return abs(val);
   }
 };
-}  // namespace math
-}  // namespace dicek
+}  // namespace dicek::math
 
 #endif /* UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854 */
