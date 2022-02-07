@@ -34,3 +34,8 @@ TEST(scalar_traitsTest, plain_type) {
   static_assert(std::is_same<double, typename dicek::math::scalar_traits<double>::type>::value, "two types are not the same");
   EXPECT_TRUE((std::is_same<double, typename dicek::math::scalar_traits<double>::type>::value));
 }
+
+TEST(scalar_traitsTest, const_type) {
+  static_assert(std::is_same<float, dicek::math::scalar_traits<const float>::type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, dicek::math::scalar_traits<const float>::type>::value));
+}
