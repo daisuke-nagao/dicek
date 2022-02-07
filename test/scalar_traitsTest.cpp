@@ -28,10 +28,9 @@ SOFTWARE.
 #include "dicek/scalar_traits.hpp"
 
 TEST(scalar_traitsTest, plain_type) {
-  static_assert(std::is_same<float, dicek::math::scalar_traits<float>::type>::value, "two types are not the same");
-  EXPECT_TRUE((std::is_same<float, dicek::math::scalar_traits<float>::type>::value));
+  static_assert(std::is_same<float, typename dicek::math::scalar_traits<float>::type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<float>::type>::value));
 
-  static_assert(std::is_same<double, dicek::math::scalar_traits<double>::type>::value, "two types are not the same");
-  EXPECT_TRUE((std::is_same<double, dicek::math::scalar_traits<double>::type>::value));
+  static_assert(std::is_same<double, typename dicek::math::scalar_traits<double>::type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<double, typename dicek::math::scalar_traits<double>::type>::value));
 }
-
