@@ -11,28 +11,24 @@ set_target_properties(gtest_main PROPERTIES FOLDER extern)
 set_target_properties(gmock PROPERTIES FOLDER extern)
 set_target_properties(gmock_main PROPERTIES FOLDER extern)
 
-add_executable(scalar_traitsTest scalar_traitsTest.cpp)
-set_target_properties(scalar_traitsTest PROPERTIES
-  CXX_STANDARD 17
-  CXX_STANDARD_REQUIRED ON
-)
-target_link_libraries(scalar_traitsTest dicek gtest_main)
-include(GoogleTest)
-gtest_discover_tests(scalar_traitsTest)
+macro(package_add_test TESTNAME)
+  # create an exectuable in which the tests will be stored
+  add_executable(${TESTNAME} ${ARGN})
+  # link the Google test infrastructure, mocking library, and a default main fuction to
+  # the test executable.  Remove g_test_main if writing your own main function.
+  target_link_libraries(${TESTNAME} dicek gtest gmock gtest_main)
+  # gtest_discover_tests replaces gtest_add_tests,
+  # see https://cmake.org/cmake/help/v3.10/module/GoogleTest.html for more options to pass to it
+  gtest_discover_tests(${TESTNAME}
+    # set a working directory so your project root so that you can find test data via paths relative to the project root
+    WORKING_DIRECTORY ${PROJECT_DIR}
+    PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_DIR}"
+  )
+  set_target_properties(${TESTNAME} PROPERTIES
+    FOLDER tests
+    CXX_STANDARD 17
+    CXX_STANDARD_REQUIRED ON
+  )
+endmacro()
 
-#find_package(CxxTest)
-#
-#include_directories(${CXXTEST_INCLUDE_DIR} ${PROJECT_SOURCE_DIR}/include)
-#
-#file(GLOB TEST_SOURCES "*Test.hpp" "*Test.h" "*test.h")
-#foreach( FILEPATH ${TEST_SOURCES} )
-#  get_filename_component( FILENAME_WE ${FILEPATH} NAME_WE )
-#  cxxtest_add_test(${FILENAME_WE} "${FILENAME_WE}.cpp" ${FILEPATH})
-#endforeach()
-#
-#if(${CMAKE_CXX_COMPILER_ID} MATCHES GNU)
-#  # Using gnu
-#  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=gnu++11")
-#elseif(${CMAKE_CXX_COMPILER_ID} MATCHES MSVC)
-#  # Using visual studio
-#endif()
+package_add_test(scalar_traitsTest scalar_traitsTest.cpp)
