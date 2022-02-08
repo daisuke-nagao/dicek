@@ -9,7 +9,11 @@ target_include_directories(dicek
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
 )
 
-if(BUILD_TESTING)
-enable_testing()
-add_subdirectory(test)
+if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
+  include(CTest)
+endif()
+
+if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR dicek_BUILD_TESTING) AND BUILD_TESTING)
+  include(GoogleTest)
+  add_subdirectory(test)
 endif()
