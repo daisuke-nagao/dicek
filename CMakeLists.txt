@@ -8,6 +8,7 @@ target_include_directories(dicek
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
 )
+target_compile_features(dicek INTERFACE cxx_std_17)
 
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   include(CTest)
