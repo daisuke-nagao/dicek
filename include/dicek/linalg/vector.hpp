@@ -30,6 +30,8 @@ namespace dicek::math::linalg {
 template<typename scalar_traits>
 class vector {
  public:
+  using scalar_type = typename scalar_traits::scalar_type;
+
   vector() : length_(0){};
   explicit vector(std::size_t length) : length_(length) {}
 

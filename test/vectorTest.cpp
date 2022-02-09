@@ -39,6 +39,8 @@ TEST(vectorTest, default_constructor) {
 
   EXPECT_EQ(0, empty.size());
   EXPECT_EQ(0, cempty.size());
+
+  static_assert(std::is_same<decltype(empty)::scalar_type, double>::value, "scalar type is not double");
 }
 
 TEST(vectorTest, size_constructor) {
@@ -46,4 +48,6 @@ TEST(vectorTest, size_constructor) {
   vector<type> vec3(3);
 
   EXPECT_EQ(3, vec3.size());
+
+  static_assert(std::is_same<decltype(vec3)::scalar_type, float>::value, "scalar type is not float");
 }
