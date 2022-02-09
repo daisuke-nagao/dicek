@@ -25,7 +25,7 @@ SOFTWARE.
 
 #include <type_traits>
 
-#include "dicek/scalar_traits.hpp"
+#include <dicek/scalar_traits.hpp>
 
 TEST(scalar_traitsTest, plain_type) {
   static_assert(std::is_same<float, typename dicek::math::scalar_traits<float>::type>::value, "two types are not the same");
