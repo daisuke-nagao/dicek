@@ -24,3 +24,15 @@ SOFTWARE.
 #include <gtest/gtest.h>
 
 #include <dicek/linalg/vector.hpp>
+#include <dicek/scalar_traits.hpp>
+
+template<typename scalar_traits>
+using vector = dicek::math::linalg::vector<scalar_traits>;
+
+template<typename scalar_type>
+using scalar_traits = dicek::math::scalar_traits<scalar_type>;
+
+TEST(vectorTest, default_constructor) {
+  using type = scalar_traits<double>;
+  vector<type> empty;
+}
