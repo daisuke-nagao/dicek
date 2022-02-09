@@ -35,4 +35,6 @@ using scalar_traits = dicek::math::scalar_traits<scalar_type>;
 TEST(vectorTest, default_constructor) {
   using type = scalar_traits<double>;
   vector<type> empty;
+
+  EXPECT_EQ(0, empty.size());
 }

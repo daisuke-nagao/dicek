@@ -24,9 +24,16 @@ SOFTWARE.
 #ifndef UUID_6F484ACB_9C23_4013_A905_B5DAC701113A
 #define UUID_6F484ACB_9C23_4013_A905_B5DAC701113A
 
+#include <cstddef>
+
 namespace dicek::math::linalg {
 template<typename scalar_traits>
-class vector {};
+class vector {
+ public:
+  std::size_t size() const {
+    return 0;
+  }
+};
 }  // namespace dicek::math::linalg
 
 #endif /* UUID_6F484ACB_9C23_4013_A905_B5DAC701113A */
