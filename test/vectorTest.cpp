@@ -40,3 +40,10 @@ TEST(vectorTest, default_constructor) {
   EXPECT_EQ(0, empty.size());
   EXPECT_EQ(0, cempty.size());
 }
+
+TEST(vectorTest, size_constructor) {
+  using type = scalar_traits<float>;
+  vector<type> vec3(3);
+
+  EXPECT_EQ(3, vec3.size());
+}
