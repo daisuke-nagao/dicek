@@ -31,13 +31,13 @@ SOFTWARE.
 namespace dicek::math {
 template<typename T>
 struct scalar_traits {
-  using type = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
+  using scalar_type = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
 
-  static constexpr type conj(type val) {
+  static constexpr scalar_type conj(scalar_type val) {
     return val;
   }
 
-  static constexpr auto abs(type val) -> decltype(std::abs(val)) {
+  static constexpr auto abs(scalar_type val) -> decltype(std::abs(val)) {
     using std::abs;
     return abs(val);
   }
@@ -45,13 +45,13 @@ struct scalar_traits {
 
 template<typename U>
 struct scalar_traits<std::complex<U>> {
-  using type = typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type;
+  using scalar_type = typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type;
 
-  static constexpr type conj(type val) {
+  static constexpr scalar_type conj(scalar_type val) {
     return std::conj(val);
   }
 
-  static constexpr auto abs(type val) -> decltype(std::abs(val)) {
+  static constexpr auto abs(scalar_type val) -> decltype(std::abs(val)) {
     using std::abs;
     return abs(val);
   }

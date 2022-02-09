@@ -28,26 +28,26 @@ SOFTWARE.
 #include <dicek/scalar_traits.hpp>
 
 TEST(scalar_traitsTest, plain_type) {
-  static_assert(std::is_same<float, typename dicek::math::scalar_traits<float>::type>::value, "two types are not the same");
-  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<float>::type>::value));
+  static_assert(std::is_same<float, typename dicek::math::scalar_traits<float>::scalar_type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<float>::scalar_type>::value));
 
-  static_assert(std::is_same<double, typename dicek::math::scalar_traits<double>::type>::value, "two types are not the same");
-  EXPECT_TRUE((std::is_same<double, typename dicek::math::scalar_traits<double>::type>::value));
+  static_assert(std::is_same<double, typename dicek::math::scalar_traits<double>::scalar_type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<double, typename dicek::math::scalar_traits<double>::scalar_type>::value));
 }
 
 TEST(scalar_traitsTest, const_type) {
-  static_assert(std::is_same<float, typename dicek::math::scalar_traits<const float>::type>::value, "two types are not the same");
-  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<const float>::type>::value));
+  static_assert(std::is_same<float, typename dicek::math::scalar_traits<const float>::scalar_type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<const float>::scalar_type>::value));
 }
 
 TEST(scalar_traitsTest, volatile_type) {
-  static_assert(std::is_same<float, typename dicek::math::scalar_traits<volatile float>::type>::value, "two types are not the same");
-  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<volatile float>::type>::value));
+  static_assert(std::is_same<float, typename dicek::math::scalar_traits<volatile float>::scalar_type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<volatile float>::scalar_type>::value));
 }
 
 TEST(scalar_traitsTest, reference_type) {
-  static_assert(std::is_same<float, typename dicek::math::scalar_traits<float&>::type>::value, "two types are not the same");
-  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<float&>::type>::value));
+  static_assert(std::is_same<float, typename dicek::math::scalar_traits<float&>::scalar_type>::value, "two types are not the same");
+  EXPECT_TRUE((std::is_same<float, typename dicek::math::scalar_traits<float&>::scalar_type>::value));
 }
 
 TEST(scalar_traitsTest, conj) {
