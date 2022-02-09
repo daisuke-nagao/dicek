@@ -10,6 +10,8 @@ target_include_directories(dicek
 )
 target_compile_features(dicek INTERFACE cxx_std_17)
 
+add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
+
 if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
   include(CTest)
 endif()
