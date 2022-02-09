@@ -24,46 +24,38 @@ SOFTWARE.
 #ifndef UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854
 #define UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854
 
-#include <type_traits>
 #include <cmath>
 #include <complex>
+#include <type_traits>
 
-namespace dicek
-{
-    namespace math
-    {
-        template<typename T>
-        struct scalar_traits {
-            typedef typename std::remove_reference<typename std::remove_cv<T>::type>::type type;
+namespace dicek::math {
+template<typename T>
+struct scalar_traits {
+  using scalar_type = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
 
-            static type conj( const type& val )
-            {
-                return val;
-            }
+  static constexpr scalar_type conj(scalar_type val) {
+    return val;
+  }
 
-            static auto abs( const type& val ) -> decltype( std::abs( val ) )
-            {
-                using std::abs;
-                return abs( val );
-            }
-        };
+  static constexpr auto abs(scalar_type val) -> decltype(std::abs(val)) {
+    using std::abs;
+    return abs(val);
+  }
+};
 
-        template<typename U>
-        struct scalar_traits<std::complex<U>> {
-            typedef typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type type;
+template<typename U>
+struct scalar_traits<std::complex<U>> {
+  using scalar_type = typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type;
 
-            static type conj( const type& val )
-            {
-                return std::conj( val );
-            }
+  static constexpr scalar_type conj(scalar_type val) {
+    return std::conj(val);
+  }
 
-            static auto abs( const type& val ) -> decltype( std::abs( val ) )
-            {
-                using std::abs;
-                return abs( val );
-            }
-        };
-    }
-}
+  static constexpr auto abs(scalar_type val) -> decltype(std::abs(val)) {
+    using std::abs;
+    return abs(val);
+  }
+};
+}  // namespace dicek::math
 
 #endif /* UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854 */
