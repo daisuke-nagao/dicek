@@ -36,3 +36,36 @@ if((CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME OR dicek_BUILD_TESTING) AND BUILD_T
   include(GoogleTest)
   add_subdirectory(test)
 endif()
+
+install(TARGETS dicek
+  EXPORT dicekConfig
+  LIBRARY  DESTINATION lib
+  ARCHIVE  DESTINATION lib
+  RUNTIME  DESTINATION bin
+  INCLUDES DESTINATION include
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+  DESTINATION include
+)
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/include/
+  DESTINATION include
+)
+
+include(CMakePackageConfigHelpers)
+write_basic_package_version_file(
+  dicekConfigVersion.cmake
+  VERSION ${PACKAGE_VERSION}
+  COMPATIBILITY ExactVersion
+)
+
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/dicekConfigVersion.cmake
+  DESTINATION lib/cmake/dicek
+)
+
+install(EXPORT dicekConfig
+  FILE dicekConfig.cmake
+  NAMESPACE dicek::
+  DESTINATION lib/cmake/dicek
+)
+
