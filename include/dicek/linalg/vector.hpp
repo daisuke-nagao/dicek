@@ -44,6 +44,11 @@ class vector {
     return v;
   }
 
+  const scalar_type& at(size_t idx) const {
+    static scalar_type v;
+    return v;
+  }
+
  private:
   std::size_t length_;
 };

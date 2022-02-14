@@ -54,4 +54,9 @@ TEST(vectorTest, size_constructor) {
   for (size_t i = 0; i < vec3.size(); ++i) {
     vec3.at(i) = static_cast<decltype(vec3)::scalar_type>(i + 1);
   }
+
+  const auto& cvec3 = vec3;
+  for (size_t i = 0; i < vec3.size(); ++i) {
+    EXPECT_EQ(static_cast<decltype(vec3)::scalar_type>(i + 1), cvec3.at(i));
+  }
 }
