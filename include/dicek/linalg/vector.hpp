@@ -40,12 +40,12 @@ class vector {
     return length_;
   }
 
-  scalar_type& at(size_t idx) {
+  const scalar_type& at(size_t idx) const {
     return elm_.at(idx);
   }
 
-  const scalar_type& at(size_t idx) const {
-    return elm_.at(idx);
+  scalar_type& at(size_t idx) {
+    return const_cast<scalar_type&>(const_cast<const vector*>(this)->at(idx));
   }
 
  private:
