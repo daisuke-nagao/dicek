@@ -25,6 +25,7 @@ SOFTWARE.
 #define UUID_6F484ACB_9C23_4013_A905_B5DAC701113A
 
 #include <cstddef>
+#include <vector>
 
 namespace dicek::math::linalg {
 template<typename scalar_traits>
@@ -32,25 +33,24 @@ class vector {
  public:
   using scalar_type = typename scalar_traits::scalar_type;
 
-  vector() : length_(0){};
-  explicit vector(std::size_t length) : length_(length) {}
+  vector() : length_(0), elm_(){};
+  explicit vector(std::size_t length) : length_(length), elm_(length) {}
 
   std::size_t size() const {
     return length_;
   }
 
   scalar_type& at(size_t idx) {
-    static scalar_type v;
-    return v;
+    return elm_.at(idx);
   }
 
   const scalar_type& at(size_t idx) const {
-    static scalar_type v;
-    return v;
+    return elm_.at(idx);
   }
 
  private:
   std::size_t length_;
+  std::vector<scalar_type> elm_;
 };
 }  // namespace dicek::math::linalg
 
