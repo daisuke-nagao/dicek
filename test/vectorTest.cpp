@@ -50,4 +50,8 @@ TEST(vectorTest, size_constructor) {
   EXPECT_EQ(3, vec3.size());
 
   static_assert(std::is_same<decltype(vec3)::scalar_type, float>::value, "scalar type is not float");
+
+  for (size_t i = 0; i < vec3.size(); ++i) {
+    vec3.at(i) = static_cast<decltype(vec3)::scalar_type>(i + 1);
+  }
 }
