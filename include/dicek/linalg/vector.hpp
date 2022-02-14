@@ -25,6 +25,7 @@ SOFTWARE.
 #define UUID_6F484ACB_9C23_4013_A905_B5DAC701113A
 
 #include <cstddef>
+#include <memory_resource>
 #include <vector>
 
 namespace dicek::math::linalg {
@@ -35,6 +36,7 @@ class vector {
 
   vector() : length_(0), elm_(){};
   explicit vector(std::size_t length) : length_(length), elm_(length) {}
+  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc) : length_(length), elm_(length, alloc) {}
 
   std::size_t size() const {
     return length_;
@@ -50,7 +52,7 @@ class vector {
 
  private:
   std::size_t length_;
-  std::vector<scalar_type> elm_;
+  std::pmr::vector<scalar_type> elm_;
 };
 }  // namespace dicek::math::linalg
 

@@ -25,6 +25,7 @@ SOFTWARE.
 
 #include <dicek/linalg/vector.hpp>
 #include <dicek/scalar_traits.hpp>
+#include <memory_resource>
 
 template<typename scalar_traits>
 using vector = dicek::math::linalg::vector<scalar_traits>;
@@ -59,4 +60,27 @@ TEST(vectorTest, size_constructor) {
   for (size_t i = 0; i < vec3.size(); ++i) {
     EXPECT_EQ(static_cast<decltype(vec3)::scalar_type>(i + 1), cvec3.at(i));
   }
+}
+
+TEST(vectorTest, size_and_allocator_constructor) {
+  using type = scalar_traits<float>;
+  std::pmr::unsynchronized_pool_resource mr;
+  vector<type> vec3(3, &mr);
+
+  static_assert(std::is_same<decltype(vec3)::scalar_type, float>::value, "scalar type is not float");
+
+  for (size_t i = 0; i < vec3.size(); ++i) {
+    vec3.at(i) = static_cast<decltype(vec3)::scalar_type>(i + 1);
+  }
+
+  const auto& cvec3 = vec3;
+  for (size_t i = 0; i < vec3.size(); ++i) {
+    EXPECT_EQ(static_cast<decltype(vec3)::scalar_type>(i + 1), cvec3.at(i));
+  }
+}
+
+TEST(vectorTest, size_and_null_allocator_constructor) {
+  using type                     = scalar_traits<float>;
+  std::pmr::memory_resource* pmr = std::pmr::null_memory_resource();
+  EXPECT_THROW(vector<type>(3, pmr), std::bad_alloc);
 }
