@@ -71,6 +71,10 @@ class vector {
     return elm_;
   }
 
+  scalar_type* data() {
+    return elm_;
+  }
+
  private:
   std::size_t length_;
   std::pmr::polymorphic_allocator<std::byte> allocator_;
