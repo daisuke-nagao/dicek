@@ -88,7 +88,7 @@ TEST(vectorTest, size_and_null_allocator_constructor) {
 TEST(vectorTest, external_buffer_constructor) {
   std::array<double, 5> buf            = {1, 2, 3, 4, 5};
   const auto check                     = buf;
-  constexpr decltype(buf)::size_type N = buf.size();
+  constexpr auto N = buf.size();
 
   using type = scalar_traits<double>;
   vector<type> vec5(buf.data(), buf.size());
