@@ -99,4 +99,5 @@ TEST(vectorTest, external_buffer_constructor) {
   }
 
   const type::scalar_type* data = cvec5.data();
+  EXPECT_EQ(buf.data(), data);
 }

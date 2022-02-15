@@ -51,6 +51,10 @@ class vector {
     return const_cast<scalar_type&>(const_cast<const vector*>(this)->at(idx));
   }
 
+  const scalar_type* data() const {
+    return elm_.data();
+  }
+
  private:
   std::size_t length_;
   std::pmr::vector<scalar_type> elm_;
