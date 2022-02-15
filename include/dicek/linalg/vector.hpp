@@ -40,16 +40,16 @@ class vector {
   /* constructor (2) */
   vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
     using scalar_type_allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
-    using scalar_type_sllocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
+    using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
     scalar_type_allocator_type scalar_type_allocator = allocator_;
-    elm_                                             = scalar_type_sllocator_traits::allocate(scalar_type_allocator, length_);
-    scalar_type_sllocator_traits::construct(scalar_type_allocator, elm_);
+    elm_                                             = scalar_type_allocator_traits::allocate(scalar_type_allocator, length_);
+    scalar_type_allocator_traits::construct(scalar_type_allocator, elm_);
 
     using size_t_allocator_type            = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<size_t>;
-    using size_t_sllocator_traits          = std::allocator_traits<size_t_allocator_type>;
+    using size_t_allocator_traits          = std::allocator_traits<size_t_allocator_type>;
     size_t_allocator_type size_t_allocator = allocator_;
-    ref_count_                             = size_t_sllocator_traits::allocate(size_t_allocator, length_);
-    size_t_sllocator_traits::construct(size_t_allocator, ref_count_);
+    ref_count_                             = size_t_allocator_traits::allocate(size_t_allocator, 1);
+    size_t_allocator_traits::construct(size_t_allocator, ref_count_);
     ++*ref_count_;
   }
   /* constructor (3) */
@@ -73,11 +73,17 @@ class vector {
       }
     }
     if (need_free) {
-      using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
-      using allocator_traits_type          = std::allocator_traits<allocator_type>;
-      allocator_type scalar_type_allocator = allocator_;
-      allocator_traits_type::destroy(scalar_type_allocator, elm_);
-      allocator_traits_type::deallocate(scalar_type_allocator, elm_, length_);
+      using scalar_type_allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
+      using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
+      scalar_type_allocator_type scalar_type_allocator = allocator_;
+      scalar_type_allocator_traits::destroy(scalar_type_allocator, elm_);
+      scalar_type_allocator_traits::deallocate(scalar_type_allocator, elm_, length_);
+
+      using size_t_allocator_type            = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<size_t>;
+      using size_t_allocator_traits          = std::allocator_traits<size_t_allocator_type>;
+      size_t_allocator_type size_t_allocator = allocator_;
+      size_t_allocator_traits::destroy(size_t_allocator, ref_count_);
+      size_t_allocator_traits::deallocate(size_t_allocator, ref_count_, 1);
     }
   }
 
