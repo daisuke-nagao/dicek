@@ -109,4 +109,6 @@ TEST(vectorTest, copy_constructor) {
   using type = scalar_traits<float>;
   vector<type> vec(3);
   auto copy_vec = vec;
+
+  EXPECT_EQ(vec.data(), copy_vec.data());
 }

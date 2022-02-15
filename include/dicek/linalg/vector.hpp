@@ -35,27 +35,47 @@ class vector {
   using scalar_type = typename scalar_traits::scalar_type;
 
   /* constructor (1) */
-  vector() : length_(0), allocator_(), elm_(nullptr){};
+  vector() : length_(0), allocator_(), ref_count_(nullptr), elm_(nullptr){};
   /* constructor (2) */
-  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), elm_(nullptr) {
-    using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
-    using allocator_traits_type          = std::allocator_traits<allocator_type>;
-    allocator_type scalar_type_allocator = allocator_;
-    elm_                                 = allocator_traits_type::allocate(scalar_type_allocator, length_);
-    allocator_traits_type::construct(scalar_type_allocator, elm_);
+  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
+    using scalar_type_allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
+    using scalar_type_sllocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
+    scalar_type_allocator_type scalar_type_allocator = allocator_;
+    elm_                                             = scalar_type_sllocator_traits::allocate(scalar_type_allocator, length_);
+    scalar_type_sllocator_traits::construct(scalar_type_allocator, elm_);
+
+    using size_t_allocator_type            = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<size_t>;
+    using size_t_sllocator_traits          = std::allocator_traits<size_t_allocator_type>;
+    size_t_allocator_type size_t_allocator = allocator_;
+    ref_count_                             = size_t_sllocator_traits::allocate(size_t_allocator, length_);
+    size_t_sllocator_traits::construct(size_t_allocator, elm_);
+    ++*ref_count_;
   }
   /* constructor (3) */
-  vector(scalar_type* buf, std::size_t length) : length_(length), allocator_(std::pmr::null_memory_resource()), elm_(buf) {}
+  vector(scalar_type* buf, std::size_t length) : length_(length), allocator_(std::pmr::null_memory_resource()), ref_count_(nullptr), elm_(buf) {}
   /* copy constructor */
-  vector(const vector& rhs) {}
+  vector(const vector& rhs) : length_(rhs.length_), allocator_(rhs.allocator_), ref_count_(rhs.ref_count_), elm_(rhs.elm_) {
+    if (ref_count_ != nullptr) {
+      ++*ref_count_;
+    }
+  }
 
   /* destructor */
   ~vector() noexcept {
-    using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
-    using allocator_traits_type          = std::allocator_traits<allocator_type>;
-    allocator_type scalar_type_allocator = allocator_;
-    allocator_traits_type::destroy(scalar_type_allocator, elm_);
-    allocator_traits_type::deallocate(scalar_type_allocator, elm_, length_);
+    bool need_free = true;
+    if (ref_count_ != nullptr) {
+      --*ref_count_;
+      if (*ref_count_ != 0) {
+        need_free = false;
+      }
+    }
+    if (need_free) {
+      using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
+      using allocator_traits_type          = std::allocator_traits<allocator_type>;
+      allocator_type scalar_type_allocator = allocator_;
+      allocator_traits_type::destroy(scalar_type_allocator, elm_);
+      allocator_traits_type::deallocate(scalar_type_allocator, elm_, length_);
+    }
   }
 
   std::size_t size() const {
@@ -84,6 +104,7 @@ class vector {
  private:
   std::size_t length_;
   std::pmr::polymorphic_allocator<std::byte> allocator_;
+  std::size_t* ref_count_;
   scalar_type* elm_;
 };
 }  // namespace dicek::math::linalg
