@@ -49,7 +49,7 @@ class vector {
     using size_t_sllocator_traits          = std::allocator_traits<size_t_allocator_type>;
     size_t_allocator_type size_t_allocator = allocator_;
     ref_count_                             = size_t_sllocator_traits::allocate(size_t_allocator, length_);
-    size_t_sllocator_traits::construct(size_t_allocator, elm_);
+    size_t_sllocator_traits::construct(size_t_allocator, ref_count_);
     ++*ref_count_;
   }
   /* constructor (3) */
@@ -60,6 +60,8 @@ class vector {
       ++*ref_count_;
     }
   }
+  /* move constructor */
+  vector(vector&& rhs) : length_(std::exchange(rhs.length_, 0)), allocator_(std::move(rhs.allocator_)), ref_count_(std::exchange(rhs.ref_count_, nullptr)), elm_(std::exchange(rhs.elm_, nullptr)) {}
 
   /* destructor */
   ~vector() noexcept {

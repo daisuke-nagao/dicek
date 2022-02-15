@@ -122,4 +122,6 @@ TEST(vectorTest, move_constructor) {
   auto move_vec = std::move(vec);
 
   EXPECT_EQ(data, move_vec.data());
+  EXPECT_TRUE(move_vec.ref_count());
+  EXPECT_EQ(1, move_vec.ref_count());
 }
