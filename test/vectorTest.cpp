@@ -86,18 +86,15 @@ TEST(vectorTest, size_and_null_allocator_constructor) {
 }
 
 TEST(vectorTest, external_buffer_constructor) {
-  std::array<double, 5> buf            = {0};
+  std::array<double, 5> buf            = {1, 2, 3, 4, 5};
+  const auto check                     = buf;
   constexpr decltype(buf)::size_type N = buf.size();
 
   using type = scalar_traits<double>;
   vector<type> vec5(buf.data(), buf.size());
 
-  for (size_t i = 0; i < vec5.size(); ++i) {
-    vec5.at(i) = static_cast<decltype(vec5)::scalar_type>(i + 1);
-  }
-
   const auto& cvec5 = vec5;
   for (size_t i = 0; i < vec5.size(); ++i) {
-    EXPECT_EQ(static_cast<decltype(vec5)::scalar_type>(i + 1), cvec5.at(i));
+    EXPECT_EQ(check.at(i), cvec5.at(i));
   }
 }
