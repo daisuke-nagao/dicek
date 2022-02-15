@@ -60,6 +60,8 @@ TEST(vectorTest, size_constructor) {
   for (size_t i = 0; i < vec3.size(); ++i) {
     EXPECT_EQ(static_cast<decltype(vec3)::scalar_type>(i + 1), cvec3.at(i));
   }
+
+  EXPECT_THROW(cvec3.at(3), std::out_of_range);
 }
 
 TEST(vectorTest, size_and_allocator_constructor) {

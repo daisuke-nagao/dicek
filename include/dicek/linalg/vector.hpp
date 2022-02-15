@@ -57,6 +57,9 @@ class vector {
   }
 
   const scalar_type& at(size_t idx) const {
+    if (idx >= length_) {
+      throw std::out_of_range("vector::at: idx >= this->size()");
+    }
     return elm_[idx];
   }
 
