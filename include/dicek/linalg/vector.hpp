@@ -27,6 +27,7 @@ SOFTWARE.
 #include <cstddef>
 #include <memory_resource>
 #include <optional>
+#include <utility>
 #include <vector>
 
 namespace dicek::math::linalg {
@@ -85,6 +86,14 @@ class vector {
       size_t_allocator_traits::destroy(size_t_allocator, ref_count_);
       size_t_allocator_traits::deallocate(size_t_allocator, ref_count_, 1);
     }
+  }
+
+  void swap(vector& rhs) noexcept {
+    using std::swap;
+    swap(length_, rhs.length_);
+    //swap(allocator_, rhs.allocator_);
+    swap(ref_count_, rhs.ref_count_);
+    swap(elm_, rhs.elm_);
   }
 
   std::size_t size() const {
