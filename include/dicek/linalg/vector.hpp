@@ -34,31 +34,22 @@ class vector {
  public:
   using scalar_type = typename scalar_traits::scalar_type;
 
-  vector() : length_(0), allocator_(), elm2_(nullptr){};
-  /*
-  explicit vector(std::size_t length) : length_(length), allocator_(), elm2_(nullptr) {
+  vector() : length_(0), allocator_(), elm_(nullptr){};
+  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), elm_(nullptr) {
     using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
     using allocator_traits_type          = std::allocator_traits<allocator_type>;
     allocator_type scalar_type_allocator = allocator_;
-    elm2_                                = allocator_traits_type::allocate(scalar_type_allocator, length_);
-    allocator_traits_type::construct(scalar_type_allocator, elm2_);
+    elm_                                 = allocator_traits_type::allocate(scalar_type_allocator, length_);
+    allocator_traits_type::construct(scalar_type_allocator, elm_);
   }
-  */
-  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), elm2_(nullptr) {
-    using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
-    using allocator_traits_type          = std::allocator_traits<allocator_type>;
-    allocator_type scalar_type_allocator = allocator_;
-    elm2_                                = allocator_traits_type::allocate(scalar_type_allocator, length_);
-    allocator_traits_type::construct(scalar_type_allocator, elm2_);
-  }
-  vector(scalar_type* buf, std::size_t length) : length_(length), allocator_(std::pmr::null_memory_resource()), elm2_(buf) {}
+  vector(scalar_type* buf, std::size_t length) : length_(length), allocator_(std::pmr::null_memory_resource()), elm_(buf) {}
 
   ~vector() noexcept {
     using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
     using allocator_traits_type          = std::allocator_traits<allocator_type>;
     allocator_type scalar_type_allocator = allocator_;
-    allocator_traits_type::destroy(scalar_type_allocator, elm2_);
-    allocator_traits_type::deallocate(scalar_type_allocator, elm2_, length_);
+    allocator_traits_type::destroy(scalar_type_allocator, elm_);
+    allocator_traits_type::deallocate(scalar_type_allocator, elm_, length_);
   }
 
   std::size_t size() const {
@@ -66,7 +57,7 @@ class vector {
   }
 
   const scalar_type& at(size_t idx) const {
-    return elm2_[idx];
+    return elm_[idx];
   }
 
   scalar_type& at(size_t idx) {
@@ -74,13 +65,13 @@ class vector {
   }
 
   const scalar_type* data() const {
-    return elm2_;
+    return elm_;
   }
 
  private:
   std::size_t length_;
   std::pmr::polymorphic_allocator<std::byte> allocator_;
-  scalar_type* elm2_;
+  scalar_type* elm_;
 };
 }  // namespace dicek::math::linalg
 
