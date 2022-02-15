@@ -62,6 +62,7 @@ TEST(vectorTest, size_constructor) {
   }
 
   EXPECT_THROW(cvec3.at(3), std::out_of_range);
+  EXPECT_THROW(vec3.at(4), std::out_of_range);
 }
 
 TEST(vectorTest, size_and_allocator_constructor) {
