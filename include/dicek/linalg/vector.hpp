@@ -37,6 +37,7 @@ class vector {
   vector() : length_(0), elm_(){};
   explicit vector(std::size_t length) : length_(length), elm_(length) {}
   vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc) : length_(length), elm_(length, alloc) {}
+  vector(scalar_type* buf, std::size_t length) : length_(length), elm_(buf, buf + length) {}
 
   std::size_t size() const {
     return length_;
