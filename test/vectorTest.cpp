@@ -104,3 +104,9 @@ TEST(vectorTest, external_buffer_constructor) {
   EXPECT_EQ(buf.data(), cvec.data());
   EXPECT_EQ(buf.data(), vec.data());
 }
+
+TEST(vectorTest, copy_constructor) {
+  using type = scalar_traits<float>;
+  vector<type> vec(3);
+  auto copy_vec = vec;
+}
