@@ -111,4 +111,14 @@ TEST(vectorTest, copy_constructor) {
   auto copy_vec = vec;
 
   EXPECT_EQ(vec.data(), copy_vec.data());
+  EXPECT_EQ(2, copy_vec.ref_count());
+}
+
+TEST(vectorTest, move_constructor) {
+  using type = scalar_traits<float>;
+  vector<type> vec(5);
+  auto data     = vec.data();
+  auto move_vec = std::move(vec);
+
+  EXPECT_EQ(data, move_vec.data());
 }

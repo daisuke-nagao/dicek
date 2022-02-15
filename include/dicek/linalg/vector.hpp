@@ -26,6 +26,7 @@ SOFTWARE.
 
 #include <cstddef>
 #include <memory_resource>
+#include <optional>
 #include <vector>
 
 namespace dicek::math::linalg {
@@ -95,6 +96,14 @@ class vector {
 
   const scalar_type* data() const {
     return elm_;
+  }
+
+  std::optional<std::size_t> ref_count() const {
+    if (ref_count_ != nullptr) {
+      return *ref_count_;
+    } else {
+      return std::optional<std::size_t>();
+    }
   }
 
   scalar_type* data() {
