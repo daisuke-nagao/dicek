@@ -46,39 +46,39 @@ TEST(vectorTest, default_constructor) {
 
 TEST(vectorTest, size_constructor) {
   using type = scalar_traits<float>;
-  vector<type> vec3(3);
+  vector<type> vec(3);
 
-  EXPECT_EQ(3, vec3.size());
+  EXPECT_EQ(3, vec.size());
 
-  static_assert(std::is_same<decltype(vec3)::scalar_type, float>::value, "scalar type is not float");
+  static_assert(std::is_same<decltype(vec)::scalar_type, float>::value, "scalar type is not float");
 
-  for (size_t i = 0; i < vec3.size(); ++i) {
-    vec3.at(i) = static_cast<decltype(vec3)::scalar_type>(i + 1);
+  for (size_t i = 0; i < vec.size(); ++i) {
+    vec.at(i) = static_cast<decltype(vec)::scalar_type>(i + 1);
   }
 
-  const auto& cvec3 = vec3;
-  for (size_t i = 0; i < vec3.size(); ++i) {
-    EXPECT_EQ(static_cast<decltype(vec3)::scalar_type>(i + 1), cvec3.at(i));
+  const auto& cvec = vec;
+  for (size_t i = 0; i < vec.size(); ++i) {
+    EXPECT_EQ(static_cast<decltype(vec)::scalar_type>(i + 1), cvec.at(i));
   }
 
-  EXPECT_THROW(cvec3.at(3), std::out_of_range);
-  EXPECT_THROW(vec3.at(4), std::out_of_range);
+  EXPECT_THROW(cvec.at(3), std::out_of_range);
+  EXPECT_THROW(vec.at(4), std::out_of_range);
 }
 
 TEST(vectorTest, size_and_allocator_constructor) {
   using type = scalar_traits<float>;
   std::pmr::unsynchronized_pool_resource mr;
-  vector<type> vec3(3, &mr);
+  vector<type> vec(3, &mr);
 
-  static_assert(std::is_same<decltype(vec3)::scalar_type, float>::value, "scalar type is not float");
+  static_assert(std::is_same<decltype(vec)::scalar_type, float>::value, "scalar type is not float");
 
-  for (size_t i = 0; i < vec3.size(); ++i) {
-    vec3.at(i) = static_cast<decltype(vec3)::scalar_type>(i + 1);
+  for (size_t i = 0; i < vec.size(); ++i) {
+    vec.at(i) = static_cast<decltype(vec)::scalar_type>(i + 1);
   }
 
-  const auto& cvec3 = vec3;
-  for (size_t i = 0; i < vec3.size(); ++i) {
-    EXPECT_EQ(static_cast<decltype(vec3)::scalar_type>(i + 1), cvec3.at(i));
+  const auto& cvec = vec;
+  for (size_t i = 0; i < vec.size(); ++i) {
+    EXPECT_EQ(static_cast<decltype(vec)::scalar_type>(i + 1), cvec.at(i));
   }
 }
 
@@ -94,13 +94,13 @@ TEST(vectorTest, external_buffer_constructor) {
   constexpr auto N          = buf.size();
 
   using type = scalar_traits<double>;
-  vector<type> vec5(buf.data(), buf.size());
+  vector<type> vec(buf.data(), buf.size());
 
-  const auto& cvec5 = vec5;
-  for (size_t i = 0; i < vec5.size(); ++i) {
-    EXPECT_EQ(check.at(i), cvec5.at(i));
+  const auto& cvec = vec;
+  for (size_t i = 0; i < vec.size(); ++i) {
+    EXPECT_EQ(check.at(i), cvec.at(i));
   }
 
-  EXPECT_EQ(buf.data(), cvec5.data());
-  EXPECT_EQ(buf.data(), vec5.data());
+  EXPECT_EQ(buf.data(), cvec.data());
+  EXPECT_EQ(buf.data(), vec.data());
 }
