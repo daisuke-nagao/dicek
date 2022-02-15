@@ -34,7 +34,9 @@ class vector {
  public:
   using scalar_type = typename scalar_traits::scalar_type;
 
+  /* constructor (1) */
   vector() : length_(0), allocator_(), elm_(nullptr){};
+  /* constructor (2) */
   vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), elm_(nullptr) {
     using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
     using allocator_traits_type          = std::allocator_traits<allocator_type>;
@@ -42,8 +44,12 @@ class vector {
     elm_                                 = allocator_traits_type::allocate(scalar_type_allocator, length_);
     allocator_traits_type::construct(scalar_type_allocator, elm_);
   }
+  /* constructor (3) */
   vector(scalar_type* buf, std::size_t length) : length_(length), allocator_(std::pmr::null_memory_resource()), elm_(buf) {}
+  /* copy constructor */
+  vector(const vector& rhs) {}
 
+  /* destructor */
   ~vector() noexcept {
     using allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
     using allocator_traits_type          = std::allocator_traits<allocator_type>;
