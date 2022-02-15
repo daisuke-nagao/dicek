@@ -103,6 +103,7 @@ TEST(vectorTest, external_buffer_constructor) {
 
   EXPECT_EQ(buf.data(), cvec.data());
   EXPECT_EQ(buf.data(), vec.data());
+  EXPECT_FALSE(vec.ref_count());
 }
 
 TEST(vectorTest, copy_constructor) {

@@ -102,7 +102,7 @@ class vector {
     if (ref_count_ != nullptr) {
       return *ref_count_;
     } else {
-      return std::optional<std::size_t>();
+      return std::nullopt;
     }
   }
 
