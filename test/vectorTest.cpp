@@ -129,8 +129,10 @@ TEST(vectorTest, move_constructor) {
 TEST(vectorTest, clone) {
   using namespace std::literals::complex_literals;
 
+  std::pmr::synchronized_pool_resource sync_mr;
+
   using type = scalar_traits<std::complex<float>>;
-  vector<type> vec(5);
+  vector<type> vec(5, &sync_mr);
   std::array<std::complex<float>, 5> check = {
       1.0f + 2.0fi, 3.0f + 4.0fi, 5.0f + 6.0fi, 7.0f + 8.0fi, 9.0f + 10.0fi,
   };
@@ -141,13 +143,14 @@ TEST(vectorTest, clone) {
 
   vector<type> vec_clone = vec.clone();
   EXPECT_EQ(vec.size(), vec_clone.size());
+  EXPECT_EQ(vec.get_allocator(), vec_clone.get_allocator());
 
   for (std::size_t i = 0; i < vec_clone.size(); ++i) {
     EXPECT_EQ(check.at(i), vec_clone.at(i));
   }
 
-  std::pmr::unsynchronized_pool_resource mr;
-  vector<type> vec_clone_alloc = vec.clone(&mr);
+  std::pmr::unsynchronized_pool_resource unsync_mr;
+  vector<type> vec_clone_alloc = vec.clone(&unsync_mr);
   EXPECT_EQ(vec.size(), vec_clone_alloc.size());
 
   for (std::size_t i = 0; i < vec_clone_alloc.size(); ++i) {

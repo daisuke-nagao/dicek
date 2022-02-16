@@ -122,7 +122,7 @@ class vector {
   }
 
   vector clone() {
-    vector r(size());
+    vector r(size(), get_allocator());
     for (std::size_t i = 0; i < size(); ++i) {
       r.at(i) = at(i);
     }
