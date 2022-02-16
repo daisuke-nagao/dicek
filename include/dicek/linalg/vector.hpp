@@ -114,13 +114,19 @@ class vector {
     return length_;
   }
 
+  const scalar_type& operator[](std::size_t idx) const {
+    return elm_[idx];
+  }
   const scalar_type& at(size_t idx) const {
     if (idx >= length_) {
       throw std::out_of_range("vector::at: idx >= this->size()");
     }
-    return elm_[idx];
+    return operator[](idx);
   }
 
+  scalar_type& operator[](std::size_t idx) {
+    return const_cast<scalar_type&>(const_cast<const vector*>(this)->operator[](idx));
+  }
   scalar_type& at(size_t idx) {
     return const_cast<scalar_type&>(const_cast<const vector*>(this)->at(idx));
   }
