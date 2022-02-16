@@ -125,19 +125,3 @@ TEST(vectorTest, move_constructor) {
   EXPECT_TRUE(move_vec.ref_count());
   EXPECT_EQ(1, move_vec.ref_count());
 }
-
-TEST(vectorTest, swap) {
-  using type = scalar_traits<float>;
-  vector<type> vec1(5), vec2(10);
-  auto data1 = vec1.data();
-  auto data2 = vec2.data();
-  auto size1 = vec1.size();
-  auto size2 = vec2.size();
-
-  vec1.swap(vec2);
-  EXPECT_EQ(data1, vec2.data());
-  EXPECT_EQ(size1, vec2.size());
-
-  EXPECT_EQ(data2, vec1.data());
-  EXPECT_EQ(size2, vec1.size());
-}
