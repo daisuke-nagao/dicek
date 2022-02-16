@@ -168,7 +168,7 @@ TEST(vectorTest, get_allocator) {
   EXPECT_TRUE(std::pmr::polymorphic_allocator<std::byte>(&mr) == vec.get_allocator());
 }
 
-TEST(vectorTest, iterator) {
+TEST(vectorTest, begin_end) {
   using namespace std::literals::complex_literals;
 
   std::pmr::unsynchronized_pool_resource mr;
