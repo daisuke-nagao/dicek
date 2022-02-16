@@ -88,6 +88,8 @@ class vector {
     }
   }
 
+  vector& operator=(const vector&) = delete;
+
   std::size_t size() const {
     return length_;
   }
