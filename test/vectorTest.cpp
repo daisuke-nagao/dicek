@@ -146,7 +146,7 @@ TEST(vectorTest, clone) {
     vec.at(i) = check.at(i);
   }
 
-  vector<type> vec_clone = vec.clone();
+  vector<type> vec_clone = const_cast<const vector<type>&>(vec).clone();
   EXPECT_EQ(vec.size(), vec_clone.size());
   EXPECT_EQ(vec.get_allocator(), vec_clone.get_allocator());
 

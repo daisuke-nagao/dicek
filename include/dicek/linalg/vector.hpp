@@ -147,15 +147,13 @@ class vector {
     return elm_;
   }
 
-  vector clone(std::pmr::polymorphic_allocator<std::byte> allocator) {
+  vector clone(std::pmr::polymorphic_allocator<std::byte> allocator) const {
     vector r(size(), allocator);
-    for (std::size_t i = 0; i < size(); ++i) {
-      r.at(i) = at(i);
-    }
+    std::copy(this->begin(), this->end(), r.begin());
     return r;
   }
 
-  vector clone() {
+  vector clone() const {
     return clone(get_allocator());
   }
 
