@@ -121,20 +121,16 @@ class vector {
     return elm_;
   }
 
-  vector clone() {
-    vector r(size(), get_allocator());
-    for (std::size_t i = 0; i < size(); ++i) {
-      r.at(i) = at(i);
-    }
-    return r;
-  }
-
   vector clone(std::pmr::polymorphic_allocator<std::byte> allocator) {
     vector r(size(), allocator);
     for (std::size_t i = 0; i < size(); ++i) {
       r.at(i) = at(i);
     }
     return r;
+  }
+
+  vector clone() {
+    return clone(get_allocator());
   }
 
   std::pmr::polymorphic_allocator<std::byte> get_allocator() const noexcept {
