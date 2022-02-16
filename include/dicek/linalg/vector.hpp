@@ -137,6 +137,10 @@ class vector {
     return r;
   }
 
+  std::pmr::polymorphic_allocator<std::byte> get_allocator() const {
+    return allocator_;
+  }
+
  private:
   std::size_t length_;
   std::pmr::polymorphic_allocator<std::byte> allocator_;

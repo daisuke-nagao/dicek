@@ -154,3 +154,13 @@ TEST(vectorTest, clone) {
     EXPECT_EQ(check.at(i), vec_clone_alloc.at(i));
   }
 }
+
+TEST(vectorTest, get_allocator) {
+  using namespace std::literals::complex_literals;
+
+  std::pmr::unsynchronized_pool_resource mr;
+  using type = scalar_traits<std::complex<float>>;
+  vector<type> vec(5, &mr);
+
+  EXPECT_TRUE(std::pmr::polymorphic_allocator<std::byte>(&mr) == vec.get_allocator());
+}
