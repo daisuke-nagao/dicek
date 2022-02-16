@@ -185,4 +185,15 @@ TEST(vectorTest, iterator) {
 
   auto d = std::distance(bite, eite);
   EXPECT_EQ(vec.size(), d);
+
+  const auto& cvec = vec;
+
+  auto cbite = cvec.begin();
+  auto ceite = cvec.end();
+
+  EXPECT_EQ(bite, cbite);
+  EXPECT_EQ(eite, ceite);
+
+  EXPECT_EQ(cbite, cvec.cbegin());
+  EXPECT_EQ(ceite, cvec.cend());
 }

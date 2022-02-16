@@ -88,9 +88,23 @@ class vector {
 
   vector& operator=(const vector&) = delete;
 
-  using iterator = scalar_type*;
+  using iterator       = scalar_type*;
+  using const_iterator = const scalar_type*;
+
+  const_iterator begin() const {
+    return elm_;
+  }
+  const_iterator cbegin() const {
+    return elm_;
+  }
   iterator begin() {
     return elm_;
+  }
+  const_iterator end() const {
+    return elm_ + length_;
+  }
+  const_iterator cend() const {
+    return elm_ + length_;
   }
   iterator end() {
     return elm_ + length_;
