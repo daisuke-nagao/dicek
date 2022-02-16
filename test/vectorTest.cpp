@@ -141,4 +141,8 @@ TEST(vectorTest, clone) {
 
   vector<type> vec_clone = vec.clone();
   EXPECT_EQ(vec.size(), vec_clone.size());
+
+  for (std::size_t i = 0; i < vec_clone.size(); ++i) {
+    EXPECT_EQ(check.at(i), vec_clone.at(i));
+  }
 }

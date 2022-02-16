@@ -123,6 +123,9 @@ class vector {
 
   vector clone() {
     vector r(size());
+    for (std::size_t i = 0; i < size(); ++i) {
+      r.at(i) = at(i);
+    }
     return r;
   }
 
