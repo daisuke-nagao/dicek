@@ -129,6 +129,14 @@ class vector {
     return r;
   }
 
+  vector clone(std::pmr::polymorphic_allocator<std::byte> allocator) {
+    vector r(size(), allocator);
+    for (std::size_t i = 0; i < size(); ++i) {
+      r.at(i) = at(i);
+    }
+    return r;
+  }
+
  private:
   std::size_t length_;
   std::pmr::polymorphic_allocator<std::byte> allocator_;

@@ -145,4 +145,12 @@ TEST(vectorTest, clone) {
   for (std::size_t i = 0; i < vec_clone.size(); ++i) {
     EXPECT_EQ(check.at(i), vec_clone.at(i));
   }
+
+  std::pmr::unsynchronized_pool_resource mr;
+  vector<type> vec_clone_alloc = vec.clone(&mr);
+  EXPECT_EQ(vec.size(), vec_clone_alloc.size());
+
+  for (std::size_t i = 0; i < vec_clone_alloc.size(); ++i) {
+    EXPECT_EQ(check.at(i), vec_clone_alloc.at(i));
+  }
 }
