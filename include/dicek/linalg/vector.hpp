@@ -95,19 +95,19 @@ class vector {
     return elm_;
   }
   const_iterator cbegin() const {
-    return elm_;
+    return begin();
   }
   iterator begin() {
-    return elm_;
+    return const_cast<iterator>(this->cbegin());
   }
   const_iterator end() const {
     return elm_ + length_;
   }
   const_iterator cend() const {
-    return elm_ + length_;
+    return end();
   }
   iterator end() {
-    return elm_ + length_;
+    return const_cast<iterator>(this->cend());
   }
 
   std::size_t size() const {
