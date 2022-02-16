@@ -121,6 +121,11 @@ class vector {
     return elm_;
   }
 
+  vector clone() {
+    vector r(size());
+    return r;
+  }
+
  private:
   std::size_t length_;
   std::pmr::polymorphic_allocator<std::byte> allocator_;

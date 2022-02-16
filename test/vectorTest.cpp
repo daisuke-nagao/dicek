@@ -125,3 +125,20 @@ TEST(vectorTest, move_constructor) {
   EXPECT_TRUE(move_vec.ref_count());
   EXPECT_EQ(1, move_vec.ref_count());
 }
+
+TEST(vectorTest, clone) {
+  using namespace std::literals::complex_literals;
+
+  using type = scalar_traits<std::complex<float>>;
+  vector<type> vec(5);
+  std::array<std::complex<float>, 5> check = {
+      1.0f + 2.0fi, 3.0f + 4.0fi, 5.0f + 6.0fi, 7.0f + 8.0fi, 9.0f + 10.0fi,
+  };
+
+  for (std::size_t i = 0; i < vec.size(); ++i) {
+    vec.at(i) = check.at(i);
+  }
+
+  vector<type> vec_clone = vec.clone();
+  EXPECT_EQ(vec.size(), vec_clone.size());
+}
