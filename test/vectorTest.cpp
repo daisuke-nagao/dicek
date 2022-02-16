@@ -167,3 +167,22 @@ TEST(vectorTest, get_allocator) {
 
   EXPECT_TRUE(std::pmr::polymorphic_allocator<std::byte>(&mr) == vec.get_allocator());
 }
+
+TEST(vectorTest, iterator) {
+  using namespace std::literals::complex_literals;
+
+  std::pmr::unsynchronized_pool_resource mr;
+  using type = scalar_traits<std::complex<float>>;
+  vector<type> vec(5, &mr);
+
+  for (std::size_t i = 0; i < vec.size(); ++i) {
+    vec.at(i) = i + 1;
+  }
+
+  vector<type>::iterator bite = vec.begin();
+  EXPECT_EQ(vec.at(0), *bite);
+  vector<type>::iterator eite = vec.end();
+
+  auto d = std::distance(bite, eite);
+  EXPECT_EQ(vec.size(), d);
+}
