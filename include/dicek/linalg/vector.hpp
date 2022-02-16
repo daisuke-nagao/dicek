@@ -137,7 +137,7 @@ class vector {
     return r;
   }
 
-  std::pmr::polymorphic_allocator<std::byte> get_allocator() const {
+  std::pmr::polymorphic_allocator<std::byte> get_allocator() const noexcept {
     return allocator_;
   }
 
