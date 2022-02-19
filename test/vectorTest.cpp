@@ -23,9 +23,11 @@ SOFTWARE.
 */
 #include <gtest/gtest.h>
 
+#include <array>
 #include <dicek/linalg/vector.hpp>
 #include <dicek/scalar_traits.hpp>
 #include <memory_resource>
+#include <utility>
 
 template<typename scalar_traits>
 using vector = dicek::math::linalg::vector<scalar_traits>;
