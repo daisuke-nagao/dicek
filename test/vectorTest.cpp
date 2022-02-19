@@ -141,7 +141,7 @@ TEST(vectorTest, clone) {
   using type = scalar_traits<std::complex<float>>;
   vector<type> vec(5, &sync_mr);
   std::array<std::complex<float>, 5> check = {
-      1.0f + 2.0fi, 3.0f + 4.0fi, 5.0f + 6.0fi, 7.0f + 8.0fi, 9.0f + 10.0fi,
+      1.0f + 2.0if, 3.0f + 4.0if, 5.0f + 6.0if, 7.0f + 8.0if, 9.0f + 10.0if,
   };
 
   for (std::size_t i = 0; i < vec.size(); ++i) {
