@@ -32,3 +32,4 @@ macro(package_add_test TESTNAME)
 endmacro()
 
 package_add_test(scalar_traitsTest scalar_traitsTest.cpp)
+package_add_test(vectorTest vectorTest.cpp)
