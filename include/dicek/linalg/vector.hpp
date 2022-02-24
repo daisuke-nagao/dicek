@@ -61,7 +61,7 @@ class vector {
     }
   }
   /* move constructor */
-  vector(vector&& rhs) : length_(std::exchange(rhs.length_, 0)), allocator_(std::move(rhs.allocator_)), ref_count_(std::exchange(rhs.ref_count_, nullptr)), elm_(std::exchange(rhs.elm_, nullptr)) {}
+  vector(vector&& rhs) noexcept : length_(std::exchange(rhs.length_, 0)), allocator_(std::move(rhs.allocator_)), ref_count_(std::exchange(rhs.ref_count_, nullptr)), elm_(std::exchange(rhs.elm_, nullptr)) {}
 
   /* destructor */
   ~vector() noexcept {
