@@ -23,13 +23,14 @@ SOFTWARE.
 #define UUID_6F484ACB_9C23_4013_A905_B5DAC701113A
 
 #include <cstddef>
+#include <dicek/scalar_traits.hpp>
 #include <memory_resource>
 #include <optional>
 #include <utility>
 #include <vector>
 
 namespace dicek::math::linalg {
-template<typename scalar_traits>
+template<typename T, typename scalar_traits = dicek::math::scalar_traits<T>>
 class vector {
  public:
   using scalar_type = typename scalar_traits::scalar_type;

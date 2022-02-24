@@ -25,7 +25,6 @@ SOFTWARE.
 
 #include <array>
 #include <dicek/linalg/vector.hpp>
-#include <dicek/scalar_traits.hpp>
 #include <memory_resource>
 #include <utility>
 
@@ -36,7 +35,7 @@ template<typename scalar_type>
 using scalar_traits = dicek::math::scalar_traits<scalar_type>;
 
 TEST(vectorTest, default_constructor) {
-  using type = scalar_traits<double>;
+  using type = double;
   vector<type> empty;
   const auto& cempty = const_cast<const decltype(empty)&>(empty);
 
@@ -47,7 +46,7 @@ TEST(vectorTest, default_constructor) {
 }
 
 TEST(vectorTest, size_constructor) {
-  using type = scalar_traits<float>;
+  using type = float;
   vector<type> vec(3);
 
   EXPECT_EQ(3, vec.size());
@@ -73,7 +72,7 @@ TEST(vectorTest, size_constructor) {
 }
 
 TEST(vectorTest, size_and_allocator_constructor) {
-  using type = scalar_traits<float>;
+  using type = float;
   std::pmr::unsynchronized_pool_resource mr;
   vector<type> vec(3, &mr);
 
@@ -90,7 +89,7 @@ TEST(vectorTest, size_and_allocator_constructor) {
 }
 
 TEST(vectorTest, size_and_null_allocator_constructor) {
-  using type                     = scalar_traits<float>;
+  using type                     = float;
   std::pmr::memory_resource* pmr = std::pmr::null_memory_resource();
   EXPECT_THROW(vector<type>(3, pmr), std::bad_alloc);
 }
@@ -100,7 +99,7 @@ TEST(vectorTest, external_buffer_constructor) {
   const auto check          = buf;
   constexpr auto N          = buf.size();
 
-  using type = scalar_traits<double>;
+  using type = double;
   vector<type> vec(buf.data(), buf.size());
 
   const auto& cvec = vec;
@@ -114,7 +113,7 @@ TEST(vectorTest, external_buffer_constructor) {
 }
 
 TEST(vectorTest, copy_constructor) {
-  using type = scalar_traits<float>;
+  using type = float;
   vector<type> vec(3);
   auto copy_vec = vec;
 
@@ -123,7 +122,7 @@ TEST(vectorTest, copy_constructor) {
 }
 
 TEST(vectorTest, move_constructor) {
-  using type = scalar_traits<float>;
+  using type = float;
   vector<type> vec(5);
   auto data     = vec.data();
   auto move_vec = std::move(vec);
@@ -138,7 +137,7 @@ TEST(vectorTest, clone) {
 
   std::pmr::synchronized_pool_resource sync_mr;
 
-  using type = scalar_traits<std::complex<float>>;
+  using type = std::complex<float>;
   vector<type> vec(5, &sync_mr);
   std::array<std::complex<float>, 5> check = {
       1.0f + 2.0if, 3.0f + 4.0if, 5.0f + 6.0if, 7.0f + 8.0if, 9.0f + 10.0if,
@@ -169,7 +168,7 @@ TEST(vectorTest, get_allocator) {
   using namespace std::literals::complex_literals;
 
   std::pmr::unsynchronized_pool_resource mr;
-  using type = scalar_traits<std::complex<float>>;
+  using type = std::complex<float>;
   vector<type> vec(5, &mr);
 
   EXPECT_TRUE(std::pmr::polymorphic_allocator<std::byte>(&mr) == vec.get_allocator());
@@ -179,7 +178,7 @@ TEST(vectorTest, begin_end) {
   using namespace std::literals::complex_literals;
 
   std::pmr::unsynchronized_pool_resource mr;
-  using type = scalar_traits<std::complex<float>>;
+  using type = std::complex<float>;
   vector<type> vec(5, &mr);
 
   for (std::size_t i = 0; i < vec.size(); ++i) {
