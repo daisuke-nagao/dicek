@@ -38,7 +38,7 @@ class vector {
   /* constructor (1) */
   vector() : length_(0), allocator_(), ref_count_(nullptr), elm_(nullptr){};
   /* constructor (2) */
-  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
+  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::get_default_resource()) : length_(length), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
     using scalar_type_allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
     using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
     scalar_type_allocator_type scalar_type_allocator = allocator_;
