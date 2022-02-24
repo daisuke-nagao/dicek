@@ -171,7 +171,7 @@ TEST(vectorTest, get_allocator) {
   using type = std::complex<float>;
   vector<type> vec(5, &mr);
 
-  EXPECT_TRUE(std::pmr::polymorphic_allocator<std::byte>(&mr) == vec.get_allocator());
+  EXPECT_TRUE(vec.get_allocator()->is_equal(mr));
 }
 
 TEST(vectorTest, begin_end) {
