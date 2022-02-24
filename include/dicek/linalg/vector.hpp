@@ -76,14 +76,18 @@ class vector {
       using scalar_type_allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
       using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
       scalar_type_allocator_type scalar_type_allocator = allocator_;
-      scalar_type_allocator_traits::destroy(scalar_type_allocator, elm_);
-      scalar_type_allocator_traits::deallocate(scalar_type_allocator, elm_, length_);
+      if (elm_ != nullptr) {
+        scalar_type_allocator_traits::destroy(scalar_type_allocator, elm_);
+        scalar_type_allocator_traits::deallocate(scalar_type_allocator, elm_, length_);
+      }
 
       using size_t_allocator_type            = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<size_t>;
       using size_t_allocator_traits          = std::allocator_traits<size_t_allocator_type>;
       size_t_allocator_type size_t_allocator = allocator_;
-      size_t_allocator_traits::destroy(size_t_allocator, ref_count_);
-      size_t_allocator_traits::deallocate(size_t_allocator, ref_count_, 1);
+      if (ref_count_ != nullptr) {
+        size_t_allocator_traits::destroy(size_t_allocator, ref_count_);
+        size_t_allocator_traits::deallocate(size_t_allocator, ref_count_, 1);
+      }
     }
   }
 
