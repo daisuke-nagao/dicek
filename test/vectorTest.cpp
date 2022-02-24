@@ -203,3 +203,7 @@ TEST(vectorTest, begin_end) {
   EXPECT_EQ(cbite, cvec.cbegin());
   EXPECT_EQ(ceite, cvec.cend());
 }
+
+TEST(vectorTest, swap) {
+  EXPECT_EQ(0,1);
+}
