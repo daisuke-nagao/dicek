@@ -91,7 +91,12 @@ class vector {
     }
   }
 
-  vector& operator=(const vector&) = delete;
+  vector& operator=(const vector& rhs) {
+    if (this != &rhs) {
+      vector(rhs).swap(*this);
+    }
+    return *this;
+  }
 
   vector& operator=(vector&& rhs) noexcept {
     if (this != &rhs) {

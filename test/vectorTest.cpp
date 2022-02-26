@@ -266,3 +266,28 @@ TEST(vectorTest, move_assignment) {
   v1 = std::move(v1);
   EXPECT_TRUE(v1.data() != nullptr);
 }
+
+TEST(vectorTest, copy_assignment) {
+  using type = float;
+  vector<float> v1(10), v2(5);
+  float x[10] = {
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  };
+  float y[5] = {
+      10, 20, 30, 40, 50,
+  };
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    v1.at(i) = x[i];
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    v2.at(i) = y[i];
+  }
+
+  v2 = v1;
+
+  EXPECT_EQ(2, v1.ref_count());
+  EXPECT_EQ(2, v2.ref_count());
+  EXPECT_EQ(v1.data(), v2.data());
+  EXPECT_EQ(v1.size(), v2.size());
+}
