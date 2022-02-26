@@ -72,7 +72,7 @@ class vector {
         need_free = false;
       }
     }
-    if (need_free) {
+    if (need_free && allocator_ != nullptr) {
       using scalar_type_allocator_type                 = typename std::allocator_traits<std::pmr::polymorphic_allocator<std::byte>>::template rebind_alloc<scalar_type>;
       using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
       scalar_type_allocator_type scalar_type_allocator = allocator_;
