@@ -101,6 +101,11 @@ class vector {
     return *this;
   }
 
+  void swap(vector& rhs) noexcept {
+    using std::swap;
+    swap(*this, rhs);
+  }
+
   using iterator       = scalar_type*;
   using const_iterator = const scalar_type*;
 

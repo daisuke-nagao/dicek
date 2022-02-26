@@ -238,4 +238,18 @@ TEST(vectorTest, swap) {
 
   EXPECT_EQ(ptr1, v2.data());
   EXPECT_EQ(ptr2, v1.data());
+
+  v1.swap(v2);
+  EXPECT_EQ(std::size(x), v1.size());
+  EXPECT_EQ(std::size(y), v2.size());
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    EXPECT_FLOAT_EQ(x[i], v1.at(i));
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    EXPECT_FLOAT_EQ(y[i], v2.at(i));
+  }
+
+  EXPECT_EQ(ptr1, v1.data());
+  EXPECT_EQ(ptr2, v2.data());
 }
