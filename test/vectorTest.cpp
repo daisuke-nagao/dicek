@@ -253,3 +253,16 @@ TEST(vectorTest, swap) {
   EXPECT_EQ(ptr1, v1.data());
   EXPECT_EQ(ptr2, v2.data());
 }
+
+TEST(vectorTest, move_assignment) {
+  using type = double;
+  vector<type> v1(10);
+  float x[10] = {
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  };
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    v1.at(i) = x[i];
+  }
+  v1 = std::move(v1);
+  EXPECT_TRUE(v1.data() != nullptr);
+}

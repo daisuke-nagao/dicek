@@ -94,10 +94,12 @@ class vector {
   vector& operator=(const vector&) = delete;
 
   vector& operator=(vector&& rhs) noexcept {
-    length_    = std::exchange(rhs.length_, 0);
-    allocator_ = std::exchange(rhs.allocator_, nullptr);
-    ref_count_ = std::exchange(rhs.ref_count_, nullptr);
-    elm_       = std::exchange(rhs.elm_, nullptr);
+    if (this != &rhs) {
+      length_    = std::exchange(rhs.length_, 0);
+      allocator_ = std::exchange(rhs.allocator_, nullptr);
+      ref_count_ = std::exchange(rhs.ref_count_, nullptr);
+      elm_       = std::exchange(rhs.elm_, nullptr);
+    }
     return *this;
   }
 
