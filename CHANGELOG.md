@@ -15,4 +15,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Removed
 - remove `include/dicek/vector.hpp`
 
-[Unreleased]: https://github.com/daisuke-nagao/dicek/compare/master...develop
+## [v0.0.2] - 2016-12-10
+### Added
+- License header
+
+## [v0.0.1] - 2016-12-10
+### Added
+- First version
+
+[Unreleased]: https://github.com/daisuke-nagao/dicek/compare/v0.0.2...develop
+[v0.0.2]: https://github.com/daisuke-nagao/dicek/compare/v0.0.1...v0.0.2
