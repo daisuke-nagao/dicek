@@ -171,7 +171,7 @@ TEST(vectorTest, get_allocator) {
   using type = std::complex<float>;
   vector<type> vec(5, &mr);
 
-  EXPECT_TRUE(std::pmr::polymorphic_allocator<std::byte>(&mr) == vec.get_allocator());
+  EXPECT_TRUE(vec.get_allocator()->is_equal(mr));
 }
 
 TEST(vectorTest, begin_end) {
@@ -202,4 +202,92 @@ TEST(vectorTest, begin_end) {
 
   EXPECT_EQ(cbite, cvec.cbegin());
   EXPECT_EQ(ceite, cvec.cend());
+}
+
+TEST(vectorTest, swap) {
+  using std::swap;
+  using type = float;
+  vector<float> v1(10), v2(5);
+  float x[10] = {
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  };
+  float y[5] = {
+      10, 20, 30, 40, 50,
+  };
+
+  auto ptr1 = v1.data();
+  auto ptr2 = v2.data();
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    v1.at(i) = x[i];
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    v2.at(i) = y[i];
+  }
+
+  swap(v1, v2);
+  EXPECT_EQ(std::size(x), v2.size());
+  EXPECT_EQ(std::size(y), v1.size());
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    EXPECT_FLOAT_EQ(y[i], v1.at(i));
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    EXPECT_FLOAT_EQ(x[i], v2.at(i));
+  }
+
+  EXPECT_EQ(ptr1, v2.data());
+  EXPECT_EQ(ptr2, v1.data());
+
+  v1.swap(v2);
+  EXPECT_EQ(std::size(x), v1.size());
+  EXPECT_EQ(std::size(y), v2.size());
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    EXPECT_FLOAT_EQ(x[i], v1.at(i));
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    EXPECT_FLOAT_EQ(y[i], v2.at(i));
+  }
+
+  EXPECT_EQ(ptr1, v1.data());
+  EXPECT_EQ(ptr2, v2.data());
+}
+
+TEST(vectorTest, move_assignment) {
+  using type = double;
+  vector<type> v1(10);
+  float x[10] = {
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  };
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    v1.at(i) = x[i];
+  }
+  v1 = std::move(v1);
+  EXPECT_TRUE(v1.data() != nullptr);
+}
+
+TEST(vectorTest, copy_assignment) {
+  using type = float;
+  vector<float> v1(10), v2(5);
+  float x[10] = {
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  };
+  float y[5] = {
+      10, 20, 30, 40, 50,
+  };
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    v1.at(i) = x[i];
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    v2.at(i) = y[i];
+  }
+
+  v2 = v1;
+
+  EXPECT_EQ(2, v1.ref_count());
+  EXPECT_EQ(2, v2.ref_count());
+  EXPECT_EQ(v1.data(), v2.data());
+  EXPECT_EQ(v1.size(), v2.size());
 }

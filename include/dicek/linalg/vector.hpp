@@ -38,14 +38,14 @@ class vector {
   /* constructor (1) */
   vector() : length_(0), allocator_(), ref_count_(nullptr), elm_(nullptr){};
   /* constructor (2) */
-  vector(std::size_t length, std::pmr::polymorphic_allocator<std::byte> alloc = std::pmr::polymorphic_allocator<std::byte>()) : length_(length), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
-    using scalar_type_allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
+  vector(std::size_t length, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : length_(length), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
+    using scalar_type_allocator_type                 = typename std::allocator_traits<std::pmr::polymorphic_allocator<std::byte>>::template rebind_alloc<scalar_type>;
     using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
     scalar_type_allocator_type scalar_type_allocator = allocator_;
     elm_                                             = scalar_type_allocator_traits::allocate(scalar_type_allocator, length_);
     scalar_type_allocator_traits::construct(scalar_type_allocator, elm_);
 
-    using size_t_allocator_type            = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<size_t>;
+    using size_t_allocator_type            = typename std::allocator_traits<std::pmr::polymorphic_allocator<std::byte>>::template rebind_alloc<size_t>;
     using size_t_allocator_traits          = std::allocator_traits<size_t_allocator_type>;
     size_t_allocator_type size_t_allocator = allocator_;
     ref_count_                             = size_t_allocator_traits::allocate(size_t_allocator, 1);
@@ -61,7 +61,7 @@ class vector {
     }
   }
   /* move constructor */
-  vector(vector&& rhs) : length_(std::exchange(rhs.length_, 0)), allocator_(std::move(rhs.allocator_)), ref_count_(std::exchange(rhs.ref_count_, nullptr)), elm_(std::exchange(rhs.elm_, nullptr)) {}
+  vector(vector&& rhs) noexcept : length_(std::exchange(rhs.length_, 0)), allocator_(std::move(rhs.allocator_)), ref_count_(std::exchange(rhs.ref_count_, nullptr)), elm_(std::exchange(rhs.elm_, nullptr)) {}
 
   /* destructor */
   ~vector() noexcept {
@@ -72,8 +72,8 @@ class vector {
         need_free = false;
       }
     }
-    if (need_free) {
-      using scalar_type_allocator_type                 = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<scalar_type>;
+    if (need_free && allocator_ != nullptr) {
+      using scalar_type_allocator_type                 = typename std::allocator_traits<std::pmr::polymorphic_allocator<std::byte>>::template rebind_alloc<scalar_type>;
       using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
       scalar_type_allocator_type scalar_type_allocator = allocator_;
       if (elm_ != nullptr) {
@@ -81,7 +81,7 @@ class vector {
         scalar_type_allocator_traits::deallocate(scalar_type_allocator, elm_, length_);
       }
 
-      using size_t_allocator_type            = typename std::allocator_traits<decltype(allocator_)>::template rebind_alloc<size_t>;
+      using size_t_allocator_type            = typename std::allocator_traits<std::pmr::polymorphic_allocator<std::byte>>::template rebind_alloc<size_t>;
       using size_t_allocator_traits          = std::allocator_traits<size_t_allocator_type>;
       size_t_allocator_type size_t_allocator = allocator_;
       if (ref_count_ != nullptr) {
@@ -91,7 +91,27 @@ class vector {
     }
   }
 
-  vector& operator=(const vector&) = delete;
+  vector& operator=(const vector& rhs) {
+    if (this != &rhs) {
+      vector(rhs).swap(*this);
+    }
+    return *this;
+  }
+
+  vector& operator=(vector&& rhs) noexcept {
+    if (this != &rhs) {
+      length_    = std::exchange(rhs.length_, 0);
+      allocator_ = std::exchange(rhs.allocator_, nullptr);
+      ref_count_ = std::exchange(rhs.ref_count_, nullptr);
+      elm_       = std::exchange(rhs.elm_, nullptr);
+    }
+    return *this;
+  }
+
+  void swap(vector& rhs) noexcept {
+    using std::swap;
+    swap(*this, rhs);
+  }
 
   using iterator       = scalar_type*;
   using const_iterator = const scalar_type*;
@@ -152,7 +172,7 @@ class vector {
     return elm_;
   }
 
-  vector clone(std::pmr::polymorphic_allocator<std::byte> allocator) const {
+  vector clone(std::pmr::memory_resource* allocator) const {
     vector r(size(), allocator);
     std::copy(this->begin(), this->end(), r.begin());
     return r;
@@ -162,13 +182,13 @@ class vector {
     return clone(get_allocator());
   }
 
-  std::pmr::polymorphic_allocator<std::byte> get_allocator() const noexcept {
+  std::pmr::memory_resource* get_allocator() const noexcept {
     return allocator_;
   }
 
  private:
   std::size_t length_;
-  std::pmr::polymorphic_allocator<std::byte> allocator_;
+  std::pmr::memory_resource* allocator_;
   std::size_t* ref_count_;
   scalar_type* elm_;
 };
