@@ -205,5 +205,37 @@ TEST(vectorTest, begin_end) {
 }
 
 TEST(vectorTest, swap) {
-  EXPECT_EQ(0,1);
+  using std::swap;
+  using type = float;
+  vector<float> v1(10), v2(5);
+  float x[10] = {
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
+  };
+  float y[5] = {
+      10, 20, 30, 40, 50,
+  };
+
+  auto ptr1 = v1.data();
+  auto ptr2 = v2.data();
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    v1.at(i) = x[i];
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    v2.at(i) = y[i];
+  }
+
+  swap(v1, v2);
+  EXPECT_EQ(std::size(x), v2.size());
+  EXPECT_EQ(std::size(y), v1.size());
+
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    EXPECT_FLOAT_EQ(y[i], v1.at(i));
+  }
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    EXPECT_FLOAT_EQ(x[i], v2.at(i));
+  }
+
+  EXPECT_EQ(ptr1, v2.data());
+  EXPECT_EQ(ptr2, v1.data());
 }
