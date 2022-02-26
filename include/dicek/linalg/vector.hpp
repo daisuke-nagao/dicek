@@ -24,6 +24,7 @@ SOFTWARE.
 
 #include <cstddef>
 #include <dicek/scalar_traits.hpp>
+#include <initializer_list>
 #include <memory_resource>
 #include <optional>
 #include <utility>
@@ -54,6 +55,10 @@ class vector {
   }
   /* constructor (3) */
   vector(scalar_type* buf, std::size_t length) : length_(length), allocator_(std::pmr::null_memory_resource()), ref_count_(nullptr), elm_(buf) {}
+  /* constructor (4) */
+  vector(std::initializer_list<scalar_type> ini, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : vector(ini.size(), alloc) {
+    std::copy(std::begin(ini), std::end(ini), std::begin(*this));
+  }
   /* copy constructor */
   vector(const vector& rhs) : length_(rhs.length_), allocator_(rhs.allocator_), ref_count_(rhs.ref_count_), elm_(rhs.elm_) {
     if (ref_count_ != nullptr) {

@@ -269,7 +269,7 @@ TEST(vectorTest, move_assignment) {
 
 TEST(vectorTest, copy_assignment) {
   using type = float;
-  vector<float> v1(10), v2(5);
+  vector<type> v1(10), v2(5);
   float x[10] = {
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
   };
@@ -290,4 +290,22 @@ TEST(vectorTest, copy_assignment) {
   EXPECT_EQ(2, v2.ref_count());
   EXPECT_EQ(v1.data(), v2.data());
   EXPECT_EQ(v1.size(), v2.size());
+}
+
+TEST(vectorTest, initializer_list) {
+  using type = float;
+  vector<type> v1({1.0, 2.0, 3.0});
+
+  EXPECT_EQ(3, v1.size());
+  for (std::size_t i = 0; i < v1.size(); ++i) {
+    EXPECT_FLOAT_EQ(static_cast<type>(i + 1), v1.at(i));
+  }
+
+  std::pmr::unsynchronized_pool_resource mr;
+  vector<type> v2({10, 20, 30, 40}, &mr);
+  EXPECT_EQ(4, v2.size());
+  for (std::size_t i = 0; i < v2.size(); ++i) {
+    EXPECT_FLOAT_EQ(static_cast<type>(i + 1) * 10, v2.at(i));
+  }
+  EXPECT_TRUE(v2.get_allocator()->is_equal(mr));
 }
