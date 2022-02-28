@@ -54,7 +54,7 @@ class vector {
     ++*ref_count_;
   }
   /* constructor (3) */
-  vector(scalar_type* buf, std::size_t length) : length_(length), allocator_(std::pmr::null_memory_resource()), ref_count_(nullptr), elm_(buf) {}
+  vector(scalar_type* buf, std::size_t length, std::size_t step = 1) : length_((length - 1) / step + 1), allocator_(std::pmr::null_memory_resource()), ref_count_(nullptr), elm_(buf) {}
   /* constructor (4) */
   vector(std::initializer_list<scalar_type> ini, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : vector(ini.size(), alloc) {
     std::copy(std::begin(ini), std::end(ini), std::begin(*this));

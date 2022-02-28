@@ -112,6 +112,17 @@ TEST(vectorTest, external_buffer_constructor) {
   EXPECT_FALSE(vec.ref_count());
 }
 
+TEST(vectorTest, external_buffer_constructor_with_step) {
+  std::array<double, 5> buf = {1, 2, 3, 4, 5};
+  const auto check          = buf;
+  constexpr auto N          = 3;
+
+  using type = double;
+  vector<type> vec(buf.data(), buf.size(), 2);
+
+  EXPECT_EQ(N, vec.size());
+}
+
 TEST(vectorTest, copy_constructor) {
   using type = float;
   vector<type> vec(3);
