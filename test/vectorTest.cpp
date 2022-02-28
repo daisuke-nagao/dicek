@@ -121,6 +121,9 @@ TEST(vectorTest, external_buffer_constructor_with_step) {
   vector<type> vec(buf.data(), buf.size(), 2);
 
   EXPECT_EQ(N, vec.size());
+  for (std::size_t i = 0; i < N; ++i) {
+    EXPECT_FLOAT_EQ(buf.at(2 * i), vec.at(i));
+  }
 }
 
 TEST(vectorTest, copy_constructor) {
