@@ -1,7 +1,7 @@
 /*
 MIT License
 
-Copyright (c) 2016 Daisuke NAGAO
+Copyright (c) 2017 Daisuke NAGAO
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -21,41 +21,37 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-#ifndef UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854
-#define UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854
+#ifndef UUID_23E3CA5E_8877_11E7_86C9_10050143A0C0
+#define UUID_23E3CA5E_8877_11E7_86C9_10050143A0C0
 
-#include <cmath>
-#include <complex>
-#include <type_traits>
+#include "scalar_traits.hpp"
 
-namespace dicek::math {
-template<typename T>
-struct scalar_traits {
-  using scalar_type = typename std::remove_reference<typename std::remove_cv<T>::type>::type;
+namespace dicek {
+namespace math {
+/* Curiously Recurring Template Pattern */
+template<typename derived, typename _scalar_type, typename _scalar_traits = scalar_traits<_scalar_type>>
+class vector_base {
+ public:
+  typedef _scalar_traits scalar_traits;
+  typedef typename scalar_traits::type scalar_type;
 
-  static constexpr scalar_type conj(scalar_type val) {
-    return val;
+  derived add(const derived& rhs) const {
+    const derived* this_ = static_cast<const derived*>(this);
+    return this_->add_impl(rhs);
   }
 
-  static constexpr auto abs(scalar_type val) -> decltype(std::abs(val)) {
-    using std::abs;
-    return abs(val);
+  derived operator+(const derived& rhs) const {
+    return add(rhs);
   }
+
+  derived scale(scalar_type val) const {
+    const derived* this_ = static_cast<const derived*>(this);
+    return this_->scale_impl(val);
+  }
+
+ private:
 };
+}  // namespace math
+}  // namespace dicek
 
-template<typename U>
-struct scalar_traits<std::complex<U>> {
-  using scalar_type = typename std::remove_reference<typename std::remove_cv<std::complex<U>>::type>::type;
-
-  static constexpr scalar_type conj(scalar_type val) {
-    return std::conj(val);
-  }
-
-  static constexpr auto abs(scalar_type val) -> decltype(std::abs(val)) {
-    using std::abs;
-    return abs(val);
-  }
-};
-}  // namespace dicek::math
-
-#endif /* UUID_DFDD573E_B92E_11E6_AB3C_0800274CD854 */
+#endif /* UUID_23E3CA5E_8877_11E7_86C9_10050143A0C0 */
