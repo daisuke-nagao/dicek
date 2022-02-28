@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
-project(dicek VERSION 0.3.0 LANGUAGES CXX)
+project(dicek VERSION 0.0.3 LANGUAGES CXX)
 
 set(default_build_type "Release")
 if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
