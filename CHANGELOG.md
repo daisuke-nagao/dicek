@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project does not adheres to [Semantic Versioning](http://semver.org/) as long as the major version is `0`.
 
 ## [Unreleased]
+None for now
+
+## [v0.0.3] - 2022-03-01
 ### Added
 - add include/dicek/linalg/vector.hpp
 - generate version.hpp from version.hpp.in
@@ -23,5 +26,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Added
 - First version
 
-[Unreleased]: https://github.com/daisuke-nagao/dicek/compare/v0.0.2...develop
+[Unreleased]: https://github.com/daisuke-nagao/dicek/compare/v0.0.3...develop
+[v0.0.3]: https://github.com/daisuke-nagao/dicek/compare/v0.0.2...v0.0.3
 [v0.0.2]: https://github.com/daisuke-nagao/dicek/compare/v0.0.1...v0.0.2
