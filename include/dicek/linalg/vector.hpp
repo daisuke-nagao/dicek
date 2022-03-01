@@ -39,7 +39,7 @@ class vector {
   /* constructor (1) */
   vector() : length_(0), allocator_(), ref_count_(nullptr), elm_(nullptr){};
   /* constructor (2) */
-  vector(std::size_t length, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : length_(length), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
+  vector(std::size_t length, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : length_(length), step_(1), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
     using scalar_type_allocator_type                 = typename std::allocator_traits<std::pmr::polymorphic_allocator<std::byte>>::template rebind_alloc<scalar_type>;
     using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
     scalar_type_allocator_type scalar_type_allocator = allocator_;
@@ -54,19 +54,20 @@ class vector {
     ++*ref_count_;
   }
   /* constructor (3) */
-  vector(scalar_type* buf, std::size_t length, std::size_t step = 1) : length_((length - 1) / step + 1), allocator_(std::pmr::null_memory_resource()), ref_count_(nullptr), elm_(buf) {}
+  vector(scalar_type* buf, std::size_t length, std::size_t step = 1) : length_((length - 1) / step + 1), step_(step), allocator_(std::pmr::null_memory_resource()), ref_count_(nullptr), elm_(buf) {}
   /* constructor (4) */
   vector(std::initializer_list<scalar_type> ini, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : vector(ini.size(), alloc) {
     std::copy(std::begin(ini), std::end(ini), std::begin(*this));
   }
   /* copy constructor */
-  vector(const vector& rhs) : length_(rhs.length_), allocator_(rhs.allocator_), ref_count_(rhs.ref_count_), elm_(rhs.elm_) {
+  vector(const vector& rhs) : length_(rhs.length_), step_(rhs.step_), allocator_(rhs.allocator_), ref_count_(rhs.ref_count_), elm_(rhs.elm_) {
     if (ref_count_ != nullptr) {
       ++*ref_count_;
     }
   }
   /* move constructor */
-  vector(vector&& rhs) noexcept : length_(std::exchange(rhs.length_, 0)), allocator_(std::move(rhs.allocator_)), ref_count_(std::exchange(rhs.ref_count_, nullptr)), elm_(std::exchange(rhs.elm_, nullptr)) {}
+  vector(vector&& rhs) noexcept
+      : length_(std::exchange(rhs.length_, 0)), step_(std::exchange(rhs.step_, 0)), allocator_(std::move(rhs.allocator_)), ref_count_(std::exchange(rhs.ref_count_, nullptr)), elm_(std::exchange(rhs.elm_, nullptr)) {}
 
   /* destructor */
   ~vector() noexcept {
@@ -106,6 +107,7 @@ class vector {
   vector& operator=(vector&& rhs) noexcept {
     if (this != &rhs) {
       length_    = std::exchange(rhs.length_, 0);
+      step_      = std::exchange(rhs.step_, 0);
       allocator_ = std::exchange(rhs.allocator_, nullptr);
       ref_count_ = std::exchange(rhs.ref_count_, nullptr);
       elm_       = std::exchange(rhs.elm_, nullptr);
@@ -118,26 +120,69 @@ class vector {
     swap(*this, rhs);
   }
 
-  using iterator       = scalar_type*;
-  using const_iterator = const scalar_type*;
+  class iterator {
+   public:
+    using difference_type   = ptrdiff_t;
+    using value_type        = scalar_type;
+    using pointer           = scalar_type*;
+    using reference         = scalar_type&;
+    using iterator_category = std::input_iterator_tag;
+
+    iterator()                    = default;
+    iterator(const iterator&)     = default;
+    iterator(iterator&&) noexcept = default;
+    iterator(pointer ptr, difference_type step = 1) : ptr_(ptr), step_(step) {}
+
+    iterator& operator=(const iterator&) = default;
+    iterator& operator=(iterator&&) noexcept = default;
+
+    bool operator!=(const iterator& rhs) const noexcept {
+      return ptr_ != rhs.ptr_;
+    }
+    bool operator==(const iterator& rhs) const noexcept {
+      return !this->operator!=(rhs);
+    }
+    pointer operator->() {
+      return ptr_;
+    }
+    iterator& operator++() {
+      ptr_ += step_;
+      return *this;
+    }
+    iterator operator++(int) {
+      ptr_ += step_;
+      return *this;
+    }
+    reference operator*() {
+      return *ptr_;
+    }
+    const reference operator*() const {
+      return *ptr_;
+    }
+
+   private:
+    pointer ptr_;
+    difference_type step_;
+  };
+  using const_iterator = iterator;
 
   const_iterator begin() const {
-    return elm_;
+    return const_iterator(elm_, step_);
   }
   const_iterator cbegin() const {
     return begin();
   }
   iterator begin() {
-    return const_cast<iterator>(this->cbegin());
+    return iterator(elm_, step_);
   }
   const_iterator end() const {
-    return elm_ + length_;
+    return const_iterator(elm_ + length_ * step_, step_);
   }
   const_iterator cend() const {
     return end();
   }
   iterator end() {
-    return const_cast<iterator>(this->cend());
+    return iterator(elm_ + length_ * step_, step_);
   }
 
   std::size_t size() const {
@@ -145,7 +190,7 @@ class vector {
   }
 
   const scalar_type& operator[](std::size_t idx) const {
-    return elm_[idx];
+    return *(elm_ + idx * step_);
   }
   const scalar_type& at(size_t idx) const {
     if (idx >= length_) {
@@ -193,6 +238,7 @@ class vector {
 
  private:
   std::size_t length_;
+  std::size_t step_;
   std::pmr::memory_resource* allocator_;
   std::size_t* ref_count_;
   scalar_type* elm_;
