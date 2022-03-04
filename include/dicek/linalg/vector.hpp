@@ -205,8 +205,9 @@ class vector {
       return *this;
     }
     iterator operator++(int) {
+      auto tmp = *this;
       ptr_ += step_;
-      return *this;
+      return tmp;
     }
     reference operator*() {
       return *ptr_;

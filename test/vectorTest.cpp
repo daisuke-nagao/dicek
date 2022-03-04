@@ -401,4 +401,14 @@ TEST(vectorTest, input_iterator) {
   static_assert(std::is_same<std::iterator_traits<iterator>::value_type, std::remove_reference<decltype(*b1)>::type>::value, "LegacyInputIterator");
 
   EXPECT_EQ(b1.operator->(), &*b1);
+  (void)b1++;
+
+  auto tmp1 = std::begin(v);
+  auto tmp2 = tmp1;
+
+  auto foo = *tmp1++;
+  auto x   = *tmp2;
+  auto bar = ++tmp2;
+  EXPECT_EQ(x, foo);
+  EXPECT_EQ(tmp1, tmp2);
 }
