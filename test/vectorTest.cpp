@@ -393,4 +393,7 @@ TEST(vectorTest, input_iterator) {
   EXPECT_EQ(!(b1 == e1), (b1 != e1));
   EXPECT_EQ(!(b1 == b2), (b1 != b2));
   EXPECT_EQ(!(e1 == e2), (e1 != e2));
+
+  static_assert(std::is_same<std::iterator_traits<iterator>::reference, decltype(*b1)>::value, "LegacyInputIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::value_type, std::remove_reference<decltype(*b1)>::type>::value, "LegacyInputIterator");
 }
