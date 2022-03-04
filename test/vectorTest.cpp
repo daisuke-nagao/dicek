@@ -376,3 +376,17 @@ TEST(vectorTest, const_iterator) {
   swap(b, e);
   swap(e, b);
 }
+
+TEST(vectorTest, input_iterator) {
+  using fvector  = vector<float>;
+  using iterator = fvector::iterator;
+
+  fvector v(5);
+  auto b1 = std::begin(v);
+  auto b2 = std::begin(v);
+  auto e1 = std::end(v);
+  auto e2 = e1;
+  EXPECT_FALSE(b1 == e1);
+  EXPECT_TRUE(b1 == b2);
+  EXPECT_TRUE(e1 == e2);
+}
