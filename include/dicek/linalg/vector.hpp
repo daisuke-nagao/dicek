@@ -152,13 +152,14 @@ class vector {
       return *this;
     }
     const_iterator operator++(int) {
+      auto tmp = *this;
       ptr_ += step_;
-      return *this;
+      return tmp;
     }
     reference operator*() {
       return *ptr_;
     }
-    const reference operator*() const {
+    reference operator*() const {
       return *ptr_;
     }
 

@@ -412,3 +412,39 @@ TEST(vectorTest, input_iterator) {
   EXPECT_EQ(x, foo);
   EXPECT_EQ(tmp1, tmp2);
 }
+
+TEST(vectorTest, const_input_iterator) {
+  using fvector  = vector<float>;
+  using iterator = fvector::const_iterator;
+
+  fvector v(5);
+  for (std::size_t i = 0; i < v.size(); ++i) {
+    v.at(i) = (i + 1) * M_PI;
+  }
+  auto b1 = std::cbegin(v);
+  auto b2 = std::cbegin(v);
+  auto e1 = std::cend(v);
+  auto e2 = e1;
+  EXPECT_FALSE(b1 == e1);
+  EXPECT_TRUE(b1 == b2);
+  EXPECT_TRUE(e1 == e2);
+
+  EXPECT_EQ(!(b1 == e1), (b1 != e1));
+  EXPECT_EQ(!(b1 == b2), (b1 != b2));
+  EXPECT_EQ(!(e1 == e2), (e1 != e2));
+
+  static_assert(std::is_same<std::iterator_traits<iterator>::reference, decltype(*b1)>::value, "LegacyInputIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::value_type, std::remove_reference<decltype(*b1)>::type>::value, "LegacyInputIterator");
+
+  EXPECT_EQ(b1.operator->(), &*b1);
+  (void)b1++;
+
+  auto tmp1 = std::cbegin(v);
+  auto tmp2 = tmp1;
+
+  auto foo = *tmp1++;
+  auto x   = *tmp2;
+  auto bar = ++tmp2;
+  EXPECT_EQ(x, foo);
+  EXPECT_EQ(tmp1, tmp2);
+}
