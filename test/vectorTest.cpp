@@ -389,4 +389,8 @@ TEST(vectorTest, input_iterator) {
   EXPECT_FALSE(b1 == e1);
   EXPECT_TRUE(b1 == b2);
   EXPECT_TRUE(e1 == e2);
+
+  EXPECT_EQ(!(b1 == e1), (b1 != e1));
+  EXPECT_EQ(!(b1 == b2), (b1 != b2));
+  EXPECT_EQ(!(e1 == e2), (e1 != e2));
 }
