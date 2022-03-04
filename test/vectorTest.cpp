@@ -382,6 +382,9 @@ TEST(vectorTest, input_iterator) {
   using iterator = fvector::iterator;
 
   fvector v(5);
+  for (std::size_t i = 0; i < v.size(); ++i) {
+    v.at(i) = (i + 1) * M_PI;
+  }
   auto b1 = std::begin(v);
   auto b2 = std::begin(v);
   auto e1 = std::end(v);
@@ -396,4 +399,6 @@ TEST(vectorTest, input_iterator) {
 
   static_assert(std::is_same<std::iterator_traits<iterator>::reference, decltype(*b1)>::value, "LegacyInputIterator");
   static_assert(std::is_same<std::iterator_traits<iterator>::value_type, std::remove_reference<decltype(*b1)>::type>::value, "LegacyInputIterator");
+
+  EXPECT_EQ(b1.operator->(), &*b1);
 }
