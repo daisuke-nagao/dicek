@@ -120,6 +120,57 @@ class vector {
     swap(*this, rhs);
   }
 
+  class iterator;
+  class const_iterator {
+   public:
+    using difference_type   = ptrdiff_t;
+    using value_type        = const scalar_type;
+    using pointer           = const scalar_type*;
+    using reference         = const scalar_type&;
+    using iterator_category = std::input_iterator_tag;
+
+    const_iterator()                          = default;
+    const_iterator(const const_iterator&)     = default;
+    const_iterator(const_iterator&&) noexcept = default;
+    const_iterator(pointer ptr, difference_type step = 1) : ptr_(ptr), step_(step) {}
+    const_iterator(const iterator& rhs) : ptr_(&*rhs), step_(rhs.step()) {}
+
+    const_iterator& operator=(const const_iterator&) = default;
+    const_iterator& operator=(const_iterator&&) noexcept = default;
+
+    bool operator!=(const const_iterator& rhs) const noexcept {
+      return ptr_ != rhs.ptr_;
+    }
+    bool operator==(const const_iterator& rhs) const noexcept {
+      return !this->operator!=(rhs);
+    }
+    pointer operator->() {
+      return ptr_;
+    }
+    const_iterator& operator++() {
+      ptr_ += step_;
+      return *this;
+    }
+    const_iterator operator++(int) {
+      ptr_ += step_;
+      return *this;
+    }
+    reference operator*() {
+      return *ptr_;
+    }
+    const reference operator*() const {
+      return *ptr_;
+    }
+
+    difference_type step() const {
+      return step_;
+    }
+
+   private:
+    pointer ptr_;
+    difference_type step_;
+  };
+
   class iterator {
    public:
     using difference_type   = ptrdiff_t;
@@ -135,6 +186,10 @@ class vector {
 
     iterator& operator=(const iterator&) = default;
     iterator& operator=(iterator&&) noexcept = default;
+
+    operator const_iterator() const {
+      return const_iterator(ptr_, step_);
+    }
 
     bool operator!=(const iterator& rhs) const noexcept {
       return ptr_ != rhs.ptr_;
@@ -160,12 +215,14 @@ class vector {
       return *ptr_;
     }
 
+    difference_type step() const {
+      return step_;
+    }
+
    private:
     pointer ptr_;
     difference_type step_;
   };
-  using const_iterator = iterator;
-
   const_iterator begin() const {
     return const_iterator(elm_, step_);
   }

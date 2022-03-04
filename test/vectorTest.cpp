@@ -211,8 +211,9 @@ TEST(vectorTest, begin_end) {
   auto cbite = cvec.begin();
   auto ceite = cvec.end();
 
-  EXPECT_EQ(bite, cbite);
-  EXPECT_EQ(eite, ceite);
+  using const_iterator = vector<type>::const_iterator;
+  EXPECT_EQ(const_iterator(bite), cbite);
+  EXPECT_EQ(const_iterator(eite), ceite);
 
   EXPECT_EQ(cbite, cvec.cbegin());
   EXPECT_EQ(ceite, cvec.cend());
@@ -323,3 +324,40 @@ TEST(vectorTest, initializer_list) {
   }
   EXPECT_TRUE(v2.get_allocator()->is_equal(mr));
 }
+
+TEST(vectorTest, iterator) {
+  using fvector = vector<float>;
+  using iterator = fvector::iterator;
+  static_assert(std::is_same<std::iterator_traits<iterator>::value_type, float>::value, "LegacyIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::difference_type, ptrdiff_t>::value, "LegacyIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::pointer, float*>::value, "LegacyIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::reference, float&>::value, "LegacyIterator");
+  //static_assert(std::is_same<std::iterator_traits<iterator>::iterator_category, std::random_access_iterator_tag>::value, "LegacyIterator");
+
+  iterator default_constructible;
+  iterator copy_constructible = default_constructible;
+  iterator copy_assignable;
+  copy_assignable = default_constructible;
+
+  static_assert(std::is_same<iterator::reference, decltype(*default_constructible)>::value, "LegacyIterator");
+  static_assert(std::is_same<iterator&, decltype(++default_constructible)>::value, "LegacyIterator");
+}
+
+TEST(vectorTest, const_iterator) {
+  using fvector = vector<float>;
+  using iterator = fvector::const_iterator;
+  static_assert(std::is_same<std::iterator_traits<iterator>::value_type, const float>::value, "LegacyIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::difference_type, ptrdiff_t>::value, "LegacyIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::pointer, const float*>::value, "LegacyIterator");
+  static_assert(std::is_same<std::iterator_traits<iterator>::reference, const float&>::value, "LegacyIterator");
+  //static_assert(std::is_same<std::iterator_traits<iterator>::iterator_category, std::random_access_iterator_tag>::value, "LegacyIterator");
+
+  iterator default_constructible;
+  iterator copy_constructible = default_constructible;
+  iterator copy_assignable;
+  copy_assignable = default_constructible;
+
+  static_assert(std::is_same<iterator::reference, decltype(*default_constructible)>::value, "LegacyIterator");
+  static_assert(std::is_same<iterator&, decltype(++default_constructible)>::value, "LegacyIterator");
+}
+
