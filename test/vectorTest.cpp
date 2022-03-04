@@ -326,7 +326,7 @@ TEST(vectorTest, initializer_list) {
 }
 
 TEST(vectorTest, iterator) {
-  using fvector = vector<float>;
+  using fvector  = vector<float>;
   using iterator = fvector::iterator;
   static_assert(std::is_same<std::iterator_traits<iterator>::value_type, float>::value, "LegacyIterator");
   static_assert(std::is_same<std::iterator_traits<iterator>::difference_type, ptrdiff_t>::value, "LegacyIterator");
@@ -341,10 +341,18 @@ TEST(vectorTest, iterator) {
 
   static_assert(std::is_same<iterator::reference, decltype(*default_constructible)>::value, "LegacyIterator");
   static_assert(std::is_same<iterator&, decltype(++default_constructible)>::value, "LegacyIterator");
+
+  fvector v(5);
+  auto b = std::begin(v);
+  auto e = std::end(v);
+
+  using std::swap;
+  swap(b, e);
+  swap(e, b);
 }
 
 TEST(vectorTest, const_iterator) {
-  using fvector = vector<float>;
+  using fvector  = vector<float>;
   using iterator = fvector::const_iterator;
   static_assert(std::is_same<std::iterator_traits<iterator>::value_type, const float>::value, "LegacyIterator");
   static_assert(std::is_same<std::iterator_traits<iterator>::difference_type, ptrdiff_t>::value, "LegacyIterator");
@@ -359,5 +367,12 @@ TEST(vectorTest, const_iterator) {
 
   static_assert(std::is_same<iterator::reference, decltype(*default_constructible)>::value, "LegacyIterator");
   static_assert(std::is_same<iterator&, decltype(++default_constructible)>::value, "LegacyIterator");
-}
 
+  fvector v(5);
+  auto b = std::cbegin(v);
+  auto e = std::cend(v);
+
+  using std::swap;
+  swap(b, e);
+  swap(e, b);
+}
