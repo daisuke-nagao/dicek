@@ -158,3 +158,14 @@ TEST(vectorIteratorTest, const_input_iterator) {
   EXPECT_EQ(tmp1, tmp2);
 }
 
+#ifdef __cpp_concepts
+namespace {
+  template<typename T>
+    requires std::input_or_output_iterator<T>
+    class Checker{};
+}
+TEST(vectorIteratorTest, cxx20_iterator_concepts ) {
+  using iterator = vector<float>::iterator;
+  using Check = Checker<iterator>;
+}
+#endif /* __cpp_concepts */
