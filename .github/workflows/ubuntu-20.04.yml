@@ -1,4 +1,4 @@
-name: test on windows
+name: test on ubuntu-20.04
 
 on:
   push:
@@ -18,8 +18,9 @@ jobs:
 
     strategy:
       matrix:
-        os: [windows-2022,windows-2019]
+        os: [ubuntu-20.04]
         BUILD_TYPE: [Debug, Release]
+        compiler: [{'cc': gcc-9, 'cxx': g++-9}, {'cc': gcc-10, 'cxx': g++-10}, {'cc': clang-12, 'cxx': clang++-12}]
 
     steps:
     - uses: actions/checkout@v2
@@ -29,7 +30,7 @@ jobs:
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.BUILD_TYPE}}
+      run: CC=${{matrix.compiler.cc}} CXX=${{matrix.compiler.cxx}} cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.BUILD_TYPE}}
 
     - name: Build
       # Build your program with the given configuration
