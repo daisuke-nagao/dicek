@@ -383,7 +383,7 @@ TEST(vectorTest, input_iterator) {
 
   fvector v(5);
   for (std::size_t i = 0; i < v.size(); ++i) {
-    v.at(i) = (i + 1) * M_PI;
+    v.at(i) = (i + 1) * 3.14;
   }
   auto b1 = std::begin(v);
   auto b2 = std::begin(v);
@@ -419,7 +419,7 @@ TEST(vectorTest, const_input_iterator) {
 
   fvector v(5);
   for (std::size_t i = 0; i < v.size(); ++i) {
-    v.at(i) = (i + 1) * M_PI;
+    v.at(i) = (i + 1) * 3.14;
   }
   auto b1 = std::cbegin(v);
   auto b2 = std::cbegin(v);

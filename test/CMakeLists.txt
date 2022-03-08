@@ -26,10 +26,16 @@ macro(package_add_test TESTNAME)
   )
   set_target_properties(${TESTNAME} PROPERTIES
     FOLDER tests
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS OFF
   )
 endmacro()
 
 package_add_test(scalar_traitsTest scalar_traitsTest.cpp)
 package_add_test(vectorTest vectorTest.cpp)
+
+if("cxx_std_20" IN_LIST CMAKE_CXX_COMPILE_FEATURES)
+package_add_test(scalar_traitsTest_cxx20 scalar_traitsTest.cpp)
+target_compile_features(scalar_traitsTest_cxx20 PRIVATE cxx_std_20)
+package_add_test(vectorTest_cxx20 vectorTest.cpp)
+target_compile_features(vectorTest_cxx20 PRIVATE cxx_std_20)
+endif()
