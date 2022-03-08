@@ -213,7 +213,7 @@ class vector {
     reference operator*() {
       return *ptr_;
     }
-    const reference operator*() const {
+    reference operator*() const {
       return *ptr_;
     }
 
