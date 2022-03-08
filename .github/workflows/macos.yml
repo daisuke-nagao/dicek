@@ -1,4 +1,4 @@
-name: test on ubuntu
+name: test on macos
 
 on:
   push:
