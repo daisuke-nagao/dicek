@@ -161,7 +161,7 @@ TEST(vectorIteratorTest, const_input_iterator) {
 #ifdef __cpp_concepts
 namespace {
   template<typename T>
-    requires std::input_or_output_iterator<T>
+    requires std::forward_iterator<T>
     class Checker{};
 }
 TEST(vectorIteratorTest, cxx20_iterator_concepts ) {

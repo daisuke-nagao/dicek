@@ -127,7 +127,7 @@ class vector {
     using value_type        = const scalar_type;
     using pointer           = const scalar_type*;
     using reference         = const scalar_type&;
-    using iterator_category = std::input_iterator_tag;
+    using iterator_category = std::forward_iterator_tag;
 
     const_iterator()                          = default;
     const_iterator(const const_iterator&)     = default;
@@ -178,7 +178,7 @@ class vector {
     using value_type        = scalar_type;
     using pointer           = scalar_type*;
     using reference         = scalar_type&;
-    using iterator_category = std::input_iterator_tag;
+    using iterator_category = std::forward_iterator_tag;
 
     iterator()                    = default;
     iterator(const iterator&)     = default;
