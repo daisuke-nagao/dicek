@@ -325,6 +325,7 @@ TEST(vectorTest, initializer_list) {
   EXPECT_TRUE(v2.get_allocator()->is_equal(mr));
 }
 
+#if 0
 TEST(vectorTest, iterator) {
   using fvector  = vector<float>;
   using iterator = fvector::iterator;
@@ -448,3 +449,4 @@ TEST(vectorTest, const_input_iterator) {
   EXPECT_EQ(x, foo);
   EXPECT_EQ(tmp1, tmp2);
 }
+#endif
