@@ -129,7 +129,7 @@ class vector {
     using reference         = const scalar_type&;
     using iterator_category = std::forward_iterator_tag;
 
-    const_iterator()                          = default;
+    const_iterator() : ptr_(nullptr), step_(0) {}
     const_iterator(const const_iterator&)     = default;
     const_iterator(const_iterator&&) noexcept = default;
     const_iterator(pointer ptr, difference_type step = 1) : ptr_(ptr), step_(step) {}
