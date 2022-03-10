@@ -207,7 +207,7 @@ class vector {
     }
     iterator operator++(int) {
       auto tmp = *this;
-      ptr_ += step_;
+      operator++();
       return tmp;
     }
     iterator& operator--() {
@@ -216,7 +216,7 @@ class vector {
     }
     iterator operator--(int) {
       auto tmp = *this;
-      ptr_ -= step_;
+      operator--();
       return tmp;
     }
     reference operator*() {
