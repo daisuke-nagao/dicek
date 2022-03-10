@@ -129,7 +129,7 @@ class vector {
     using reference         = const scalar_type&;
     using iterator_category = std::forward_iterator_tag;
 
-    const_iterator() : ptr_(nullptr) {}
+    const_iterator() {}
     const_iterator(const const_iterator&)     = default;
     const_iterator(const_iterator&&) noexcept = default;
     const_iterator(pointer ptr, difference_type step = 1) : ptr_(ptr), step_(step) {}
@@ -168,7 +168,7 @@ class vector {
     }
 
    private:
-    pointer ptr_;
+    pointer ptr_          = nullptr;
     difference_type step_ = 0;
   };
 
@@ -180,7 +180,7 @@ class vector {
     using reference         = scalar_type&;
     using iterator_category = std::forward_iterator_tag;
 
-    iterator()                    = default;
+    iterator() {}
     iterator(const iterator&)     = default;
     iterator(iterator&&) noexcept = default;
     iterator(pointer ptr, difference_type step = 1) : ptr_(ptr), step_(step) {}
@@ -222,8 +222,8 @@ class vector {
     }
 
    private:
-    pointer ptr_;
-    difference_type step_;
+    pointer ptr_          = nullptr;
+    difference_type step_ = 0;
   };
   const_iterator begin() const {
     return const_iterator(elm_, step_);
