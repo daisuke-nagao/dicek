@@ -43,8 +43,8 @@ TEST(vectorIteratorTest, iterator) {
   static_assert(std::is_same<std::iterator_traits<iterator>::reference, float&>::value, "LegacyIterator");
   //static_assert(std::is_same<std::iterator_traits<iterator>::iterator_category, std::random_access_iterator_tag>::value, "LegacyIterator");
 
-  iterator default_constructible = iterator();
-  iterator copy_constructible    = default_constructible;
+  iterator default_constructible;
+  iterator copy_constructible = default_constructible;
   iterator copy_assignable;
   copy_assignable = default_constructible;
 
@@ -69,8 +69,8 @@ TEST(vectorIteratorTest, const_iterator) {
   static_assert(std::is_same<std::iterator_traits<iterator>::reference, const float&>::value, "LegacyIterator");
   //static_assert(std::is_same<std::iterator_traits<iterator>::iterator_category, std::random_access_iterator_tag>::value, "LegacyIterator");
 
-  iterator default_constructible = iterator();
-  iterator copy_constructible    = default_constructible;
+  iterator default_constructible;
+  iterator copy_constructible = default_constructible;
   iterator copy_assignable;
   copy_assignable = default_constructible;
 
