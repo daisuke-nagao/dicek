@@ -1,4 +1,4 @@
-Checks: '-*,modernize-use-default-member-init'
+Checks: '-*,modernize-use-default-member-init,readability-braces-around-statements,google-readability-casting'
 CheckOptions:
   - key:   modernize-use-default-member-init.UseAssignment
     value: 'true'
