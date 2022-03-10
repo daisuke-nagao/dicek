@@ -37,9 +37,9 @@ class vector {
   using scalar_type = typename scalar_traits::scalar_type;
 
   /* constructor (1) */
-  vector() : length_(0), allocator_(), ref_count_(nullptr), elm_(nullptr){};
+  vector(){};
   /* constructor (2) */
-  vector(std::size_t length, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : length_(length), step_(1), allocator_(alloc), ref_count_(nullptr), elm_(nullptr) {
+  vector(std::size_t length, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : length_(length), step_(1), allocator_(alloc) {
     using scalar_type_allocator_type                 = typename std::allocator_traits<std::pmr::polymorphic_allocator<std::byte>>::template rebind_alloc<scalar_type>;
     using scalar_type_allocator_traits               = std::allocator_traits<scalar_type_allocator_type>;
     scalar_type_allocator_type scalar_type_allocator = allocator_;
@@ -54,7 +54,7 @@ class vector {
     ++*ref_count_;
   }
   /* constructor (3) */
-  vector(scalar_type* buf, std::size_t length, std::size_t step = 1) : length_((length - 1) / step + 1), step_(step), allocator_(std::pmr::null_memory_resource()), ref_count_(nullptr), elm_(buf) {}
+  vector(scalar_type* buf, std::size_t length, std::size_t step = 1) : length_((length - 1) / step + 1), step_(step), allocator_(std::pmr::null_memory_resource()), elm_(buf) {}
   /* constructor (4) */
   vector(std::initializer_list<scalar_type> ini, std::pmr::memory_resource* alloc = std::pmr::get_default_resource()) : vector(ini.size(), alloc) {
     std::copy(std::begin(ini), std::end(ini), std::begin(*this));
@@ -129,7 +129,7 @@ class vector {
     using reference         = const scalar_type&;
     using iterator_category = std::forward_iterator_tag;
 
-    const_iterator() : ptr_(nullptr), step_(0) {}
+    const_iterator() : ptr_(nullptr) {}
     const_iterator(const const_iterator&)     = default;
     const_iterator(const_iterator&&) noexcept = default;
     const_iterator(pointer ptr, difference_type step = 1) : ptr_(ptr), step_(step) {}
@@ -169,7 +169,7 @@ class vector {
 
    private:
     pointer ptr_;
-    difference_type step_;
+    difference_type step_ = 0;
   };
 
   class iterator {
@@ -296,11 +296,11 @@ class vector {
   }
 
  private:
-  std::size_t length_;
+  std::size_t length_ = 0;
   std::size_t step_;
-  std::pmr::memory_resource* allocator_;
-  std::size_t* ref_count_;
-  scalar_type* elm_;
+  std::pmr::memory_resource* allocator_ = nullptr;
+  std::size_t* ref_count_               = nullptr;
+  scalar_type* elm_                     = nullptr;
 };
 }  // namespace dicek::math::linalg
 
