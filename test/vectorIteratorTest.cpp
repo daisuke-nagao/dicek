@@ -175,9 +175,19 @@ TEST(vectorIteratorTest, cxx20_iterator_concepts) {
   iterator1 i1    = iterator1();
   iterator1::difference_type(3) + i1;
 
+  using iterator2 = vector<std::complex<double>>::iterator;
+  using Check2    = Checker<iterator2>;
+  iterator2 i2    = iterator2();
+  iterator2::difference_type(5) + i2;
+
   using const_iterator1 = vector<float>::const_iterator;
   using ConstCheck1     = ConstChecker<const_iterator1>;
-  const_iterator1 i2    = const_iterator1();
-  const_iterator1::difference_type(3) + i2;
+  const_iterator1 ci1   = const_iterator1();
+  const_iterator1::difference_type(3) + ci1;
+
+  using const_iterator2 = vector<std::complex<double>>::const_iterator;
+  using ConstCheck2     = ConstChecker<const_iterator2>;
+  const_iterator2 ci2   = const_iterator2();
+  const_iterator2::difference_type(5) + ci2;
 }
 #endif /* __cpp_concepts */
