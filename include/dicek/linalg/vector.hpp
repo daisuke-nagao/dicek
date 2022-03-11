@@ -127,7 +127,7 @@ class vector {
     using value_type        = const scalar_type;
     using pointer           = const scalar_type*;
     using reference         = const scalar_type&;
-    using iterator_category = std::bidirectional_iterator_tag;
+    using iterator_category = std::random_access_iterator_tag;
 
     const_iterator() {}
     const_iterator(const const_iterator&)     = default;
@@ -156,6 +156,15 @@ class vector {
       ptr_ += step_;
       return tmp;
     }
+    const_iterator& operator--() {
+      ptr_ -= step_;
+      return *this;
+    }
+    const_iterator operator--(int) {
+      auto tmp = *this;
+      ptr_ -= step_;
+      return tmp;
+    }
     reference operator*() {
       return *ptr_;
     }
@@ -165,6 +174,61 @@ class vector {
 
     difference_type step() const {
       return step_;
+    }
+
+    const_iterator& operator+=(difference_type n) {
+      ptr_ += step_ * n;
+      return *this;
+    }
+
+    const_iterator operator+(difference_type n) const {
+      auto tmp = *this;
+      tmp += n;
+      return tmp;
+    }
+
+    const_iterator& operator-=(difference_type n) {
+      ptr_ -= step_ * n;
+      return *this;
+    }
+
+    const_iterator operator-(difference_type n) const {
+      auto tmp = *this;
+      tmp -= n;
+      return tmp;
+    }
+
+    reference operator[](difference_type n) const {
+      return ptr_[step_ * n];
+    }
+
+    difference_type operator-(const const_iterator& rhs) const {
+      return (ptr_ - rhs.ptr_) / step_;
+    }
+
+   private:
+    int three_way_comparison(const const_iterator& rhs) const {
+      if (ptr_ < rhs.ptr_) {
+        return -1;
+      } else if (ptr_ > rhs.ptr_) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
+   public:
+    bool operator<(const const_iterator& rhs) const {
+      return three_way_comparison(rhs) < 0;
+    }
+    bool operator<=(const const_iterator& rhs) const {
+      return three_way_comparison(rhs) <= 0;
+    }
+    bool operator>(const const_iterator& rhs) const {
+      return three_way_comparison(rhs) > 0;
+    }
+    bool operator>=(const const_iterator& rhs) const {
+      return three_way_comparison(rhs) >= 0;
     }
 
    private:
@@ -178,7 +242,7 @@ class vector {
     using value_type        = scalar_type;
     using pointer           = scalar_type*;
     using reference         = scalar_type&;
-    using iterator_category = std::bidirectional_iterator_tag;
+    using iterator_category = std::random_access_iterator_tag;
 
     iterator() {}
     iterator(const iterator&)     = default;
@@ -228,6 +292,61 @@ class vector {
 
     difference_type step() const {
       return step_;
+    }
+
+    iterator& operator+=(difference_type n) {
+      ptr_ += step_ * n;
+      return *this;
+    }
+
+    iterator operator+(difference_type n) const {
+      auto tmp = *this;
+      tmp += n;
+      return tmp;
+    }
+
+    iterator& operator-=(difference_type n) {
+      ptr_ -= step_ * n;
+      return *this;
+    }
+
+    iterator operator-(difference_type n) const {
+      auto tmp = *this;
+      tmp -= n;
+      return tmp;
+    }
+
+    reference operator[](difference_type n) const {
+      return ptr_[step_ * n];
+    }
+
+    difference_type operator-(const iterator& rhs) const {
+      return (ptr_ - rhs.ptr_) / step_;
+    }
+
+   private:
+    int three_way_comparison(const iterator& rhs) const {
+      if (ptr_ < rhs.ptr_) {
+        return -1;
+      } else if (ptr_ > rhs.ptr_) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
+   public:
+    bool operator<(const iterator& rhs) const {
+      return three_way_comparison(rhs) < 0;
+    }
+    bool operator<=(const iterator& rhs) const {
+      return three_way_comparison(rhs) <= 0;
+    }
+    bool operator>(const iterator& rhs) const {
+      return three_way_comparison(rhs) > 0;
+    }
+    bool operator>=(const iterator& rhs) const {
+      return three_way_comparison(rhs) >= 0;
     }
 
    private:
@@ -311,6 +430,11 @@ class vector {
   std::size_t* ref_count_               = nullptr;
   scalar_type* elm_                     = nullptr;
 };
+
+template<typename It>
+It operator+(typename It::difference_type n, It i) noexcept {
+  return i += n;
+}
 }  // namespace dicek::math::linalg
 
 #endif /* UUID_6F484ACB_9C23_4013_A905_B5DAC701113A */

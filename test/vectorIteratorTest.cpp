@@ -161,12 +161,23 @@ TEST(vectorIteratorTest, const_input_iterator) {
 #ifdef __cpp_concepts
 namespace {
 template<typename T>
-requires std::bidirectional_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type>
+requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type>
 class Checker {
+};
+template<typename T>
+requires std::random_access_iterator<T>
+class ConstChecker {
 };
 }  // namespace
 TEST(vectorIteratorTest, cxx20_iterator_concepts) {
-  using iterator = vector<float>::iterator;
-  using Check    = Checker<iterator>;
+  using iterator1 = vector<float>::iterator;
+  using Check1    = Checker<iterator1>;
+  iterator1 i1    = iterator1();
+  iterator1::difference_type(3) + i1;
+
+  using const_iterator1 = vector<float>::const_iterator;
+  using ConstCheck1     = ConstChecker<const_iterator1>;
+  const_iterator1 i2    = const_iterator1();
+  const_iterator1::difference_type(3) + i2;
 }
 #endif /* __cpp_concepts */
