@@ -138,11 +138,11 @@ class vector {
     const_iterator& operator=(const const_iterator&) = default;
     const_iterator& operator=(const_iterator&&) noexcept = default;
 
-    bool operator!=(const const_iterator& rhs) const noexcept {
-      return ptr_ != rhs.ptr_;
-    }
     bool operator==(const const_iterator& rhs) const noexcept {
-      return !this->operator!=(rhs);
+      return three_way_comparison(rhs) == 0;
+    }
+    bool operator!=(const const_iterator& rhs) const noexcept {
+      return !(*this == rhs);
     }
     pointer operator->() {
       return ptr_;
@@ -206,17 +206,6 @@ class vector {
       return (ptr_ - rhs.ptr_) / step_;
     }
 
-   private:
-    int three_way_comparison(const const_iterator& rhs) const {
-      if (ptr_ < rhs.ptr_) {
-        return -1;
-      } else if (ptr_ > rhs.ptr_) {
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-
    public:
     bool operator<(const const_iterator& rhs) const {
       return three_way_comparison(rhs) < 0;
@@ -229,6 +218,17 @@ class vector {
     }
     bool operator>=(const const_iterator& rhs) const {
       return three_way_comparison(rhs) >= 0;
+    }
+
+   private:
+    int three_way_comparison(const const_iterator& rhs) const {
+      if (ptr_ < rhs.ptr_) {
+        return -1;
+      } else if (ptr_ > rhs.ptr_) {
+        return 1;
+      } else {
+        return 0;
+      }
     }
 
    private:
@@ -256,11 +256,11 @@ class vector {
       return const_iterator(ptr_, step_);
     }
 
-    bool operator!=(const iterator& rhs) const noexcept {
-      return ptr_ != rhs.ptr_;
-    }
     bool operator==(const iterator& rhs) const noexcept {
-      return !this->operator!=(rhs);
+      return three_way_comparison(rhs) == 0;
+    }
+    bool operator!=(const iterator& rhs) const noexcept {
+      return !(*this == rhs);
     }
     pointer operator->() {
       return ptr_;
@@ -324,17 +324,6 @@ class vector {
       return (ptr_ - rhs.ptr_) / step_;
     }
 
-   private:
-    int three_way_comparison(const iterator& rhs) const {
-      if (ptr_ < rhs.ptr_) {
-        return -1;
-      } else if (ptr_ > rhs.ptr_) {
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-
    public:
     bool operator<(const iterator& rhs) const {
       return three_way_comparison(rhs) < 0;
@@ -347,6 +336,17 @@ class vector {
     }
     bool operator>=(const iterator& rhs) const {
       return three_way_comparison(rhs) >= 0;
+    }
+
+   private:
+    int three_way_comparison(const iterator& rhs) const {
+      if (ptr_ < rhs.ptr_) {
+        return -1;
+      } else if (ptr_ > rhs.ptr_) {
+        return 1;
+      } else {
+        return 0;
+      }
     }
 
    private:
