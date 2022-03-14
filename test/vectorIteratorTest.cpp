@@ -204,8 +204,15 @@ concept LegacyInputIterator = LegacyIterator<I> && std::equality_comparable<I> &
   requires std::signed_integral<typename std::incrementable_traits<I>::difference_type>;
 };
 
+template<class I>
+concept LegacyForwardIterator = LegacyInputIterator<I> && std::constructible_from<I> && std::is_lvalue_reference_v<std::iter_reference_t<I>> && std::same_as < std::remove_cvref_t<std::iter_reference_t<I>>,
+typename std::indirectly_readable_traits<I>::value_type > &&requires(I i) {
+  { i++ } -> std::convertible_to<const I&>;
+  { *i++ } -> std::same_as<std::iter_reference_t<I>>;
+};
+
 template<typename T>
-requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyInputIterator<T>
+requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyForwardIterator<T>
 class Checker {
 };
 
