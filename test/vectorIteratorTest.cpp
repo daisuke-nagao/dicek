@@ -218,8 +218,19 @@ concept LegacyBidirectionalIterator = LegacyForwardIterator<I> && requires(I i) 
   { *i-- } -> std::same_as<std::iter_reference_t<I>>;
 };
 
+template<class I>
+concept LegacyRandomAccessIterator = LegacyBidirectionalIterator<I> && std::totally_ordered<I> && requires(I i, typename std::incrementable_traits<I>::difference_type n) {
+  { i += n } -> std::same_as<I&>;
+  { i -= n } -> std::same_as<I&>;
+  { i + n } -> std::same_as<I>;
+  { n + i } -> std::same_as<I>;
+  { i - n } -> std::same_as<I>;
+  { i - i } -> std::same_as<decltype(n)>;
+  { i[n] } -> std::convertible_to<std::iter_reference_t<I>>;
+};
+
 template<typename T>
-requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyBidirectionalIterator<T>
+requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyRandomAccessIterator<T>
 class Checker {
 };
 
