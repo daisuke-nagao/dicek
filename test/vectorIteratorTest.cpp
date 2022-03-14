@@ -34,14 +34,10 @@ using vector = dicek::math::linalg::vector<scalar_traits>;
 template<typename scalar_type>
 using scalar_traits = dicek::math::scalar_traits<scalar_type>;
 
-TEST(vectorIteratorTest, iterator) {
-  using fvector  = vector<float>;
-  using iterator = fvector::iterator;
-  static_assert(std::is_same<std::iterator_traits<iterator>::value_type, float>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::difference_type, ptrdiff_t>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::pointer, float*>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::reference, float&>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::iterator_category, std::random_access_iterator_tag>::value, "LegacyIterator");
+TEST(vectorIteratorTest, legacy_iterator) {
+  using fvector         = vector<float>;
+  using iterator        = fvector::iterator;
+  using iterator_traits = std::iterator_traits<iterator>;
 
   iterator default_constructible;
   iterator copy_constructible = default_constructible;
@@ -60,14 +56,10 @@ TEST(vectorIteratorTest, iterator) {
   swap(e, b);
 }
 
-TEST(vectorIteratorTest, const_iterator) {
-  using fvector  = vector<float>;
-  using iterator = fvector::const_iterator;
-  static_assert(std::is_same<std::iterator_traits<iterator>::value_type, const float>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::difference_type, ptrdiff_t>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::pointer, const float*>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::reference, const float&>::value, "LegacyIterator");
-  static_assert(std::is_same<std::iterator_traits<iterator>::iterator_category, std::random_access_iterator_tag>::value, "LegacyIterator");
+TEST(vectorIteratorTest, legacy_const_iterator) {
+  using fvector         = vector<float>;
+  using iterator        = fvector::const_iterator;
+  using iterator_traits = std::iterator_traits<iterator>;
 
   iterator default_constructible;
   iterator copy_constructible = default_constructible;
@@ -239,6 +231,7 @@ requires std::random_access_iterator<T> && LegacyRandomAccessIterator<T>
 class ConstChecker {
 };
 }  // namespace
+
 TEST(vectorIteratorTest, cxx20_iterator_concepts) {
   using iterator1 = vector<float>::iterator;
   using Check1    = Checker<iterator1>;
