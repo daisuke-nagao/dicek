@@ -178,8 +178,22 @@ TEST(vectorIteratorTest, random_access_iterator) {
 
 #ifdef __cpp_concepts
 namespace {
+template<typename _Tp>
+using with_ref = _Tp&;
+template<typename _Tp>
+concept can_reference = requires {
+  typename with_ref<_Tp>;
+};
+template<class I>
+concept LegacyIterator = requires(I i) {
+  { *i } -> can_reference;
+  { ++i } -> std::same_as<I&>;
+  { *i++ } -> can_reference;
+}
+&&std::copyable<I>;
+
 template<typename T>
-requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type>
+requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyIterator<T>
 class Checker {
 };
 template<typename T>
