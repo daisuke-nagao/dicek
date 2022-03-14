@@ -180,10 +180,12 @@ TEST(vectorIteratorTest, random_access_iterator) {
 namespace {
 template<typename _Tp>
 using with_ref = _Tp&;
+
 template<typename _Tp>
 concept can_reference = requires {
   typename with_ref<_Tp>;
 };
+
 template<class I>
 concept LegacyIterator = requires(I i) {
   { *i } -> can_reference;
@@ -192,10 +194,21 @@ concept LegacyIterator = requires(I i) {
 }
 &&std::copyable<I>;
 
+template<class I>
+concept LegacyInputIterator = LegacyIterator<I> && std::equality_comparable<I> && requires(I i) {
+  typename std::incrementable_traits<I>::difference_type;
+  typename std::indirectly_readable_traits<I>::value_type;
+  typename std::common_reference_t<std::iter_reference_t<I>&&, typename std::indirectly_readable_traits<I>::value_type&>;
+  *i++;
+  typename std::common_reference_t<decltype(*i++)&&, typename std::indirectly_readable_traits<I>::value_type&>;
+  requires std::signed_integral<typename std::incrementable_traits<I>::difference_type>;
+};
+
 template<typename T>
-requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyIterator<T>
+requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyInputIterator<T>
 class Checker {
 };
+
 template<typename T>
 requires std::random_access_iterator<T>
 class ConstChecker {
