@@ -235,7 +235,7 @@ class Checker {
 };
 
 template<typename T>
-requires std::random_access_iterator<T>
+requires std::random_access_iterator<T> && LegacyRandomAccessIterator<T>
 class ConstChecker {
 };
 }  // namespace
