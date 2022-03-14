@@ -78,7 +78,7 @@ TEST(vectorIteratorTest, legacy_const_iterator) {
   swap(e, b);
 }
 
-TEST(vectorIteratorTest, input_iterator) {
+TEST(vectorIteratorTest, legacy_input_iterator) {
   using fvector  = vector<float>;
   using iterator = fvector::iterator;
 
@@ -114,7 +114,7 @@ TEST(vectorIteratorTest, input_iterator) {
   EXPECT_EQ(tmp1, tmp2);
 }
 
-TEST(vectorIteratorTest, const_input_iterator) {
+TEST(vectorIteratorTest, legacy_const_input_iterator) {
   using fvector  = vector<float>;
   using iterator = fvector::const_iterator;
 
