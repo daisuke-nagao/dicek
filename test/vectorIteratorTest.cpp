@@ -211,8 +211,15 @@ typename std::indirectly_readable_traits<I>::value_type > &&requires(I i) {
   { *i++ } -> std::same_as<std::iter_reference_t<I>>;
 };
 
+template<class I>
+concept LegacyBidirectionalIterator = LegacyForwardIterator<I> && requires(I i) {
+  { --i } -> std::same_as<I&>;
+  { i-- } -> std::convertible_to<const I&>;
+  { *i-- } -> std::same_as<std::iter_reference_t<I>>;
+};
+
 template<typename T>
-requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyForwardIterator<T>
+requires std::random_access_iterator<T> && std::output_iterator<T, typename std::iterator_traits<T>::value_type> && LegacyBidirectionalIterator<T>
 class Checker {
 };
 
