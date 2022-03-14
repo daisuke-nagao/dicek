@@ -188,6 +188,38 @@ TEST(vectorIteratorTest, legacy_forward_iterator) {
   EXPECT_TRUE((++a == ++b));
 }
 
+TEST(vectorIteratorTest, legacy_const_forward_iterator) {
+  using fvector         = vector<float>;
+  using iterator        = fvector::const_iterator;
+  using iterator_traits = std::iterator_traits<iterator>;
+
+  iterator i;
+
+  static_assert(std::is_same<iterator_traits::reference, const float&>::value, "LegacyForwardIterator");
+  static_assert(std::is_same<iterator, decltype(i++)>::value, "LegacyForwardIterator");
+  static_assert(std::is_same<iterator_traits::reference, decltype(*i++)>::value, "LegacyForwardIterator");
+
+  const fvector v(5);
+  iterator a = std::next(std::begin(v), 3);
+  iterator b = std::begin(v) + 3;
+  EXPECT_EQ(a, b);
+  EXPECT_EQ(&*a, &*b);
+
+  float x;
+  a = iterator(&x);
+  b = iterator(&x);
+  EXPECT_EQ(a, b);
+
+  a = std::next(std::begin(v), 2);
+  (void)++iterator(a);
+  EXPECT_EQ(2, std::distance(std::begin(v), a));
+
+  a = std::next(std::begin(v), 3);
+  b = std::begin(v) + 3;
+  EXPECT_TRUE((a == b));
+  EXPECT_TRUE((++a == ++b));
+}
+
 #if 0
 TEST(vectorIteratorTest, bidirectional_iterator) {
   EXPECT_TRUE(false);
