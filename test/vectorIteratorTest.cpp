@@ -220,11 +220,35 @@ TEST(vectorIteratorTest, legacy_const_forward_iterator) {
   EXPECT_TRUE((++a == ++b));
 }
 
-#if 0
 TEST(vectorIteratorTest, bidirectional_iterator) {
-  EXPECT_TRUE(false);
+  using fvector         = vector<float>;
+  using iterator        = fvector::iterator;
+  using iterator_traits = std::iterator_traits<iterator>;
+
+  fvector v(5);
+  iterator a = std::end(v);
+  static_assert(std::is_same<iterator&, decltype(--a)>::value, "LegacyBidirectionalIterator");
+  {
+    auto b     = std::begin(v);
+    auto a     = ++b;
+    auto tmp_a = a;
+    EXPECT_TRUE((--(++a) == tmp_a));
+  }
+  {
+    auto a     = ++std::begin(v);
+    auto b     = std::next(std::begin(v), 1);
+    auto tmp_a = a;
+    auto tmp_b = b;
+    if (--a == --b) {
+      EXPECT_TRUE(a == b);
+    }
+  }
+  {
+    auto a   = ++std::begin(v);
+    auto& a_ = --a;
+    EXPECT_EQ(&a, &a_);
+  }
 }
-#endif
 
 #if 0
 TEST(vectorIteratorTest, random_access_iterator) {
