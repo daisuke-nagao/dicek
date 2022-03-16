@@ -228,6 +228,7 @@ TEST(vectorIteratorTest, bidirectional_iterator) {
   fvector v(5);
   iterator a = std::end(v);
   static_assert(std::is_same<iterator&, decltype(--a)>::value, "LegacyBidirectionalIterator");
+  static_assert(std::is_same<iterator_traits::reference, decltype(*a--)>::value, "LegacyBidirectionalIterator");
   {
     auto b     = std::begin(v);
     auto a     = ++b;
@@ -247,6 +248,17 @@ TEST(vectorIteratorTest, bidirectional_iterator) {
     auto a   = ++std::begin(v);
     auto& a_ = --a;
     EXPECT_EQ(&a, &a_);
+  }
+
+  {
+    auto a  = ++std::begin(v);
+    auto a_ = a;
+
+    auto r   = a--;
+    auto pre = a_;
+    a_--;
+    EXPECT_TRUE(a_ == a);
+    EXPECT_TRUE(pre == r);
   }
 }
 
