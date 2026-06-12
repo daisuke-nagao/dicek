@@ -1,4 +1,4 @@
-﻿{
+{
   "version": 3,
   "configurePresets": [
     {
@@ -14,7 +14,18 @@
         "lhs": "${hostSystemName}",
         "rhs": "Linux"
       },
-      "vendor": { "microsoft.com/VisualStudioRemoteSettings/CMake/2.0": { "remoteSourceRootDir": "$env{HOME}/.vs/$ms{projectDirName}" } }
+      "vendor": {
+        "microsoft.com/VisualStudioRemoteSettings/CMake/2.0": {
+          "remoteSourceRootDir": "$env{HOME}/.vs/$ms{projectDirName}"
+        }
+      }
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux Release",
+      "description": "Targets Windows Subsystem for Linux (WSL) or a remote system.",
+      "inherits": "linux-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
       "name": "macos-debug",
@@ -29,7 +40,18 @@
         "lhs": "${hostSystemName}",
         "rhs": "Darwin"
       },
-      "vendor": { "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": { "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}" } }
+      "vendor": {
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+        }
+      }
+    },
+    {
+      "name": "macos-release",
+      "displayName": "macOS Release",
+      "description": "Targets a remote macOS system.",
+      "inherits": "macos-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
       "name": "windows-base",
@@ -62,8 +84,26 @@
     {
       "name": "x64-release",
       "displayName": "x64 Release",
-      "description": "Targets Windows (64-bit) using the Visual Studio development environment. (RelWithDebInfo)",
+      "description": "Targets Windows (64-bit) using the Visual Studio development environment. (Release)",
       "inherits": "x64-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "arm64-debug",
+      "displayName": "ARM64 Debug",
+      "description": "Targets Windows (ARM64) using the Visual Studio development environment. (Debug)",
+      "inherits": "windows-base",
+      "architecture": {
+        "value": "ARM64",
+        "strategy": "external"
+      },
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "arm64-release",
+      "displayName": "ARM64 Release",
+      "description": "Targets Windows (ARM64) using the Visual Studio development environment. (Release)",
+      "inherits": "arm64-debug",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
@@ -80,9 +120,153 @@
     {
       "name": "x86-release",
       "displayName": "x86 Release",
-      "description": "Targets Windows (32-bit) using the Visual Studio development environment. (RelWithDebInfo)",
+      "description": "Targets Windows (32-bit) using the Visual Studio development environment. (Release)",
       "inherits": "x86-debug",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug",
+      "configuration": "Debug",
+      "verbose": true
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "configuration": "Release",
+      "verbose": true
+    },
+    {
+      "name": "macos-debug",
+      "configurePreset": "macos-debug",
+      "configuration": "Debug",
+      "verbose": true
+    },
+    {
+      "name": "macos-release",
+      "configurePreset": "macos-release",
+      "configuration": "Release",
+      "verbose": true
+    },
+    {
+      "name": "x64-debug",
+      "configurePreset": "x64-debug",
+      "configuration": "Debug",
+      "verbose": true
+    },
+    {
+      "name": "x64-release",
+      "configurePreset": "x64-release",
+      "configuration": "Release",
+      "verbose": true
+    },
+    {
+      "name": "arm64-debug",
+      "configurePreset": "arm64-debug",
+      "configuration": "Debug",
+      "verbose": true
+    },
+    {
+      "name": "arm64-release",
+      "configurePreset": "arm64-release",
+      "configuration": "Release",
+      "verbose": true
+    },
+    {
+      "name": "x86-debug",
+      "configurePreset": "x86-debug",
+      "configuration": "Debug",
+      "verbose": true
+    },
+    {
+      "name": "x86-release",
+      "configurePreset": "x86-release",
+      "configuration": "Release",
+      "verbose": true
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "linux-debug",
+      "configurePreset": "linux-debug",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "linux-release",
+      "configurePreset": "linux-release",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "macos-debug",
+      "configurePreset": "macos-debug",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "macos-release",
+      "configurePreset": "macos-release",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "x64-debug",
+      "configurePreset": "x64-debug",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "x64-release",
+      "configurePreset": "x64-release",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "arm64-debug",
+      "configurePreset": "arm64-debug",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "arm64-release",
+      "configurePreset": "arm64-release",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "x86-debug",
+      "configurePreset": "x86-debug",
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "x86-release",
+      "configurePreset": "x86-release",
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
     }
   ]
 }

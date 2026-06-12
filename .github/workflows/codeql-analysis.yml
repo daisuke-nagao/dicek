@@ -38,7 +38,7 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v6
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
@@ -62,12 +62,10 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    - run: |
-       mkdir -p build
-       cd build
-       cmake -DBUILD_TESTING:BOOL=OFF ..
-       cmake --build .
+    - name: Build with CMake preset
+      run: |
+       cmake --preset linux-release
+       cmake --build --preset linux-release
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-
