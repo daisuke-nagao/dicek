@@ -32,22 +32,30 @@ jobs:
         submodules: true
 
     - name: Configure CMake
-      shell: cmd
+      shell: pwsh
+      env:
+        CMAKE_PRESET: ${{ matrix.preset }}
+        VCVARS_ARCH: ${{ matrix.vcvars_arch }}
       run: |
-        for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath`) do set "VSINSTALLDIR=%%i"
-        if not defined VSINSTALLDIR exit /b 1
-        call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vcvars_arch }}
-        where cl
-        cmake --preset ${{ matrix.preset }}
+        $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+        $vsInstallDir = & $vswhere -latest -products * -property installationPath
+        if (-not $vsInstallDir) { throw 'Visual Studio installation not found.' }
+        $vcvarsall = Join-Path $vsInstallDir 'VC\Auxiliary\Build\vcvarsall.bat'
+        & cmd.exe /d /s /c "call `"$vcvarsall`" $env:VCVARS_ARCH && where cl && cmake --preset $env:CMAKE_PRESET"
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
     - name: Build
-      shell: cmd
+      shell: pwsh
+      env:
+        CMAKE_PRESET: ${{ matrix.preset }}
+        VCVARS_ARCH: ${{ matrix.vcvars_arch }}
       run: |
-        for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath`) do set "VSINSTALLDIR=%%i"
-        if not defined VSINSTALLDIR exit /b 1
-        call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vcvars_arch }}
-        where cl
-        cmake --build --preset ${{ matrix.preset }}
+        $vswhere = Join-Path ${env:ProgramFiles(x86)} 'Microsoft Visual Studio\Installer\vswhere.exe'
+        $vsInstallDir = & $vswhere -latest -products * -property installationPath
+        if (-not $vsInstallDir) { throw 'Visual Studio installation not found.' }
+        $vcvarsall = Join-Path $vsInstallDir 'VC\Auxiliary\Build\vcvarsall.bat'
+        & cmd.exe /d /s /c "call `"$vcvarsall`" $env:VCVARS_ARCH && where cl && cmake --build --preset $env:CMAKE_PRESET"
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
     - name: Test
       run: ctest --preset ${{ matrix.preset }}
