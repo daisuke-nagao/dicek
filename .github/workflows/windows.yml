@@ -15,12 +15,16 @@ jobs:
         include:
           - os: windows-latest
             preset: x64-debug
+            vcvars_arch: x64
           - os: windows-latest
             preset: x64-release
+            vcvars_arch: x64
           - os: windows-11-arm
             preset: arm64-debug
+            vcvars_arch: arm64
           - os: windows-11-arm
             preset: arm64-release
+            vcvars_arch: arm64
 
     steps:
     - uses: actions/checkout@v6
@@ -28,10 +32,22 @@ jobs:
         submodules: true
 
     - name: Configure CMake
-      run: cmake --preset ${{ matrix.preset }}
+      shell: cmd
+      run: |
+        for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath`) do set "VSINSTALLDIR=%%i"
+        if not defined VSINSTALLDIR exit /b 1
+        call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vcvars_arch }}
+        where cl
+        cmake --preset ${{ matrix.preset }}
 
     - name: Build
-      run: cmake --build --preset ${{ matrix.preset }}
+      shell: cmd
+      run: |
+        for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath`) do set "VSINSTALLDIR=%%i"
+        if not defined VSINSTALLDIR exit /b 1
+        call "%VSINSTALLDIR%\VC\Auxiliary\Build\vcvarsall.bat" ${{ matrix.vcvars_arch }}
+        where cl
+        cmake --build --preset ${{ matrix.preset }}
 
     - name: Test
       run: ctest --preset ${{ matrix.preset }}
