@@ -16,7 +16,7 @@ jobs:
         preset: [macos-debug, macos-release]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v6
       with:
         submodules: true
 
