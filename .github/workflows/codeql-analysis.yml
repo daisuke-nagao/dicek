@@ -62,12 +62,10 @@ jobs:
     #    and modify them (or add more) to build your code if your project
     #    uses a compiled language
 
-    - run: |
-       mkdir -p build
-       cd build
-       cmake -DBUILD_TESTING:BOOL=OFF ..
-       cmake --build .
+    - name: Build with CMake preset
+      run: |
+       cmake --preset ci-linux-codeql
+       cmake --build --preset ci-linux-codeql
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
-

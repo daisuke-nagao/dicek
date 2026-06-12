@@ -1,6 +1,105 @@
-﻿{
+{
   "version": 3,
   "configurePresets": [
+    {
+      "name": "ci-unix-base",
+      "hidden": true,
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}"
+    },
+    {
+      "name": "ci-linux-base",
+      "hidden": true,
+      "inherits": "ci-unix-base",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Linux"
+      }
+    },
+    {
+      "name": "ci-macos-base",
+      "hidden": true,
+      "inherits": "ci-unix-base",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Darwin"
+      }
+    },
+    {
+      "name": "ci-windows-base",
+      "hidden": true,
+      "generator": "Visual Studio 17 2022",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "condition": {
+        "type": "equals",
+        "lhs": "${hostSystemName}",
+        "rhs": "Windows"
+      }
+    },
+    {
+      "name": "ci-linux-debug",
+      "displayName": "CI Linux Debug",
+      "inherits": "ci-linux-base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "ci-linux-release",
+      "displayName": "CI Linux Release",
+      "inherits": "ci-linux-base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "ci-linux-codeql",
+      "displayName": "CI Linux CodeQL",
+      "inherits": "ci-linux-base",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "BUILD_TESTING": false
+      }
+    },
+    {
+      "name": "ci-macos-debug",
+      "displayName": "CI macOS Debug",
+      "inherits": "ci-macos-base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "ci-macos-release",
+      "displayName": "CI macOS Release",
+      "inherits": "ci-macos-base",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "ci-windows-x64-debug",
+      "displayName": "CI Windows x64 Debug",
+      "inherits": "ci-windows-base",
+      "architecture": {
+        "value": "x64",
+        "strategy": "set"
+      }
+    },
+    {
+      "name": "ci-windows-x64-release",
+      "displayName": "CI Windows x64 Release",
+      "inherits": "ci-windows-x64-debug"
+    },
+    {
+      "name": "ci-windows-arm64-debug",
+      "displayName": "CI Windows ARM64 Debug",
+      "inherits": "ci-windows-base",
+      "architecture": {
+        "value": "ARM64",
+        "strategy": "set"
+      }
+    },
+    {
+      "name": "ci-windows-arm64-release",
+      "displayName": "CI Windows ARM64 Release",
+      "inherits": "ci-windows-arm64-debug"
+    },
     {
       "name": "linux-debug",
       "displayName": "Linux Debug",
@@ -14,7 +113,18 @@
         "lhs": "${hostSystemName}",
         "rhs": "Linux"
       },
-      "vendor": { "microsoft.com/VisualStudioRemoteSettings/CMake/2.0": { "remoteSourceRootDir": "$env{HOME}/.vs/$ms{projectDirName}" } }
+      "vendor": {
+        "microsoft.com/VisualStudioRemoteSettings/CMake/2.0": {
+          "remoteSourceRootDir": "$env{HOME}/.vs/$ms{projectDirName}"
+        }
+      }
+    },
+    {
+      "name": "linux-release",
+      "displayName": "Linux Release",
+      "description": "Targets Windows Subsystem for Linux (WSL) or a remote system.",
+      "inherits": "linux-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
       "name": "macos-debug",
@@ -29,7 +139,18 @@
         "lhs": "${hostSystemName}",
         "rhs": "Darwin"
       },
-      "vendor": { "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": { "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}" } }
+      "vendor": {
+        "microsoft.com/VisualStudioRemoteSettings/CMake/1.0": {
+          "sourceDir": "$env{HOME}/.vs/$ms{projectDirName}"
+        }
+      }
+    },
+    {
+      "name": "macos-release",
+      "displayName": "macOS Release",
+      "description": "Targets a remote macOS system.",
+      "inherits": "macos-debug",
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
     {
       "name": "windows-base",
@@ -62,7 +183,7 @@
     {
       "name": "x64-release",
       "displayName": "x64 Release",
-      "description": "Targets Windows (64-bit) using the Visual Studio development environment. (RelWithDebInfo)",
+      "description": "Targets Windows (64-bit) using the Visual Studio development environment. (Release)",
       "inherits": "x64-debug",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
     },
@@ -80,9 +201,206 @@
     {
       "name": "x86-release",
       "displayName": "x86 Release",
-      "description": "Targets Windows (32-bit) using the Visual Studio development environment. (RelWithDebInfo)",
+      "description": "Targets Windows (32-bit) using the Visual Studio development environment. (Release)",
       "inherits": "x86-debug",
       "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "build-debug-base",
+      "hidden": true,
+      "configuration": "Debug",
+      "verbose": true
+    },
+    {
+      "name": "build-release-base",
+      "hidden": true,
+      "configuration": "Release",
+      "verbose": true
+    },
+    {
+      "name": "ci-linux-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "ci-linux-debug"
+    },
+    {
+      "name": "ci-linux-release",
+      "inherits": "build-release-base",
+      "configurePreset": "ci-linux-release"
+    },
+    {
+      "name": "ci-linux-codeql",
+      "inherits": "build-release-base",
+      "configurePreset": "ci-linux-codeql"
+    },
+    {
+      "name": "ci-macos-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "ci-macos-debug"
+    },
+    {
+      "name": "ci-macos-release",
+      "inherits": "build-release-base",
+      "configurePreset": "ci-macos-release"
+    },
+    {
+      "name": "ci-windows-x64-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "ci-windows-x64-debug"
+    },
+    {
+      "name": "ci-windows-x64-release",
+      "inherits": "build-release-base",
+      "configurePreset": "ci-windows-x64-release"
+    },
+    {
+      "name": "ci-windows-arm64-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "ci-windows-arm64-debug"
+    },
+    {
+      "name": "ci-windows-arm64-release",
+      "inherits": "build-release-base",
+      "configurePreset": "ci-windows-arm64-release"
+    },
+    {
+      "name": "linux-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "linux-release",
+      "inherits": "build-release-base",
+      "configurePreset": "linux-release"
+    },
+    {
+      "name": "macos-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "macos-debug"
+    },
+    {
+      "name": "macos-release",
+      "inherits": "build-release-base",
+      "configurePreset": "macos-release"
+    },
+    {
+      "name": "x64-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "x64-debug"
+    },
+    {
+      "name": "x64-release",
+      "inherits": "build-release-base",
+      "configurePreset": "x64-release"
+    },
+    {
+      "name": "x86-debug",
+      "inherits": "build-debug-base",
+      "configurePreset": "x86-debug"
+    },
+    {
+      "name": "x86-release",
+      "inherits": "build-release-base",
+      "configurePreset": "x86-release"
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test-debug-base",
+      "hidden": true,
+      "configuration": "Debug",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "test-release-base",
+      "hidden": true,
+      "configuration": "Release",
+      "output": {
+        "outputOnFailure": true
+      }
+    },
+    {
+      "name": "ci-linux-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "ci-linux-debug"
+    },
+    {
+      "name": "ci-linux-release",
+      "inherits": "test-release-base",
+      "configurePreset": "ci-linux-release"
+    },
+    {
+      "name": "ci-macos-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "ci-macos-debug"
+    },
+    {
+      "name": "ci-macos-release",
+      "inherits": "test-release-base",
+      "configurePreset": "ci-macos-release"
+    },
+    {
+      "name": "ci-windows-x64-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "ci-windows-x64-debug"
+    },
+    {
+      "name": "ci-windows-x64-release",
+      "inherits": "test-release-base",
+      "configurePreset": "ci-windows-x64-release"
+    },
+    {
+      "name": "ci-windows-arm64-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "ci-windows-arm64-debug"
+    },
+    {
+      "name": "ci-windows-arm64-release",
+      "inherits": "test-release-base",
+      "configurePreset": "ci-windows-arm64-release"
+    },
+    {
+      "name": "linux-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "linux-debug"
+    },
+    {
+      "name": "linux-release",
+      "inherits": "test-release-base",
+      "configurePreset": "linux-release"
+    },
+    {
+      "name": "macos-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "macos-debug"
+    },
+    {
+      "name": "macos-release",
+      "inherits": "test-release-base",
+      "configurePreset": "macos-release"
+    },
+    {
+      "name": "x64-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "x64-debug"
+    },
+    {
+      "name": "x64-release",
+      "inherits": "test-release-base",
+      "configurePreset": "x64-release"
+    },
+    {
+      "name": "x86-debug",
+      "inherits": "test-debug-base",
+      "configurePreset": "x86-debug"
+    },
+    {
+      "name": "x86-release",
+      "inherits": "test-release-base",
+      "configurePreset": "x86-release"
     }
   ]
 }
