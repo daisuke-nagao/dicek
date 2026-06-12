@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-15-intel, macos-latest]
-        preset: [ci-macos-debug, ci-macos-release]
+        preset: [macos-debug, macos-release]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,4 +28,3 @@ jobs:
 
     - name: Test
       run: ctest --preset ${{ matrix.preset }}
-

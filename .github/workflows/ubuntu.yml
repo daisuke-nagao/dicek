@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, ubuntu-24.04, ubuntu-22.04]
-        preset: [ci-linux-debug, ci-linux-release]
+        preset: [linux-debug, linux-release]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,4 +28,3 @@ jobs:
 
     - name: Test
       run: ctest --preset ${{ matrix.preset }}
-

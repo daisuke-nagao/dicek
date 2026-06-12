@@ -64,8 +64,8 @@ jobs:
 
     - name: Build with CMake preset
       run: |
-       cmake --preset ci-linux-codeql
-       cmake --build --preset ci-linux-codeql
+       cmake --preset linux-release
+       cmake --build --preset linux-release
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

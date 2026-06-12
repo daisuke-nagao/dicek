@@ -14,13 +14,17 @@ jobs:
       matrix:
         include:
           - os: windows-latest
-            preset: ci-windows-x64-debug
+            preset: x64-debug
+            vcvars_arch: x64
           - os: windows-latest
-            preset: ci-windows-x64-release
+            preset: x64-release
+            vcvars_arch: x64
           - os: windows-11-arm
-            preset: ci-windows-arm64-debug
+            preset: arm64-debug
+            vcvars_arch: arm64
           - os: windows-11-arm
-            preset: ci-windows-arm64-release
+            preset: arm64-release
+            vcvars_arch: arm64
 
     steps:
     - uses: actions/checkout@v2
@@ -28,11 +32,18 @@ jobs:
         submodules: true
 
     - name: Configure CMake
-      run: cmake --preset ${{ matrix.preset }}
+      shell: cmd
+      run: |
+        for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath`) do set "VSINSTALLDIR=%%i"
+        call "%VSINSTALLDIR%\Common7\Tools\VsDevCmd.bat" -arch=${{ matrix.vcvars_arch }}
+        cmake --preset ${{ matrix.preset }}
 
     - name: Build
-      run: cmake --build --preset ${{ matrix.preset }}
+      shell: cmd
+      run: |
+        for /f "usebackq delims=" %%i in (`"%ProgramFiles(x86)%\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -property installationPath`) do set "VSINSTALLDIR=%%i"
+        call "%VSINSTALLDIR%\Common7\Tools\VsDevCmd.bat" -arch=${{ matrix.vcvars_arch }}
+        cmake --build --preset ${{ matrix.preset }}
 
     - name: Test
       run: ctest --preset ${{ matrix.preset }}
-
