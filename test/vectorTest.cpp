@@ -112,6 +112,63 @@ TEST(vectorTest, external_buffer_constructor) {
   EXPECT_FALSE(vec.ref_count());
 }
 
+TEST(vectorTest, external_buffer_constructor_with_step) {
+  std::array<double, 9> buf = {1, -1, 2, -1, 3, -1, 4, -1, 5};
+  constexpr auto N          = 5;
+
+  using type = double;
+  vector<type> vec(buf.data(), N, 2);
+
+  const auto& cvec = vec;
+  for (size_t i = 0; i < vec.size(); ++i) {
+    EXPECT_EQ(static_cast<type>(i + 1), cvec.at(i));
+  }
+
+  vec.at(1) = 20;
+  EXPECT_EQ(20, buf.at(2));
+  EXPECT_EQ(-1, buf.at(1));
+
+  std::array<double, N> copied = {};
+  std::copy(vec.begin(), vec.end(), copied.begin());
+  for (size_t i = 0; i < copied.size(); ++i) {
+    EXPECT_EQ(cvec.at(i), copied.at(i));
+  }
+
+  EXPECT_EQ(buf.data(), cvec.data());
+  EXPECT_EQ(buf.data(), vec.data());
+  EXPECT_FALSE(vec.ref_count());
+}
+
+TEST(vectorTest, external_buffer_constructor_with_negative_step) {
+  std::array<double, 5> buf = {1, 2, 3, 4, 5};
+  constexpr auto N          = buf.size();
+
+  using type = double;
+  vector<type> vec(buf.data() + buf.size() - 1, N, -1);
+
+  const auto& cvec = vec;
+  for (size_t i = 0; i < vec.size(); ++i) {
+    EXPECT_EQ(static_cast<type>(N - i), cvec.at(i));
+  }
+
+  vec.at(2) = 30;
+  EXPECT_EQ(30, buf.at(2));
+
+  auto bite = vec.begin();
+  auto eite = vec.end();
+  EXPECT_EQ(vec.size(), std::distance(bite, eite));
+
+  EXPECT_EQ(buf.data() + buf.size() - 1, cvec.data());
+  EXPECT_FALSE(vec.ref_count());
+}
+
+TEST(vectorTest, external_buffer_constructor_rejects_zero_step) {
+  std::array<double, 5> buf = {1, 2, 3, 4, 5};
+
+  using type = double;
+  EXPECT_THROW(vector<type>(buf.data(), buf.size(), 0), std::invalid_argument);
+}
+
 TEST(vectorTest, copy_constructor) {
   using type = float;
   vector<type> vec(3);
