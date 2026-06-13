@@ -413,7 +413,7 @@ class vector {
   vector& apply_in_place(const vector& rhs, const char* name, F f) {
     validate_same_size(rhs, name);
 
-    if (may_share_storage_with(rhs)) {
+    if (may_share_storage_with(rhs) && !has_identical_element_mapping(rhs)) {
       const auto rhs_copy = rhs.clone(result_allocator());
       for (std::size_t i = 0; i < size(); ++i) {
         f((*this)[i], rhs_copy[i]);
@@ -438,6 +438,19 @@ class vector {
       return std::pmr::get_default_resource();
     }
     return allocator_;
+  }
+
+  bool has_identical_element_mapping(const vector& rhs) const noexcept {
+    if (size() != rhs.size()) {
+      return false;
+    }
+    if (size() == 0) {
+      return true;
+    }
+    if (elm_ != rhs.elm_) {
+      return false;
+    }
+    return size() == 1 || step_ == rhs.step_;
   }
 
   std::pair<const scalar_type*, const scalar_type*> storage_bounds() const noexcept {

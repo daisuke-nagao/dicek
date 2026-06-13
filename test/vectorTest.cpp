@@ -35,6 +35,31 @@ using vector = dicek::math::linalg::vector<scalar_traits>;
 template<typename scalar_type>
 using scalar_traits = dicek::math::scalar_traits<scalar_type>;
 
+class allocation_control_resource : public std::pmr::memory_resource {
+ public:
+  void reject_allocations() {
+    reject_allocations_ = true;
+  }
+
+ private:
+  void* do_allocate(std::size_t bytes, std::size_t alignment) override {
+    if (reject_allocations_) {
+      throw std::bad_alloc();
+    }
+    return std::pmr::new_delete_resource()->allocate(bytes, alignment);
+  }
+
+  void do_deallocate(void* p, std::size_t bytes, std::size_t alignment) override {
+    std::pmr::new_delete_resource()->deallocate(p, bytes, alignment);
+  }
+
+  bool do_is_equal(const std::pmr::memory_resource& other) const noexcept override {
+    return this == &other;
+  }
+
+  bool reject_allocations_ = false;
+};
+
 TEST(vectorTest, default_constructor) {
   using type = double;
   vector<type> empty;
@@ -471,6 +496,24 @@ TEST(vectorTest, in_place_subtraction_preserves_rhs_values_for_overlapping_views
   EXPECT_DOUBLE_EQ(1.0, buf.at(1));
   EXPECT_DOUBLE_EQ(1.0, buf.at(2));
   EXPECT_DOUBLE_EQ(1.0, buf.at(3));
+}
+
+TEST(vectorTest, in_place_operations_do_not_allocate_for_identical_views) {
+  allocation_control_resource mr;
+  vector<double> v({1.0, 2.0, 3.0}, &mr);
+  const auto same_view = v;
+
+  mr.reject_allocations();
+
+  EXPECT_NO_THROW(v += v);
+  EXPECT_DOUBLE_EQ(2.0, v.at(0));
+  EXPECT_DOUBLE_EQ(4.0, v.at(1));
+  EXPECT_DOUBLE_EQ(6.0, v.at(2));
+
+  EXPECT_NO_THROW(v -= same_view);
+  EXPECT_DOUBLE_EQ(0.0, v.at(0));
+  EXPECT_DOUBLE_EQ(0.0, v.at(1));
+  EXPECT_DOUBLE_EQ(0.0, v.at(2));
 }
 
 TEST(vectorTest, numerical_operations_reject_size_mismatch) {
