@@ -10,3 +10,5 @@ repos:
       - id: check-json
       - id: check-xml
       - id: check-added-large-files
+      - id: mixed-line-ending
+        args: ['--fix=auto']
