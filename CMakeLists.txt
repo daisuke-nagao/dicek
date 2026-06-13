@@ -68,4 +68,3 @@ install(EXPORT dicekConfig
   NAMESPACE dicek::
   DESTINATION lib/cmake/dicek
 )
-
