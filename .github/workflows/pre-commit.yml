@@ -1,0 +1,71 @@
+name: pre-commit
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+  push:
+    branches:
+      - main
+permissions:
+  contents: read
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          submodules: true
+      - name: Install uv
+        uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b
+        with:
+          enable-cache: true
+      - name: Set up Python
+        run: uv python install 3.14
+      - name: Install pre-commit
+        run: >
+          uv venv
+
+          uv pip install -r requirements.txt
+      - name: Determine diff range
+        id: diff
+        shell: bash
+        run: >
+          set -euo pipefail
+
+
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE="${{ github.event.pull_request.base.sha }}"
+            HEAD="${{ github.event.pull_request.head.sha }}"
+          else
+            BASE="${{ github.event.before }}"
+            HEAD="${{ github.sha }}"
+
+            # Initial push or unusual force-push can produce an all-zero before SHA.
+            if [[ "$BASE" =~ ^0+$ ]]; then
+              BASE="$(git rev-list --max-parents=0 "$HEAD")"
+            fi
+          fi
+
+
+          echo "base=$BASE" >> "$GITHUB_OUTPUT"
+
+          echo "head=$HEAD" >> "$GITHUB_OUTPUT"
+
+
+          echo "Diff range:"
+
+          echo "  base: $BASE"
+
+          echo "  head: $HEAD"
+      - name: Run pre-commit on changed files
+        run: >-
+          uv run pre-commit run \
+            --from-ref "${{ steps.diff.outputs.base }}" \
+            --to-ref "${{ steps.diff.outputs.head }}" \
+            --show-diff-on-failure
