@@ -32,8 +32,11 @@ macro(package_add_test TESTNAME)
     # data via paths relative to the project root
     WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
     PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${PROJECT_SOURCE_DIR}")
-  set_target_properties(${TESTNAME} PROPERTIES FOLDER tests CXX_STANDARD 17
-                                               CXX_STANDARD_REQUIRED ON)
+  set_target_properties(
+    ${TESTNAME}
+    PROPERTIES FOLDER tests
+               CXX_STANDARD 17
+               CXX_STANDARD_REQUIRED ON)
 endmacro()
 
 package_add_test(scalar_traitsTest scalar_traitsTest.cpp)
