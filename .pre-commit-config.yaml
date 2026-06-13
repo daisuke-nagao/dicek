@@ -11,4 +11,9 @@ repos:
       - id: check-xml
       - id: check-added-large-files
       - id: mixed-line-ending
-        args: ['--fix=auto']
+        args:
+          - --fix=auto
+  - repo: https://github.com/cheshirekow/cmake-format-precommit
+    rev: v0.6.10
+    hooks:
+      - id: cmake-format
