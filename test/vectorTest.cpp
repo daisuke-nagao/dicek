@@ -445,6 +445,34 @@ TEST(vectorTest, numerical_operations_accept_strided_external_buffer) {
   EXPECT_DOUBLE_EQ(-1.0, lhs_buf.at(5));
 }
 
+TEST(vectorTest, in_place_addition_preserves_rhs_values_for_overlapping_views) {
+  std::array<double, 4> buf = {1.0, 2.0, 3.0, 4.0};
+
+  vector<double> lhs(buf.data() + 1, 3);
+  vector<double> rhs(buf.data(), 3);
+
+  lhs += rhs;
+
+  EXPECT_DOUBLE_EQ(1.0, buf.at(0));
+  EXPECT_DOUBLE_EQ(3.0, buf.at(1));
+  EXPECT_DOUBLE_EQ(5.0, buf.at(2));
+  EXPECT_DOUBLE_EQ(7.0, buf.at(3));
+}
+
+TEST(vectorTest, in_place_subtraction_preserves_rhs_values_for_overlapping_views) {
+  std::array<double, 4> buf = {1.0, 2.0, 3.0, 4.0};
+
+  vector<double> lhs(buf.data() + 1, 3);
+  vector<double> rhs(buf.data(), 3);
+
+  lhs -= rhs;
+
+  EXPECT_DOUBLE_EQ(1.0, buf.at(0));
+  EXPECT_DOUBLE_EQ(1.0, buf.at(1));
+  EXPECT_DOUBLE_EQ(1.0, buf.at(2));
+  EXPECT_DOUBLE_EQ(1.0, buf.at(3));
+}
+
 TEST(vectorTest, numerical_operations_reject_size_mismatch) {
   vector<double> v1({1.0, 2.0, 3.0});
   vector<double> v2({10.0, 20.0});

@@ -26,6 +26,7 @@ SOFTWARE.
 #include <cmath>
 #include <cstddef>
 #include <dicek/scalar_traits.hpp>
+#include <functional>
 #include <initializer_list>
 #include <iterator>
 #include <memory_resource>
@@ -382,19 +383,11 @@ class vector {
   }
 
   vector& operator+=(const vector& rhs) {
-    validate_same_size(rhs, "vector::operator+=");
-    for (std::size_t i = 0; i < size(); ++i) {
-      (*this)[i] += rhs[i];
-    }
-    return *this;
+    return apply_in_place(rhs, "vector::operator+=", [](scalar_type& lhs, const scalar_type& rhs) { lhs += rhs; });
   }
 
   vector& operator-=(const vector& rhs) {
-    validate_same_size(rhs, "vector::operator-=");
-    for (std::size_t i = 0; i < size(); ++i) {
-      (*this)[i] -= rhs[i];
-    }
-    return *this;
+    return apply_in_place(rhs, "vector::operator-=", [](scalar_type& lhs, const scalar_type& rhs) { lhs -= rhs; });
   }
 
   vector& operator*=(scalar_type val) {
@@ -416,6 +409,24 @@ class vector {
   }
 
  private:
+  template<typename F>
+  vector& apply_in_place(const vector& rhs, const char* name, F f) {
+    validate_same_size(rhs, name);
+
+    if (may_share_storage_with(rhs)) {
+      const auto rhs_copy = rhs.clone(result_allocator());
+      for (std::size_t i = 0; i < size(); ++i) {
+        f((*this)[i], rhs_copy[i]);
+      }
+    } else {
+      for (std::size_t i = 0; i < size(); ++i) {
+        f((*this)[i], rhs[i]);
+      }
+    }
+
+    return *this;
+  }
+
   void validate_same_size(const vector& rhs, const char* name) const {
     if (size() != rhs.size()) {
       throw std::invalid_argument(std::string(name) + ": size mismatch");
@@ -427,6 +438,28 @@ class vector {
       return std::pmr::get_default_resource();
     }
     return allocator_;
+  }
+
+  std::pair<const scalar_type*, const scalar_type*> storage_bounds() const noexcept {
+    const auto* first = elm_;
+    const auto* last  = elm_ + static_cast<std::ptrdiff_t>(size() - 1) * step_;
+
+    if (std::less<const scalar_type*>{}(last, first)) {
+      return {last, first};
+    }
+    return {first, last};
+  }
+
+  bool may_share_storage_with(const vector& rhs) const noexcept {
+    if (size() == 0 || rhs.size() == 0) {
+      return false;
+    }
+
+    const auto lhs_bounds = storage_bounds();
+    const auto rhs_bounds = rhs.storage_bounds();
+    const auto less       = std::less<const scalar_type*>{};
+
+    return !less(lhs_bounds.second, rhs_bounds.first) && !less(rhs_bounds.second, lhs_bounds.first);
   }
 
   std::size_t length_;
