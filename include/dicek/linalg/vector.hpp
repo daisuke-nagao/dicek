@@ -23,13 +23,16 @@ SOFTWARE.
 #define UUID_6F484ACB_9C23_4013_A905_B5DAC701113A
 
 #include <algorithm>
+#include <cmath>
 #include <cstddef>
 #include <dicek/scalar_traits.hpp>
+#include <functional>
 #include <initializer_list>
 #include <iterator>
 #include <memory_resource>
 #include <optional>
 #include <stdexcept>
+#include <string>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -38,7 +41,8 @@ namespace dicek::math::linalg {
 template<typename T, typename scalar_traits = dicek::math::scalar_traits<T>>
 class vector {
  public:
-  using scalar_type = typename scalar_traits::scalar_type;
+  using scalar_traits_type = scalar_traits;
+  using scalar_type        = typename scalar_traits::scalar_type;
 
   template<typename pointer_type>
   class strided_iterator {
@@ -329,13 +333,187 @@ class vector {
     return allocator_;
   }
 
+  template<typename F>
+  vector map(F f) const {
+    vector r(size(), result_allocator());
+    std::transform(begin(), end(), r.begin(), f);
+    return r;
+  }
+
+  vector add(const vector& rhs) const {
+    validate_same_size(rhs, "vector::add");
+    vector r(size(), result_allocator());
+    for (std::size_t i = 0; i < size(); ++i) {
+      r[i] = (*this)[i] + rhs[i];
+    }
+    return r;
+  }
+
+  vector subtract(const vector& rhs) const {
+    validate_same_size(rhs, "vector::subtract");
+    vector r(size(), result_allocator());
+    for (std::size_t i = 0; i < size(); ++i) {
+      r[i] = (*this)[i] - rhs[i];
+    }
+    return r;
+  }
+
+  vector scale(scalar_type val) const {
+    return map([val](scalar_type x) { return x * val; });
+  }
+
+  vector operator+(const vector& rhs) const {
+    return add(rhs);
+  }
+
+  vector operator-(const vector& rhs) const {
+    return subtract(rhs);
+  }
+
+  vector operator-() const {
+    return map([](scalar_type x) { return -x; });
+  }
+
+  vector operator*(scalar_type val) const {
+    return scale(val);
+  }
+
+  vector operator/(scalar_type val) const {
+    return map([val](scalar_type x) { return x / val; });
+  }
+
+  vector& operator+=(const vector& rhs) {
+    return apply_in_place(rhs, "vector::operator+=", [](scalar_type& lhs, const scalar_type& rhs) { lhs += rhs; });
+  }
+
+  vector& operator-=(const vector& rhs) {
+    return apply_in_place(rhs, "vector::operator-=", [](scalar_type& lhs, const scalar_type& rhs) { lhs -= rhs; });
+  }
+
+  vector& operator*=(scalar_type val) {
+    for (auto& elm : *this) {
+      elm *= val;
+    }
+    return *this;
+  }
+
+  vector& operator/=(scalar_type val) {
+    for (auto& elm : *this) {
+      elm /= val;
+    }
+    return *this;
+  }
+
+  friend vector operator*(scalar_type lhs, const vector& rhs) {
+    return rhs.scale(lhs);
+  }
+
  private:
+  template<typename F>
+  vector& apply_in_place(const vector& rhs, const char* name, F f) {
+    validate_same_size(rhs, name);
+
+    if (may_share_storage_with(rhs) && !has_identical_element_mapping(rhs)) {
+      const auto rhs_copy = rhs.clone(result_allocator());
+      for (std::size_t i = 0; i < size(); ++i) {
+        f((*this)[i], rhs_copy[i]);
+      }
+    } else {
+      for (std::size_t i = 0; i < size(); ++i) {
+        f((*this)[i], rhs[i]);
+      }
+    }
+
+    return *this;
+  }
+
+  void validate_same_size(const vector& rhs, const char* name) const {
+    if (size() != rhs.size()) {
+      throw std::invalid_argument(std::string(name) + ": size mismatch");
+    }
+  }
+
+  std::pmr::memory_resource* result_allocator() const noexcept {
+    if (allocator_ == nullptr || allocator_ == std::pmr::null_memory_resource()) {
+      return std::pmr::get_default_resource();
+    }
+    return allocator_;
+  }
+
+  bool has_identical_element_mapping(const vector& rhs) const noexcept {
+    if (size() != rhs.size()) {
+      return false;
+    }
+    if (size() == 0) {
+      return true;
+    }
+    if (elm_ != rhs.elm_) {
+      return false;
+    }
+    return size() == 1 || step_ == rhs.step_;
+  }
+
+  std::pair<const scalar_type*, const scalar_type*> storage_bounds() const noexcept {
+    const auto* first = elm_;
+    const auto* last  = elm_ + static_cast<std::ptrdiff_t>(size() - 1) * step_;
+
+    if (std::less<const scalar_type*>{}(last, first)) {
+      return {last, first};
+    }
+    return {first, last};
+  }
+
+  bool may_share_storage_with(const vector& rhs) const noexcept {
+    if (size() == 0 || rhs.size() == 0) {
+      return false;
+    }
+
+    const auto lhs_bounds = storage_bounds();
+    const auto rhs_bounds = rhs.storage_bounds();
+    const auto less       = std::less<const scalar_type*>{};
+
+    return !less(lhs_bounds.second, rhs_bounds.first) && !less(rhs_bounds.second, lhs_bounds.first);
+  }
+
   std::size_t length_;
   std::pmr::memory_resource* allocator_;
   std::size_t* ref_count_;
   scalar_type* elm_;
   std::ptrdiff_t step_;
 };
+
+template<typename T, typename scalar_traits>
+typename vector<T, scalar_traits>::scalar_type dot(const vector<T, scalar_traits>& lhs, const vector<T, scalar_traits>& rhs) {
+  if (lhs.size() != rhs.size()) {
+    throw std::invalid_argument("dot: size mismatch");
+  }
+
+  typename vector<T, scalar_traits>::scalar_type ret = {};
+  for (std::size_t i = 0; i < lhs.size(); ++i) {
+    ret += lhs[i] * scalar_traits::conj(rhs[i]);
+  }
+  return ret;
+}
+
+template<typename T, typename scalar_traits>
+typename vector<T, scalar_traits>::scalar_type inner_product(const vector<T, scalar_traits>& lhs, const vector<T, scalar_traits>& rhs) {
+  return dot(lhs, rhs);
+}
+
+template<typename T, typename scalar_traits, typename scalar>
+auto norm(const vector<T, scalar_traits>& v, scalar p) {
+  if (p < scalar(1)) {
+    throw std::range_error("p must be greater than or equal to 1");
+  }
+
+  using return_type = decltype(std::pow(scalar_traits::abs(typename vector<T, scalar_traits>::scalar_type{}), p));
+  return_type ret   = {};
+  for (std::size_t i = 0; i < v.size(); ++i) {
+    ret += std::pow(scalar_traits::abs(v[i]), p);
+  }
+
+  return std::pow(ret, return_type(1) / static_cast<return_type>(p));
+}
 }  // namespace dicek::math::linalg
 
 #endif /* UUID_6F484ACB_9C23_4013_A905_B5DAC701113A */
