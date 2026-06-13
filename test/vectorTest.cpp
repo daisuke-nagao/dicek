@@ -24,6 +24,7 @@ SOFTWARE.
 #include <gtest/gtest.h>
 
 #include <array>
+#include <complex>
 #include <dicek/linalg/vector.hpp>
 #include <memory_resource>
 #include <utility>
@@ -365,4 +366,116 @@ TEST(vectorTest, initializer_list) {
     EXPECT_FLOAT_EQ(static_cast<type>(i + 1) * 10, v2.at(i));
   }
   EXPECT_TRUE(v2.get_allocator()->is_equal(mr));
+}
+
+TEST(vectorTest, add_and_subtract) {
+  vector<double> v1({1.0, 2.0, 3.0});
+  vector<double> v2({10.0, 20.0, 30.0});
+
+  auto sum = v1 + v2;
+  EXPECT_EQ(v1.size(), sum.size());
+  EXPECT_DOUBLE_EQ(11.0, sum.at(0));
+  EXPECT_DOUBLE_EQ(22.0, sum.at(1));
+  EXPECT_DOUBLE_EQ(33.0, sum.at(2));
+
+  auto difference = v2 - v1;
+  EXPECT_EQ(v1.size(), difference.size());
+  EXPECT_DOUBLE_EQ(9.0, difference.at(0));
+  EXPECT_DOUBLE_EQ(18.0, difference.at(1));
+  EXPECT_DOUBLE_EQ(27.0, difference.at(2));
+
+  v1 += v2;
+  EXPECT_DOUBLE_EQ(11.0, v1.at(0));
+  EXPECT_DOUBLE_EQ(22.0, v1.at(1));
+  EXPECT_DOUBLE_EQ(33.0, v1.at(2));
+
+  v1 -= v2;
+  EXPECT_DOUBLE_EQ(1.0, v1.at(0));
+  EXPECT_DOUBLE_EQ(2.0, v1.at(1));
+  EXPECT_DOUBLE_EQ(3.0, v1.at(2));
+}
+
+TEST(vectorTest, scale_and_divide) {
+  vector<double> v({1.0, -2.0, 3.0});
+
+  auto scaled = v.scale(2.5);
+  EXPECT_DOUBLE_EQ(2.5, scaled.at(0));
+  EXPECT_DOUBLE_EQ(-5.0, scaled.at(1));
+  EXPECT_DOUBLE_EQ(7.5, scaled.at(2));
+
+  auto product = 3.0 * v;
+  EXPECT_DOUBLE_EQ(3.0, product.at(0));
+  EXPECT_DOUBLE_EQ(-6.0, product.at(1));
+  EXPECT_DOUBLE_EQ(9.0, product.at(2));
+
+  auto quotient = v / 2.0;
+  EXPECT_DOUBLE_EQ(0.5, quotient.at(0));
+  EXPECT_DOUBLE_EQ(-1.0, quotient.at(1));
+  EXPECT_DOUBLE_EQ(1.5, quotient.at(2));
+
+  v *= -2.0;
+  EXPECT_DOUBLE_EQ(-2.0, v.at(0));
+  EXPECT_DOUBLE_EQ(4.0, v.at(1));
+  EXPECT_DOUBLE_EQ(-6.0, v.at(2));
+
+  v /= 2.0;
+  EXPECT_DOUBLE_EQ(-1.0, v.at(0));
+  EXPECT_DOUBLE_EQ(2.0, v.at(1));
+  EXPECT_DOUBLE_EQ(-3.0, v.at(2));
+}
+
+TEST(vectorTest, numerical_operations_accept_strided_external_buffer) {
+  std::array<double, 6> lhs_buf = {1.0, -1.0, 2.0, -1.0, 3.0, -1.0};
+  std::array<double, 6> rhs_buf = {10.0, -1.0, 20.0, -1.0, 30.0, -1.0};
+
+  vector<double> lhs(lhs_buf.data(), 3, 2);
+  vector<double> rhs(rhs_buf.data(), 3, 2);
+
+  auto sum = lhs + rhs;
+  EXPECT_DOUBLE_EQ(11.0, sum.at(0));
+  EXPECT_DOUBLE_EQ(22.0, sum.at(1));
+  EXPECT_DOUBLE_EQ(33.0, sum.at(2));
+
+  lhs += rhs;
+  EXPECT_DOUBLE_EQ(11.0, lhs_buf.at(0));
+  EXPECT_DOUBLE_EQ(22.0, lhs_buf.at(2));
+  EXPECT_DOUBLE_EQ(33.0, lhs_buf.at(4));
+  EXPECT_DOUBLE_EQ(-1.0, lhs_buf.at(1));
+  EXPECT_DOUBLE_EQ(-1.0, lhs_buf.at(3));
+  EXPECT_DOUBLE_EQ(-1.0, lhs_buf.at(5));
+}
+
+TEST(vectorTest, numerical_operations_reject_size_mismatch) {
+  vector<double> v1({1.0, 2.0, 3.0});
+  vector<double> v2({10.0, 20.0});
+
+  EXPECT_THROW(v1 + v2, std::invalid_argument);
+  EXPECT_THROW(v1 - v2, std::invalid_argument);
+  EXPECT_THROW(v1 += v2, std::invalid_argument);
+  EXPECT_THROW(v1 -= v2, std::invalid_argument);
+  EXPECT_THROW(dot(v1, v2), std::invalid_argument);
+  EXPECT_THROW(inner_product(v1, v2), std::invalid_argument);
+}
+
+TEST(vectorTest, dot_inner_product_and_norm) {
+  vector<double> v1({1.0, 2.0, 3.0});
+  vector<double> v2({10.0, 20.0, 30.0});
+
+  EXPECT_DOUBLE_EQ(140.0, dot(v1, v2));
+  EXPECT_DOUBLE_EQ(140.0, inner_product(v1, v2));
+  EXPECT_DOUBLE_EQ(std::sqrt(14.0), norm(v1, 2.0));
+  EXPECT_DOUBLE_EQ(std::pow(36.0, 1.0 / 3.0), norm(v1, 3.0));
+  EXPECT_THROW(norm(v1, 0.5), std::range_error);
+}
+
+TEST(vectorTest, complex_dot_uses_conjugated_rhs) {
+  using namespace std::literals::complex_literals;
+
+  vector<std::complex<double>> v1({1.0 + 4.0i, 2.0 + 5.0i, 3.0 + 6.0i});
+  vector<std::complex<double>> v2({2.0 + 3.0i, 5.0 + 7.0i, 11.0 + 13.0i});
+
+  const auto expected = (1.0 + 4.0i) * std::conj(2.0 + 3.0i) + (2.0 + 5.0i) * std::conj(5.0 + 7.0i) + (3.0 + 6.0i) * std::conj(11.0 + 13.0i);
+  EXPECT_EQ(expected, dot(v1, v2));
+  EXPECT_EQ(expected, inner_product(v1, v2));
+  EXPECT_DOUBLE_EQ(std::sqrt(91.0), norm(v1, 2.0));
 }
